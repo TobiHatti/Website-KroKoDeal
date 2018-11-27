@@ -58,14 +58,14 @@
         <!-- End of File Buttons -->
 
 
-        <!-- Header-Parallax
+        <!-- Header-Parallax -->
             <script>
                 window.addEventListener("scroll", function(e) {
-                    var scrOffset = (window.scrollY/3) + 360;
-                    document.getElementById("htmlheader").style.backgroundPosition = "0px " + (scrOffset) + "px";
+                    var scrOffset = - (window.scrollY/16);
+                    document.getElementById("htmlfoundation").style.backgroundPosition = "0px " + (scrOffset) + "px";
                 });
             </script>
-             End of Header-Parallax -->
+        <!-- End of Header-Parallax -->
     ';
 
 ?>

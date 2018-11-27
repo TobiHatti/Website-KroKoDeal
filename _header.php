@@ -3,7 +3,7 @@
 
 
     echo '
-        <html>
+        <html id="htmlfoundation">
             <head>
     ';
 
@@ -16,7 +16,40 @@
 
                 </header>
                 <nav>
+                    <div class="container">
+                        <ul id="nav">
+                            <li><a href="/">Home</a></li>
+                            <li><a class="hsubs" href="#">Sammlung</a>
+                                <ul class="subs">
+                                    <li><a href="#">Kronkorken</a></li>
+                                    <li><a href="#">Sets</a></li>
+                                    <li><a href="#">Alle Kronkorken</a></li>
+                                    <li><a href="#">Unbekannte Kronkorken</a></li>
+                                </ul>
+                            </li>
+                            <li><a class="hsubs" href="#">Tauschen</a>
+                                <ul class="subs">
+                                    <li><a href="#">Wie wird getauscht</a></li>
+                                    <li><a href="#">Kronkorken Tauschen</a></li>
+                                    <li><a href="#">Sets Tauschen</a></li>
+                                </ul>
+                            </li>
+                            <li><a class="hsubs" href="#">Mehr</a>
+                                <ul class="subs">
+                                    <li><a href="#">Kontakt</a></li>
+                                    <li><a href="#">Infos</a></li>
+                                    <li><a href="#">G&auml;stebuch</a></li>
+                                    <li><a href="#">Forum</a></li>
+                                    <li><a href="#">Brauereien</a></li>
+                                </ul>
+                            </li>
+                            <div id="lavalamp"></div>
 
+                            <div class="searchbar">
+                                <input type="search" placeholder="Suche..."/>
+                            </div>
+                        </ul>
+                    </div>
                 </nav>
                 <main>
     ';

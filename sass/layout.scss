@@ -1,0 +1,279 @@
+/*
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+///////////////////////////////////////////////////////////////////////////////////////
+
+    Notes:
+    •   For every CSS-Grid a Fallback-Class needs to be created.
+
+///////////////////////////////////////////////////////////////////////////////////////
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+    Content:
+    ====== $ -  SASS =======================
+    ($01)   SASS > Imports
+    ====== A -  HTML-Structural Tags ========
+    (A01)   HTML > html
+    (A01)   HTML > body
+    (A01)   HTML > header
+    (A01)   HTML > nav
+    (A02)   HTML > main
+    (A03)   HTML > article
+    (A04)   HTML > aside
+    (A05)   HTML > footer
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+///////////////////////////////////////////////////////////////////////////////////////
+*/
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*================================    $ -  SASS      ================================*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+
+/*===================================================================================*/
+/* ($01) SASS > Imports                                                              */
+/*===================================================================================*/
+
+@import 'variables';
+@import 'mixins';
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*============================= A -  HTML-Structural Tags ===========================*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+
+/*===================================================================================*/
+/* (A01) HTML > html                                                                 */
+/*===================================================================================*/
+
+@supports (grid-area: auto){
+
+    html{
+        font-family: Calibri, Arial, sans-serif;
+        font-size: $font-size-default;
+        background: #FFFFFF;
+        background-attachment: fixed;
+        height:100%;
+
+        background-image: url(../content/background.jpg);
+    }
+
+    @media only screen and (max-width: $media-smalllargephone){
+        html{
+            font-size: $font-size-portable;
+        }
+    }
+}
+
+@supports not (grid-area: auto){
+
+}
+
+/*===================================================================================*/
+/* (A01) HTML > body                                                                 */
+/*===================================================================================*/
+
+@supports (grid-area: auto){
+
+    body{
+        display: grid;
+        margin: 0;
+    }
+
+    @media only screen and (max-width: $media-smalllargephone){
+            body{
+            margin:0px;
+            grid-template-columns: 1fr;
+            grid-template-rows: 60px 56px auto 0px;
+            grid-template-areas:
+                "header"
+                "nav"
+                "main"
+                ".";
+        }
+    }
+
+    @media only screen and (min-width: $media-smalllargephone){
+        body{
+            grid-template-columns: 1fr 8fr 1fr;
+            grid-template-rows: 80px 56px auto 0px;
+            grid-template-areas:
+                "header header header"
+                ". nav ."
+                ". main ."
+                ". . .";
+        }
+    }
+
+    @media only screen and (min-width: $media-tablet){
+        body{
+            grid-template-columns: 1fr 6fr 1fr;
+            grid-template-rows: 100px 56px auto 0px;
+            grid-template-areas:
+                "header header header"
+                ". nav ."
+                ". main ."
+                ". . .";
+        }
+    }
+
+    @media only screen and (min-width: $media-desktop){
+        body{
+            grid-template-columns: 1fr 5fr 1fr;
+            grid-template-rows: 120px 56px auto 0px;
+            grid-template-areas:
+                "header header header"
+                ". nav ."
+                ". main ."
+                ". . .";
+        }
+    }
+
+}
+
+@supports not (grid-area: auto){
+
+}
+
+/*===================================================================================*/
+/* (A01) HTML > header                                                               */
+/*===================================================================================*/
+
+@supports (grid-area: auto){
+    header{
+        grid-area: header;
+
+        background: $theme-headerbackground;
+
+        background-image: url(../content/banner.gif);
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}
+
+@supports not (grid-area: auto){
+
+}
+
+/*===================================================================================*/
+/* (A02) HTML > nav                                                                  */
+/*===================================================================================*/
+
+@supports (grid-area: auto){
+    nav{
+        grid-area: nav;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+}
+
+@supports not (grid-area: auto){
+
+}
+
+/*===================================================================================*/
+/* (A02) HTML > main                                                                 */
+/*===================================================================================*/
+
+@supports (grid-area: auto){
+    main{
+        grid-area: main;
+
+        background: linear-gradient(to bottom, $theme-medium, $theme-mainfadeout);
+        border-radius: 5px;
+        box-shadow:  0px 3px 3px 0 #000000;
+
+        margin-bottom: 160px;
+    }
+
+    @media only screen and (max-width: $media-smalllargephone){
+        main{
+            padding-left: 15px;
+            padding-right: 15px;
+            box-shadow: none;
+            border-radius: 0;
+        }
+    }
+
+    @media only screen and (min-width: $media-smalllargephone){
+        main{
+            padding-left: 15%;
+            padding-right: 15%;
+        }
+    }
+
+    @media only screen and (min-width: $media-tablet){
+        main{
+            padding-left: 10%;
+            padding-right: 10%;
+        }
+    }
+
+    @media only screen and (min-width: $media-desktop){
+        main{
+            padding-left: 15%;
+            padding-right: 15%;
+        }
+    }
+
+
+}
+
+@supports not (grid-area: auto){
+
+}
+
+/*===================================================================================*/
+/* (A03) HTML > article                                                              */
+/*===================================================================================*/
+
+@supports (grid-area: auto){
+    article{
+        grid-area: article;
+    }
+}
+
+@supports not (grid-area: auto){
+
+}
+
+/*===================================================================================*/
+/* (A04) HTML > aside                                                                */
+/*===================================================================================*/
+
+@supports (grid-area: auto){
+    aside{
+        grid-area: aside;
+    }
+}
+
+@supports not (grid-area: auto){
+
+}
+
+/*===================================================================================*/
+/* (A05) HTML > footer                                                               */
+/*===================================================================================*/
+
+@supports (grid-area: auto){
+    footer{
+        position:fixed;
+        z-index: -10;
+        background: $theme-footerbackground;
+        height: 150px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        text-align:center;
+        color: #FFFFFF;
+    }
+}
+
+@supports not (grid-area: auto){
+
+}
