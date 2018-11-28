@@ -8,6 +8,8 @@
             <link rel="stylesheet" type="text/css" href="/css/layout.css?'.$__pageRevision.'">
             <link rel="stylesheet" type="text/css" href="/css/dropdown.css?'.$__pageRevision.'">
             <link rel="stylesheet" type="text/css" href="/css/slide.css?'.$__pageRevision.'" />
+            <link rel="stylesheet" type="text/css" href="/css/fonts.css?'.$__pageRevision.'" />
+            <link rel="stylesheet" type="text/css" href="/css/modal.css?'.$__pageRevision.'" />
             <link href="/content/favicon.png?'.$__pageRevision.'" rel="icon" type="image/x-icon" />
         <!-- End own links -->
 

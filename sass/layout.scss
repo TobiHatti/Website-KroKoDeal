@@ -59,8 +59,14 @@
         background: #FFFFFF;
         background-attachment: fixed;
         height:100%;
+    }
 
+    #htmlfoundation{
         background-image: url(../content/background.jpg);
+    }
+
+    #iframefoundation{
+        background: transparent;
     }
 
     @media only screen and (max-width: $media-smalllargephone){
@@ -89,7 +95,7 @@
             body{
             margin:0px;
             grid-template-columns: 1fr;
-            grid-template-rows: 60px 56px auto 0px;
+            grid-template-rows: 60px 80px auto 0px;
             grid-template-areas:
                 "header"
                 "nav"
@@ -101,7 +107,7 @@
     @media only screen and (min-width: $media-smalllargephone){
         body{
             grid-template-columns: 1fr 8fr 1fr;
-            grid-template-rows: 80px 56px auto 0px;
+            grid-template-rows: 80px 80px auto 0px;
             grid-template-areas:
                 "header header header"
                 ". nav ."
@@ -113,7 +119,7 @@
     @media only screen and (min-width: $media-tablet){
         body{
             grid-template-columns: 1fr 6fr 1fr;
-            grid-template-rows: 100px 56px auto 0px;
+            grid-template-rows: 100px 80px auto 0px;
             grid-template-areas:
                 "header header header"
                 ". nav ."
@@ -125,7 +131,7 @@
     @media only screen and (min-width: $media-desktop){
         body{
             grid-template-columns: 1fr 5fr 1fr;
-            grid-template-rows: 120px 56px auto 0px;
+            grid-template-rows: 120px 80px auto 0px;
             grid-template-areas:
                 "header header header"
                 ". nav ."
@@ -189,12 +195,13 @@
         box-shadow:  0px 3px 3px 0 #000000;
 
         margin-bottom: 160px;
+
+        padding: 5px 10px;
     }
 
     @media only screen and (max-width: $media-smalllargephone){
         main{
-            padding-left: 15px;
-            padding-right: 15px;
+
             box-shadow: none;
             border-radius: 0;
         }
@@ -202,22 +209,19 @@
 
     @media only screen and (min-width: $media-smalllargephone){
         main{
-            padding-left: 15%;
-            padding-right: 15%;
+
         }
     }
 
     @media only screen and (min-width: $media-tablet){
         main{
-            padding-left: 10%;
-            padding-right: 10%;
+
         }
     }
 
     @media only screen and (min-width: $media-desktop){
         main{
-            padding-left: 15%;
-            padding-right: 15%;
+
         }
     }
 

@@ -47,8 +47,13 @@
 
                             <div class="searchbar">
                                 <input type="search" placeholder="Suche..."/>
+                                <button type="submit"><i class="fas fa-search"></i></button>
                             </div>
                         </ul>
+                    </div>
+
+                    <div class="navigationPath">
+                        <a href=""><span>Home</span></a> <i>&gt;</i>
                     </div>
                 </nav>
                 <main>

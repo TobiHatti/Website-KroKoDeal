@@ -98,11 +98,16 @@
 @supports (grid-area: auto) {
   html {
     font-family: Calibri, Arial, sans-serif;
-    font-size: 11pt;
+    font-size: 12pt;
     background: #FFFFFF;
     background-attachment: fixed;
-    height: 100%;
+    height: 100%; }
+
+  #htmlfoundation {
     background-image: url(../content/background.jpg); }
+
+  #iframefoundation {
+    background: transparent; }
 
   @media only screen and (max-width: 600px) {
     html {
@@ -119,22 +124,22 @@
     body {
       margin: 0px;
       grid-template-columns: 1fr;
-      grid-template-rows: 60px 56px auto 0px;
+      grid-template-rows: 60px 80px auto 0px;
       grid-template-areas: "header" "nav" "main" "."; } }
   @media only screen and (min-width: 600px) {
     body {
       grid-template-columns: 1fr 8fr 1fr;
-      grid-template-rows: 80px 56px auto 0px;
+      grid-template-rows: 80px 80px auto 0px;
       grid-template-areas: "header header header" ". nav ." ". main ." ". . ."; } }
   @media only screen and (min-width: 768px) {
     body {
       grid-template-columns: 1fr 6fr 1fr;
-      grid-template-rows: 100px 56px auto 0px;
+      grid-template-rows: 100px 80px auto 0px;
       grid-template-areas: "header header header" ". nav ." ". main ." ". . ."; } }
   @media only screen and (min-width: 992px) {
     body {
       grid-template-columns: 1fr 5fr 1fr;
-      grid-template-rows: 120px 56px auto 0px;
+      grid-template-rows: 120px 80px auto 0px;
       grid-template-areas: "header header header" ". nav ." ". main ." ". . ."; } } }
 /*===================================================================================*/
 /* (A01) HTML > header                                                               */
@@ -163,26 +168,13 @@
     background: linear-gradient(to bottom, #FF892E, #d9d9d9);
     border-radius: 5px;
     box-shadow: 0px 3px 3px 0 #000000;
-    margin-bottom: 160px; }
+    margin-bottom: 160px;
+    padding: 5px 10px; }
 
   @media only screen and (max-width: 600px) {
     main {
-      padding-left: 15px;
-      padding-right: 15px;
       box-shadow: none;
-      border-radius: 0; } }
-  @media only screen and (min-width: 600px) {
-    main {
-      padding-left: 15%;
-      padding-right: 15%; } }
-  @media only screen and (min-width: 768px) {
-    main {
-      padding-left: 10%;
-      padding-right: 10%; } }
-  @media only screen and (min-width: 992px) {
-    main {
-      padding-left: 15%;
-      padding-right: 15%; } } }
+      border-radius: 0; } } }
 /*===================================================================================*/
 /* (A03) HTML > article                                                              */
 /*===================================================================================*/
