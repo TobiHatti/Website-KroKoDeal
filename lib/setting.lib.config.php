@@ -13,6 +13,6 @@ $settingConfigDatabaseUser = "root";
 $settingConfigDatabasePass = "";
 
 // Database-Name
-$settingConfigDatabaseName = "sample-db";
+$settingConfigDatabaseName = "krokodeal_new";
 
 ?>

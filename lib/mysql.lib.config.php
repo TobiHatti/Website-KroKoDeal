@@ -13,7 +13,7 @@ $sqlConfigDatabaseUser = "root";
 $sqlConfigDatabasePass = "";
 
 // Database-Name
-$sqlConfigDatabaseName = "sample-db";
+$sqlConfigDatabaseName = "krokodeal_new";
 
 //=================================
 // BackUp-Path

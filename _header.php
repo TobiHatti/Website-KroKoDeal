@@ -1,8 +1,10 @@
 <?php
+    session_start();
 	require("_headerincludes.php");
 
 
     echo '
+        <!DOCTYPE html>
         <html id="htmlfoundation">
             <head>
     ';
