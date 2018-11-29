@@ -61,11 +61,11 @@
         height:100%;
     }
 
-    #htmlfoundation{
+    #mainPage{
         background-image: url(../content/background.jpg);
     }
 
-    #iframefoundation{
+    #iframePage{
         background: transparent;
     }
 
@@ -86,13 +86,13 @@
 
 @supports (grid-area: auto){
 
-    body{
+    body#mainBody{
         display: grid;
         margin: 0;
     }
 
     @media only screen and (max-width: $media-smalllargephone){
-            body{
+            body#mainBody{
             margin:0px;
             grid-template-columns: 1fr;
             grid-template-rows: 60px 80px auto 0px;
@@ -105,7 +105,7 @@
     }
 
     @media only screen and (min-width: $media-smalllargephone){
-        body{
+        body#mainBody{
             grid-template-columns: 1fr 8fr 1fr;
             grid-template-rows: 80px 80px auto 0px;
             grid-template-areas:
@@ -117,7 +117,7 @@
     }
 
     @media only screen and (min-width: $media-tablet){
-        body{
+        body#mainBody{
             grid-template-columns: 1fr 6fr 1fr;
             grid-template-rows: 100px 80px auto 0px;
             grid-template-areas:
@@ -129,7 +129,7 @@
     }
 
     @media only screen and (min-width: $media-desktop){
-        body{
+        body#mainBody{
             grid-template-columns: 1fr 5fr 1fr;
             grid-template-rows: 120px 80px auto 0px;
             grid-template-areas:
@@ -271,10 +271,36 @@
         background: $theme-footerbackground;
         height: 150px;
         bottom: 0px;
-        left: 0px;
-        right: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50%;
+        border-radius: 10px 10px 0 0;
         text-align:center;
         color: #FFFFFF;
+    }
+
+    @media only screen and (max-width: $media-smalllargephone){
+        footer{
+            width: 100%;
+        }
+    }
+
+    @media only screen and (min-width: $media-smalllargephone){
+        footer{
+            width: 80%;
+        }
+    }
+
+    @media only screen and (min-width: $media-tablet){
+        footer{
+            width: 75%;
+        }
+    }
+
+    @media only screen and (min-width: $media-desktop){
+        footer{
+            width: 71%;
+        }
     }
 }
 

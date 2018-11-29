@@ -54,10 +54,10 @@
         	    <ul>
                 ';
 
-                $sliderRows = MySQL::Cluster("SELECT *,countries.short AS country, breweries.filepath AS brewery, bottlecaps.image AS capImage FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isSet = '0' ORDER BY bottlecaps.id DESC LIMIT 0,6");
+                $sliderRows = MySQL::Cluster("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isSet = '0' ORDER BY bottlecaps.id DESC LIMIT 0,6");
                 $sliderMessages = array("KRO-KO-DEAL","EST. 2016","Ihr Kronkorken Dealer","KRO-KO-DEAL","EST. 2016","Ihr Kronkorken Dealer");
                 $i=1;
-                foreach($sliderRows AS $slide) echo '<li><img src="/files/bottlecaps/'.$slide['country'].'/'.$slide['brewery'].'/'.$slide['capImage'].'" alt="Kro-Ko-Deal" title="'.$sliderMessages[$i-1].'" id="wows1_'.$i++.'" width="350px" height="350px" style="border-radius:25px; "/></li>';
+                foreach($sliderRows AS $slide) echo '<li><img src="/files/bottlecaps/'.$slide['countryShort'].'/'.$slide['breweryFilepath'].'/'.$slide['capImage'].'" alt="Kro-Ko-Deal" title="'.$sliderMessages[$i-1].'" id="wows1_'.$i++.'" width="350px" height="350px" style="border-radius:25px; "/></li>';
 
                 echo '
             	</ul>
@@ -67,7 +67,7 @@
                 ';
 
                 $i=1;
-                foreach($sliderRows AS $slide) echo '<a href="#" title=""><span><img src="/files/bottlecaps/'.$slide['country'].'/'.$slide['brewery'].'/'.$slide['capImage'].'" alt="Kro-Ko-Deal" class="thumbnail"/>'.$i++.'</span></a>';
+                foreach($sliderRows AS $slide) echo '<a href="#" title=""><span><img src="/files/bottlecaps/'.$slide['countryShort'].'/'.$slide['breweryFilepath'].'/'.$slide['capImage'].'" alt="Kro-Ko-Deal" class="thumbnail"/>'.$i++.'</span></a>';
 
                 echo '
         	    </div>
@@ -81,13 +81,21 @@
         <br><br>
 
         <h3><u>Neueste Kronkorken</u></h3>
-        <iframe src="_iframe_neuesteKronkorken.php" frameborder="1" scrolling="no" style="width: 100%;" ></iframe>
+        <iframe src="_iframe_neuesteKronkorken.php?offset=0" frameborder="0" scrolling="no" style="width: 100%; height: 235px;" ></iframe>
 
         <br>
         <h3><u>Sammlung</u></h3>
 
-    ';
+        <center>
+            <a href="#">'.ContinentButton('EU',true).'</a>
+            <a href="#">'.ContinentButton('AMN',true).'</a>
+            <a href="#">'.ContinentButton('AMS',true).'</a>
+            <a href="#">'.ContinentButton('AS',true).'</a>
+            <a href="#">'.ContinentButton('OZE',true).'</a>
+            <a href="#">'.ContinentButton('AFR',true).'</a>
+        </center>
 
+    ';
 
 	include("_footer.php");
 ?>

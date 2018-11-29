@@ -10,6 +10,7 @@
             <link rel="stylesheet" type="text/css" href="/css/slide.css?'.$__pageRevision.'" />
             <link rel="stylesheet" type="text/css" href="/css/fonts.css?'.$__pageRevision.'" />
             <link rel="stylesheet" type="text/css" href="/css/modal.css?'.$__pageRevision.'" />
+            <link rel="stylesheet" type="text/css" href="/css/flags.css?'.$__pageRevision.'" />
             <link href="/content/favicon.png?'.$__pageRevision.'" rel="icon" type="image/x-icon" />
         <!-- End own links -->
 
@@ -64,7 +65,7 @@
             <script>
                 window.addEventListener("scroll", function(e) {
                     var scrOffset = - (window.scrollY/16);
-                    document.getElementById("htmlfoundation").style.backgroundPosition = "0px " + (scrOffset) + "px";
+                    document.getElementById("mainPage").style.backgroundPosition = "0px " + (scrOffset) + "px";
                 });
             </script>
         <!-- End of Header-Parallax -->

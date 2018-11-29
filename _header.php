@@ -5,7 +5,7 @@
 
     echo '
         <!DOCTYPE html>
-        <html id="htmlfoundation">
+        <html id="mainPage">
             <head>
     ';
 
@@ -13,7 +13,7 @@
 
     echo '
             </head>
-            <body>
+            <body id="mainBody">
                 <header>
 
                 </header>

@@ -3,7 +3,7 @@
 
 
     echo '
-        <html id="iframefoundation">
+        <html id="iframePage">
             <head>
     ';
 
@@ -11,16 +11,19 @@
 
     echo '
             </head>
-            <body>
+            <body id="iframeBody" style="margin: 0;">
+                <center>
     ';
 
-    $offset = 0;
+    $offset = $_GET['offset'];
 
-    $strSQL = "SELECT * FROM bottlecaps WHERE isOwned = 1 AND isSet = 0 ORDER BY id DESC LIMIT $offset,1";
-    $rs=mysqli_query($link,$strSQL);
-    while($row=mysqli_fetch_assoc($rs)) echo BottlecapSingleBox($row['id']);
+    echo BottlecapSingleBox(MySQL::Scalar("SELECT * FROM bottlecaps WHERE isOwned = 1 AND isSet = 0 ORDER BY id DESC LIMIT ?,1",'i',$offset));
 
     echo '
+
+                    <a href="?offset='.($offset+1).'" class="navigationLink" style="text-decoration:none;">&#9664; Zur&uuml;ck &#10074;</a>
+                    <a href="?offset='.($offset-1).'" class="navigationLink" style="text-decoration:none;">&#10074; Weiter &#9654;</a>
+                </center>
             </body>
         </html>
     ';

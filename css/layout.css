@@ -103,10 +103,10 @@
     background-attachment: fixed;
     height: 100%; }
 
-  #htmlfoundation {
+  #mainPage {
     background-image: url(../content/background.jpg); }
 
-  #iframefoundation {
+  #iframePage {
     background: transparent; }
 
   @media only screen and (max-width: 600px) {
@@ -116,28 +116,28 @@
 /* (A01) HTML > body                                                                 */
 /*===================================================================================*/
 @supports (grid-area: auto) {
-  body {
+  body#mainBody {
     display: grid;
     margin: 0; }
 
   @media only screen and (max-width: 600px) {
-    body {
+    body#mainBody {
       margin: 0px;
       grid-template-columns: 1fr;
       grid-template-rows: 60px 80px auto 0px;
       grid-template-areas: "header" "nav" "main" "."; } }
   @media only screen and (min-width: 600px) {
-    body {
+    body#mainBody {
       grid-template-columns: 1fr 8fr 1fr;
       grid-template-rows: 80px 80px auto 0px;
       grid-template-areas: "header header header" ". nav ." ". main ." ". . ."; } }
   @media only screen and (min-width: 768px) {
-    body {
+    body#mainBody {
       grid-template-columns: 1fr 6fr 1fr;
       grid-template-rows: 100px 80px auto 0px;
       grid-template-areas: "header header header" ". nav ." ". main ." ". . ."; } }
   @media only screen and (min-width: 992px) {
-    body {
+    body#mainBody {
       grid-template-columns: 1fr 5fr 1fr;
       grid-template-rows: 120px 80px auto 0px;
       grid-template-areas: "header header header" ". nav ." ". main ." ". . ."; } } }
@@ -197,9 +197,24 @@
     background: #2B2B2B;
     height: 150px;
     bottom: 0px;
-    left: 0px;
-    right: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    border-radius: 10px 10px 0 0;
     text-align: center;
-    color: #FFFFFF; } }
+    color: #FFFFFF; }
+
+  @media only screen and (max-width: 600px) {
+    footer {
+      width: 100%; } }
+  @media only screen and (min-width: 600px) {
+    footer {
+      width: 80%; } }
+  @media only screen and (min-width: 768px) {
+    footer {
+      width: 75%; } }
+  @media only screen and (min-width: 992px) {
+    footer {
+      width: 71%; } } }
 
 /*# sourceMappingURL=layout.css.map */
