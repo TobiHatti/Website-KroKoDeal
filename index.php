@@ -55,7 +55,7 @@
                 ';
 
                 $sliderRows = MySQL::Cluster("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isSet = '0' ORDER BY bottlecaps.id DESC LIMIT 0,6");
-                $sliderMessages = array("KRO-KO-DEAL","EST. 2016","Ihr Kronkorken Dealer","KRO-KO-DEAL","EST. 2016","Ihr Kronkorken Dealer");
+                $sliderMessages = array("KRO-KO-DEAL","EST. 2016","Dein Kronkorken Dealer","KRO-KO-DEAL","EST. 2016","Dein Kronkorken Dealer");
                 $i=1;
                 foreach($sliderRows AS $slide) echo '<li><img src="/files/bottlecaps/'.$slide['countryShort'].'/'.$slide['breweryFilepath'].'/'.$slide['capImage'].'" alt="Kro-Ko-Deal" title="'.$sliderMessages[$i-1].'" id="wows1_'.$i++.'" width="350px" height="350px" style="border-radius:25px; "/></li>';
 
@@ -87,12 +87,12 @@
         <h3><u>Sammlung</u></h3>
 
         <center>
-            <a href="#">'.ContinentButton('EU',true).'</a>
-            <a href="#">'.ContinentButton('AMN',true).'</a>
-            <a href="#">'.ContinentButton('AMS',true).'</a>
-            <a href="#">'.ContinentButton('AS',true).'</a>
-            <a href="#">'.ContinentButton('OZE',true).'</a>
-            <a href="#">'.ContinentButton('AFR',true).'</a>
+            <a href="/laender/kontinent/europa">'.ContinentButton('EU',true).'</a>
+            <a href="/laender/kontinent/nordamerika">'.ContinentButton('AMN',true).'</a>
+            <a href="/laender/kontinent/sudamerika">'.ContinentButton('AMS',true).'</a>
+            <a href="/laender/kontinent/asien">'.ContinentButton('AS',true).'</a>
+            <a href="/laender/kontinent/ozeanien">'.ContinentButton('OZE',true).'</a>
+            <a href="/laender/kontinent/afrika">'.ContinentButton('AFR',true).'</a>
         </center>
 
     ';

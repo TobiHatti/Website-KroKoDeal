@@ -88,7 +88,7 @@ h3{
 .bottlecapSingleContainer{
        position: relative;
 
-    table{
+    table.capDisplay{
         background: #333333;
         border-radius: 10px;
         width: 100%;
@@ -137,9 +137,12 @@ h3{
                     border-radius: 10px 0 0 10px;
                     max-height: 100px;
                     max-width: 150px;
+                    display: block;
                 }
 
                 img:nth-child(2){
+                    margin-top: 5px;
+                    max-height: 30px;
                 }
             }
 
@@ -216,6 +219,64 @@ h3{
             background: rgba(255, 255, 255, 0.9);
             height: 150px;
             border-radius: 10px;
+
+            text-align: left;
+            overflow: hidden;
+
+
+            table.capData{
+                background: transparent;
+                border-spacing: 0;
+                border-collapse: collapse;
+                height: 100%;
+
+                tr{
+                    td:nth-child(1),
+                    td:nth-child(3){
+                        text-align: right;
+                        color: #696969;
+                        border-right: none;
+                        padding-right: 0;
+                    }
+
+                    td:nth-child(2),
+                    td:nth-child(4){
+                        text-align: left;
+                        padding-left: 4px;
+                        padding-right: 10px;
+                        color: #000000;
+                        border-right: 1px solid gray;
+                    }
+                }
+
+                tr:nth-child(1){
+                    td:nth-child(1){
+                        width: 0px;
+                        border-right: none;
+                    }
+
+                    td:nth-child(2),
+                    td:nth-child(4){
+                        text-align: right;
+                        color: #696969;
+                        border-right: none;
+                        padding-right: 0;
+                    }
+
+                    td:nth-child(3),
+                    td:nth-child(5){
+                        text-align: left;
+                        padding-left: 4px;
+                        padding-right: 10px;
+                        color: #000000;
+                        border-right: 1px solid gray;
+                    }
+                }
+
+
+
+
+            }
 
             .close{
                 position: absolute;
@@ -346,6 +407,109 @@ h3{
 .tradeButton{
     div{
         border-color: #1E90FF;
+    }
+}
+
+
+.bottlecapColorSchemeContainer{
+    position: relative;
+    width: 100px;
+    height: 100px;
+
+
+    div{
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+
+        border-radius: 100%;
+    }
+
+    div:nth-child(1){
+        margin: 0px;
+        top: 0.5px;
+
+        img{
+            width: 100%;
+        }
+
+        img#GLD{
+            filter: drop-shadow(0px 3px 5px black) saturate(0.50) hue-rotate(53deg);
+        }
+
+        img#SLV{
+            filter: drop-shadow(0px 3px 5px black) saturate(0);
+        }
+
+        img#WHT{
+            filter: drop-shadow(0px 3px 5px black) brightness(2.66) saturate(0) hue-rotate(172deg);
+        }
+
+        img#BLK{
+            filter: drop-shadow(0px 3px 5px black) brightness(0.2) saturate(0) hue-rotate(172deg);
+        }
+
+        img#GRY{
+            filter: drop-shadow(0px 3px 5px black) brightness(0.5) saturate(0) hue-rotate(172deg);
+        }
+
+        img#RED{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(0deg);
+        }
+
+        img#BLU{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(225deg);
+        }
+
+        img#GRN{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(145deg);
+        }
+
+        img#YLW{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(65deg);
+        }
+
+        img#ORA{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(50deg);
+        }
+
+        img#PUR{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(285deg);
+        }
+
+        img#BRN{
+            filter: drop-shadow(0px 3px 5px black) saturate(0.5) hue-rotate(35deg);
+        }
+
+        img#BRZ{
+            filter: drop-shadow(0px 3px 5px black) brightness(1.5) saturate(0.7) hue-rotate(35deg);
+        }
+
+        img#CYA{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(180deg);
+        }
+
+    }
+
+    div:nth-child(2){
+        margin: 13px;
+    }
+
+    div:nth-child(3){
+        margin: 13px;
+        line-height: 70px;
+        font-size: 13pt;
+        font-family: komikax;
+        text-align: center;
+    }
+
+    div:nth-child(4){
+        margin: 1px;
+        top:0.5px;
+        background-image: url(../content/twist.png);
+        background-size: 100%;
     }
 }
 

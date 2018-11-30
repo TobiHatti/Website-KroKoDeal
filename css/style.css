@@ -121,7 +121,7 @@ h3 {
 
 .bottlecapSingleContainer {
   position: relative; }
-  .bottlecapSingleContainer table {
+  .bottlecapSingleContainer table.capDisplay {
     background: #333333;
     border-radius: 10px;
     width: 100%;
@@ -129,47 +129,51 @@ h3 {
     height: 203px;
     border-spacing: 3px;
     border-collapse: separate; }
-    .bottlecapSingleContainer table tr:nth-child(1) td {
+    .bottlecapSingleContainer table.capDisplay tr:nth-child(1) td {
       background: #FF8C00;
       font-weight: bold;
       color: #FFFFFF;
       text-align: center;
       border-radius: 10px; }
-    .bottlecapSingleContainer table tr:nth-child(2) td:nth-child(1) {
+    .bottlecapSingleContainer table.capDisplay tr:nth-child(2) td:nth-child(1) {
       width: 140px;
       position: relative; }
-      .bottlecapSingleContainer table tr:nth-child(2) td:nth-child(1) img:nth-child(1) {
+      .bottlecapSingleContainer table.capDisplay tr:nth-child(2) td:nth-child(1) img:nth-child(1) {
         width: 140px;
         border-radius: 10px; }
-      .bottlecapSingleContainer table tr:nth-child(2) td:nth-child(1) img:nth-child(2) {
+      .bottlecapSingleContainer table.capDisplay tr:nth-child(2) td:nth-child(1) img:nth-child(2) {
         position: absolute;
         bottom: 0;
         left: 0; }
-    .bottlecapSingleContainer table tr:nth-child(2) td:nth-child(2) {
+    .bottlecapSingleContainer table.capDisplay tr:nth-child(2) td:nth-child(2) {
       background: #FFFFFF;
       border-radius: 10px 0 0 10px;
       width: 150px; }
-      .bottlecapSingleContainer table tr:nth-child(2) td:nth-child(2) img:nth-child(1) {
+      .bottlecapSingleContainer table.capDisplay tr:nth-child(2) td:nth-child(2) img:nth-child(1) {
         border-radius: 10px 0 0 10px;
         max-height: 100px;
-        max-width: 150px; }
+        max-width: 150px;
+        display: block; }
+      .bottlecapSingleContainer table.capDisplay tr:nth-child(2) td:nth-child(2) img:nth-child(2) {
+        margin-top: 5px;
+        max-height: 30px; }
     @media only screen and (max-width: 700px) {
-      .bottlecapSingleContainer table tr:nth-child(2) td:nth-child(3) {
+      .bottlecapSingleContainer table.capDisplay tr:nth-child(2) td:nth-child(3) {
         background: #FFFFFF;
         border-radius: 0 10px 10px 0; }
-      .bottlecapSingleContainer table tr:nth-child(2) td:nth-child(4) {
+      .bottlecapSingleContainer table.capDisplay tr:nth-child(2) td:nth-child(4) {
         display: none; } }
     @media only screen and (min-width: 700px) {
-      .bottlecapSingleContainer table tr:nth-child(2) td:nth-child(3) {
+      .bottlecapSingleContainer table.capDisplay tr:nth-child(2) td:nth-child(3) {
         background: #FFFFFF; }
-      .bottlecapSingleContainer table tr:nth-child(2) td:nth-child(4) {
+      .bottlecapSingleContainer table.capDisplay tr:nth-child(2) td:nth-child(4) {
         background: #FFFFFF;
         border-radius: 0 10px 10px 0; } }
-    .bottlecapSingleContainer table tr:nth-child(2) td:nth-child(5) {
+    .bottlecapSingleContainer table.capDisplay tr:nth-child(2) td:nth-child(5) {
       background: #FFDFC7;
       border-radius: 10px;
       width: 120px; }
-      .bottlecapSingleContainer table tr:nth-child(2) td:nth-child(5) button {
+      .bottlecapSingleContainer table.capDisplay tr:nth-child(2) td:nth-child(5) button {
         background: #2B2B2B;
         border: none;
         border-radius: 5px;
@@ -200,7 +204,43 @@ h3 {
       margin-top: 28px;
       background: rgba(255, 255, 255, 0.9);
       height: 150px;
-      border-radius: 10px; }
+      border-radius: 10px;
+      text-align: left;
+      overflow: hidden; }
+      .bottlecapSingleContainer .additionalInformationContainer .additionalInformationOverlay table.capData {
+        background: transparent;
+        border-spacing: 0;
+        border-collapse: collapse;
+        height: 100%; }
+        .bottlecapSingleContainer .additionalInformationContainer .additionalInformationOverlay table.capData tr td:nth-child(1),
+        .bottlecapSingleContainer .additionalInformationContainer .additionalInformationOverlay table.capData tr td:nth-child(3) {
+          text-align: right;
+          color: #696969;
+          border-right: none;
+          padding-right: 0; }
+        .bottlecapSingleContainer .additionalInformationContainer .additionalInformationOverlay table.capData tr td:nth-child(2),
+        .bottlecapSingleContainer .additionalInformationContainer .additionalInformationOverlay table.capData tr td:nth-child(4) {
+          text-align: left;
+          padding-left: 4px;
+          padding-right: 10px;
+          color: #000000;
+          border-right: 1px solid gray; }
+        .bottlecapSingleContainer .additionalInformationContainer .additionalInformationOverlay table.capData tr:nth-child(1) td:nth-child(1) {
+          width: 0px;
+          border-right: none; }
+        .bottlecapSingleContainer .additionalInformationContainer .additionalInformationOverlay table.capData tr:nth-child(1) td:nth-child(2),
+        .bottlecapSingleContainer .additionalInformationContainer .additionalInformationOverlay table.capData tr:nth-child(1) td:nth-child(4) {
+          text-align: right;
+          color: #696969;
+          border-right: none;
+          padding-right: 0; }
+        .bottlecapSingleContainer .additionalInformationContainer .additionalInformationOverlay table.capData tr:nth-child(1) td:nth-child(3),
+        .bottlecapSingleContainer .additionalInformationContainer .additionalInformationOverlay table.capData tr:nth-child(1) td:nth-child(5) {
+          text-align: left;
+          padding-left: 4px;
+          padding-right: 10px;
+          color: #000000;
+          border-right: 1px solid gray; }
       .bottlecapSingleContainer .additionalInformationContainer .additionalInformationOverlay .close {
         position: absolute;
         right: 0px;
@@ -324,5 +364,63 @@ h3 {
 
 .tradeButton div {
   border-color: #1E90FF; }
+
+.bottlecapColorSchemeContainer {
+  position: relative;
+  width: 100px;
+  height: 100px; }
+  .bottlecapColorSchemeContainer div {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    border-radius: 100%; }
+  .bottlecapColorSchemeContainer div:nth-child(1) {
+    margin: 0px;
+    top: 0.5px; }
+    .bottlecapColorSchemeContainer div:nth-child(1) img {
+      width: 100%; }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#GLD {
+      filter: drop-shadow(0px 3px 5px black) saturate(0.5) hue-rotate(53deg); }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#SLV {
+      filter: drop-shadow(0px 3px 5px black) saturate(0); }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#WHT {
+      filter: drop-shadow(0px 3px 5px black) brightness(2.66) saturate(0) hue-rotate(172deg); }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#BLK {
+      filter: drop-shadow(0px 3px 5px black) brightness(0.2) saturate(0) hue-rotate(172deg); }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#GRY {
+      filter: drop-shadow(0px 3px 5px black) brightness(0.5) saturate(0) hue-rotate(172deg); }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#RED {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(0deg); }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#BLU {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(225deg); }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#GRN {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(145deg); }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#YLW {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(65deg); }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#ORA {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(50deg); }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#PUR {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(285deg); }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#BRN {
+      filter: drop-shadow(0px 3px 5px black) saturate(0.5) hue-rotate(35deg); }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#BRZ {
+      filter: drop-shadow(0px 3px 5px black) brightness(1.5) saturate(0.7) hue-rotate(35deg); }
+    .bottlecapColorSchemeContainer div:nth-child(1) img#CYA {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(180deg); }
+  .bottlecapColorSchemeContainer div:nth-child(2) {
+    margin: 13px; }
+  .bottlecapColorSchemeContainer div:nth-child(3) {
+    margin: 13px;
+    line-height: 70px;
+    font-size: 13pt;
+    font-family: komikax;
+    text-align: center; }
+  .bottlecapColorSchemeContainer div:nth-child(4) {
+    margin: 1px;
+    top: 0.5px;
+    background-image: url(../content/twist.png);
+    background-size: 100%; }
 
 /*# sourceMappingURL=style.css.map */

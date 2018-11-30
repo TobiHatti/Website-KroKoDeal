@@ -134,4 +134,27 @@
         MySQL::NonQuery("UPDATE sets SET filepath = ? WHERE id = ?","@s",SReplace($row['name']),$row['id']);
     }
     */
+
+    /*
+    $strSQL = "SELECT * FROM sidesigns";
+    $rs=mysqli_query($link,$strSQL);
+    while($row=mysqli_fetch_assoc($rs))
+    {
+        $id = $row['id'];
+        $newFile = $row['name'].'.'.$row['sidesignImage'];
+
+        MySQL::NonQuery("UPDATE sidesigns SET sidesignImage = '$newFile' WHERE id = '$id'");
+    }
+    */
+
+    /*
+    $strSQL = "SELECT * FROM countries INNER JOIN country_list ON countries.countryShort = country_list.alpha3";
+    $rs=mysqli_query($link,$strSQL);
+    while($row=mysqli_fetch_assoc($rs))
+    {
+        //MySQL::NonQuery("UPDATE countries SET countryShort2 = ? WHERE countryShort = ?",'@s',$row['alpha2'],$row['alpha3']);
+        MySQL::NonQuery("UPDATE countries SET countryShort2 = ? WHERE countryEN = ?",'@s',$row['alpha2'],$row['name']);
+    }
+
+    */
 ?>
