@@ -87,14 +87,13 @@
         <h3><u>Sammlung</u></h3>
 
         <center>
-            <a href="/laender/kontinent/europa">'.ContinentButton('EU',true).'</a>
-            <a href="/laender/kontinent/nordamerika">'.ContinentButton('AMN',true).'</a>
-            <a href="/laender/kontinent/sudamerika">'.ContinentButton('AMS',true).'</a>
-            <a href="/laender/kontinent/asien">'.ContinentButton('AS',true).'</a>
-            <a href="/laender/kontinent/ozeanien">'.ContinentButton('OZE',true).'</a>
-            <a href="/laender/kontinent/afrika">'.ContinentButton('AFR',true).'</a>
-        </center>
+    ';
 
+    $rows = MySQL::Cluster("SELECT * FROM continents");
+    foreach($rows AS $row) echo ContinentButton($row['continentShort'],true,true);
+
+    echo '
+        </center>
     ';
 
 	include("_footer.php");

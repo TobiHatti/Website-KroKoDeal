@@ -60,7 +60,7 @@ function BottlecapSingleBox($bottlecapID)
                 <td>
                     <a target="_blank" href="'.$row['breweryLink'].'"><button type="button"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>
 
-                    <a href="#zusatzinfos"><button type="button"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
+                    <a href="#zusatzinfos" ><button type="button"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
                 </td>
             </tr>
 
@@ -132,47 +132,102 @@ function BottlecapSingleBox($bottlecapID)
     return $retval;
 }
 
-function CountryButton($ISOcode,$showBottlecapCount=false)
+function ContinentButton($ISOcode,$showBottlecapCount=false,$linkToCountries=false)
 {
+    $link = '';
+
+    if($linkToCountries) $link = '/laender/kontinent/'.$ISOcode;
+
     $retval = '
-        <div class="regionButtons countryButton">
-            <img src="/content/regionButtons/DE/country/'.$ISOcode.'.png" alt="" />
+        '.($linkToCountries ? ('<a href="'.$link.'">') : '').'
+            <div class="regionButtons continentButton">
+                <img src="/content/regionButtons/DE/continent/'.$ISOcode.'.png" alt="" />
     ';
 
     if($showBottlecapCount)
     {
         $retval .= '
             <div>
-                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isOwned='1' AND countries.countryShort = '$ISOcode'").' St&uuml;ck
+                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN continents ON countries.continentID = continents.id WHERE bottlecaps.isOwned='1' AND continents.continentShort = ?",'s',$ISOcode).' St&uuml;ck
             </div>
         ';
     }
 
-    $retval .= '</div>';
+    $retval .= '
+            </div>
+        '.($linkToCountries ? '</a>' : '').'
+    ';
 
     return $retval;
 }
 
-function ContinentButton($ISOcode,$showBottlecapCount=false)
+function CountryButton($ISOcode,$showBottlecapCount=false,$linkToCollectionOrSubmenu = false)
 {
+    $link = '';
+
+    if($linkToCollectionOrSubmenu)
+    {
+        if(MySQL::Exist("SELECT regions.id FROM regions INNER JOIN countries ON regions.countryID = countries.id WHERE countries.countryShort = ?",'s',$ISOcode)) $link = '/laender/regionen/'.$ISOcode;
+        else $link = '/kronkorken/'.$ISOcode;
+    }
+
     $retval = '
-        <div class="regionButtons continentButton">
-            <img src="/content/regionButtons/DE/continent/'.$ISOcode.'.png" alt="" />
+        '.($linkToCollectionOrSubmenu ? ('<a href="'.$link.'">') : '').'
+            <div class="regionButtons countryButton">
+                <img src="/content/regionButtons/DE/country/'.$ISOcode.'.png" alt="" />
     ';
 
     if($showBottlecapCount)
     {
         $retval .= '
             <div>
-                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN continents ON countries.continentID = continents.id WHERE bottlecaps.isOwned='1' AND continents.continentShort = '$ISOcode'").' St&uuml;ck
+                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isOwned='1' AND countries.countryShort = ?",'s',$ISOcode).' St&uuml;ck
             </div>
         ';
     }
 
-    $retval .= '</div>';
+    $retval .= '
+            </div>
+        '.($linkToCollectionOrSubmenu ? '</a>' : '').'
+    ';
 
     return $retval;
 }
+
+function RegionButton($ISOcode,$showBottlecapCount=false,$linkToCollection = false)
+{
+    $link = '';
+
+    if($linkToCollection)
+    {
+        $countryShort = MySQL::Scalar("SELECT countries.countryShort FROM regions INNER JOIN countries ON regions.countryID = countries.id WHERE regions.regionShort = ?",'s',$ISOcode);
+        $link = '/kronkorken/'.$countryShort.'/'.$ISOcode;
+    }
+
+    $retval = '
+        '.($linkToCollection ? ('<a href="'.$link.'">') : '').'
+            <div class="regionButtons federalButton">
+                <img src="/content/regionButtons/DE/region/'.$ISOcode.'.png" alt="" />
+    ';
+
+    if($showBottlecapCount)
+    {
+        $retval .= '
+            <div>
+                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.ID INNER JOIN regions ON breweries.regionID = regions.id WHERE bottlecaps.isOwned = '1' AND regions.regionShort = ?",'s',$ISOcode).' St&uuml;ck
+            </div>
+        ';
+    }
+
+    $retval .= '
+            </div>
+        '.($linkToCollection ? '</a>' : '').'
+    ';
+
+    return $retval;
+}
+
+
 
 
 function BottlecapColorScheme($capColorCode,$baseColor,$textColor,$isUsed = false,$isTwistlock = false)

@@ -1,6 +1,9 @@
 @import 'variables';
 @import 'mixins';
 
+a{
+    text-decoration: none;
+}
 
 h1{
     margin: 5px 0;

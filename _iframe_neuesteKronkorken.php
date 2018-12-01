@@ -17,12 +17,17 @@
 
     $offset = $_GET['offset'];
 
+
     echo BottlecapSingleBox(MySQL::Scalar("SELECT * FROM bottlecaps WHERE isOwned = 1 AND isSet = 0 ORDER BY id DESC LIMIT ?,1",'i',$offset));
 
-    echo '
+    echo '<a href="?offset='.($offset+1).'" class="navigationLink" style="text-decoration:none;">&#9664; Zur&uuml;ck &#10074;</a>';
 
-                    <a href="?offset='.($offset+1).'" class="navigationLink" style="text-decoration:none;">&#9664; Zur&uuml;ck &#10074;</a>
-                    <a href="?offset='.($offset-1).'" class="navigationLink" style="text-decoration:none;">&#10074; Weiter &#9654;</a>
+    echo '&nbsp;&nbsp;';
+
+    if($offset==0) echo '<span style="color: #696969">&#10074; Weiter &#9654;</span>';
+    else echo '<a href="?offset='.($offset-1).'" class="navigationLink" style="text-decoration:none;">&#10074; Weiter &#9654;</a>';
+
+    echo '
                 </center>
             </body>
         </html>

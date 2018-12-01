@@ -12,6 +12,14 @@ RewriteCond %{REQUEST_FILENAME} !-f
 #         URL Rewrites        #
 ###############################
 
+RewriteRule ^laender/kontinent/([a-zA-Z0-9-]+)/?$ laender.php?kontinent=$1 [NC,QSA,L]
+RewriteRule ^laender/regionen/([a-zA-Z0-9-]+)/?$ laender.php?region=$1 [NC,QSA,L]
+
+
+RewriteRule ^kronkorken/([a-zA-Z0-9-]+)/?$ kronkorken.php?land=$1 [NC,QSA,L]
+RewriteRule ^kronkorken/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$/?$ kronkorken.php?land=$1&region=$2 [NC,QSA,L]
+
+
 #Ignore .php-Extension
 RewriteRule ^([^\.]+)$ $1.php [NC,L]
 
