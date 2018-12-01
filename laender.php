@@ -1,9 +1,9 @@
 <?php
 	require("_header.php");
 
-    if(isset($_GET['kontinent']))
+    if(isset($_GET['continent']))
     {
-        $continent = $_GET['kontinent'];
+        $continent = $_GET['continent'];
 
         echo '<h2>'.MySQL::Scalar("SELECT continentDE FROM continents WHERE continentShort = ?",'s',$continent).'</h2><br>';
 
@@ -22,12 +22,17 @@
     else if(isset($_GET['region']))
     {
         $country = $_GET['region'];
+        $countryData = MySQL::Row("SELECT * FROM countries WHERE countryShort = ?",'s',$country);
 
-        echo '<h2>'.MySQL::Scalar("SELECT countryDE FROM countries WHERE countryShort = ?",'s',$country).'</h2><br>';
+        echo '<h2>'.$countryData['countryDE'].'</h2><br>';
 
         echo '<center>';
         $rows = MySQL::Cluster("SELECT * FROM regions INNER JOIN countries ON regions.countryID = countries.id WHERE countries.countryShort = ?",'s',$country);
         foreach($rows AS $row) echo RegionButton($row['regionShort'],true,true);
+
+        echo '<br><br><br>';
+        echo SetsAndA2ZButtons($countryData['countryShort'],true,true);
+
         echo '</center>';
     }
     else

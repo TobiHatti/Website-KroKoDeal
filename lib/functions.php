@@ -58,7 +58,7 @@ function BottlecapSingleBox($bottlecapID)
                     '.$row['dateAquired'].'
                 </td>
                 <td>
-                    <a target="_blank" href="'.$row['breweryLink'].'"><button type="button"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>
+                    '.(($row['breweryLink']!='') ? '<a target="_blank" href="'.$row['breweryLink'].'"><button type="button"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
 
                     <a href="#zusatzinfos" ><button type="button"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
                 </td>
@@ -128,6 +128,39 @@ function BottlecapSingleBox($bottlecapID)
             </div>
         </div>
     ';
+
+    return $retval;
+}
+
+function SetsAndA2ZButtons($ISOcode,$showBottlecapCount=false,$linkToCountries=false)
+{
+    $link = '';
+
+    // A-Z Button
+    if($linkToCountries) $link = '/kronkorken/'.$ISOcode;
+
+    $retval = '
+        '.($linkToCountries ? ('<a href="'.$link.'">') : '').'
+            <div class="regionButtons setsAndA2ZButtons">
+                <img src="/content/buttons/DE/a-z.png" alt="" />
+    ';
+
+    if($showBottlecapCount) $retval .= '<div>'.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isOwned='1' AND countries.countryShort = ?",'s',$ISOcode).' St&uuml;ck</div>';
+
+    $retval .= '</div>'.($linkToCountries ? '</a>' : '');
+
+    // Set Button
+    if($linkToCountries) $link = '/sets/'.$ISOcode;
+
+    $retval .= '
+        '.($linkToCountries ? ('<a href="'.$link.'">') : '').'
+            <div class="regionButtons setsAndA2ZButtons">
+                <img src="/content/buttons/DE/sets.png" alt="" />
+    ';
+
+    if($showBottlecapCount) $retval .= '<div>'.MySQL::Count("SELECT DISTINCT bottlecaps.setID FROM sets INNER JOIN bottlecaps ON sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isOwned='1' AND countries.countryShort = ?",'s',$ISOcode).' Sets</div>';
+
+    $retval .= '</div>'.($linkToCountries ? '</a>' : '');
 
     return $retval;
 }
@@ -241,6 +274,35 @@ function BottlecapColorScheme($capColorCode,$baseColor,$textColor,$isUsed = fals
             '.($isTwistlock ? '<div></div>' : '').'
         </div>
 
+    ';
+
+    return $retval;
+}
+
+function BreweryListTile($breweryID,$showRegional=false)
+{
+    if($showRegional) $breweryData = MySQL::Row("SELECT * FROM breweries INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN regions ON breweries.regionID = regions.id WHERE breweries.id = ? ORDER BY breweries.breweryName ASC",'i',$breweryID);
+    else $breweryData = MySQL::Row("SELECT * FROM breweries INNER JOIN countries ON breweries.countryID = countries.id  WHERE breweries.id = ? ORDER BY breweries.breweryName ASC",'i',$breweryID);
+
+
+    $retval = '
+        <tr>
+            <td><img src="/files/breweries/'.$breweryData['countryShort'].'/'.$breweryData['breweryImage'].'" alt="" /></td>
+            <td>
+                <i>Brauerei:</i> '.$breweryData['breweryName'].'<br><br>
+                <i>Land:</i> '.$breweryData['countryDE'].'<br><br>
+                '.($showRegional ? ('<i>Bundesland:</i> '.$breweryData['regionDE']) : '').'
+            </td>
+            <td>
+                <i>Kronkorken:</i> '.MySQL::Count("SELECT id FROM bottlecaps WHERE isOwned = '1' AND isSet = '0' AND breweryID = ?",'i',$breweryData['id']).'<br>
+                <i>Tauschbar:</i> '.MySQL::Count("SELECT id FROM bottlecaps WHERE isOwned = '1' AND isSet = '0' AND isTradeable = '1' AND breweryID = ?",'i',$breweryData['id']).'
+            </td>
+            <td>
+                '.(($breweryData['breweryLink']!='') ? '<a target="_blank" href="'.$breweryData['breweryLink'].'"><button type="button"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
+
+                <a href="/kronkorken/sammlung/'.$breweryData['countryShort'].'/brauerei/'.$breweryData['breweryFilepath'].'"><button type="button">Kronkorken dieser<br>Brauerei</button></a>
+            </td>
+        </tr>
     ';
 
     return $retval;
