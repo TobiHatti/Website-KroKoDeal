@@ -157,4 +157,16 @@
     }
 
     */
+
+    /*
+    $strSQL = "SELECT * FROM bottlecaps WHERE isSet = '0'";
+    $rs=mysqli_query($link,$strSQL);
+    while($row=mysqli_fetch_assoc($rs))
+    {
+        $short = explode('_',$row['capNumber']);
+        echo 'Kurz: '.$short[1].' ('.$row['capNumber'].')<br>';
+
+        MySQL::NonQuery("UPDATE breweries SET breweryShort = ? WHERE id = ?",'@s',$short[1],$row['breweryID']);
+    }
+    */
 ?>

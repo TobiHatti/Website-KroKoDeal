@@ -2,6 +2,7 @@
     session_start();
 	require("_headerincludes.php");
 
+    MySQL::PeriodicSave();
 
     echo '
         <!DOCTYPE html>
@@ -24,7 +25,7 @@
                             <li><a class="hsubs" href="#">Sammlung</a>
                                 <ul class="subs">
                                     <li><a href="/laender">Kronkorken</a></li>
-                                    <li><a href="#">Sets</a></li>
+                                    <li><a href="/sets">Sets</a></li>
                                     <li><a href="#">Alle Kronkorken</a></li>
                                     <li><a href="#">Unbekannte Kronkorken</a></li>
                                 </ul>

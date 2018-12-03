@@ -18,7 +18,7 @@
     $offset = $_GET['offset'];
 
 
-    echo BottlecapSingleBox(MySQL::Scalar("SELECT * FROM bottlecaps WHERE isOwned = 1 AND isSet = 0 ORDER BY id DESC LIMIT ?,1",'i',$offset));
+    echo BottlecapSingleBox(MySQL::Scalar("SELECT * FROM bottlecaps WHERE isCounted = 1 AND isSet = 0 ORDER BY id DESC LIMIT ?,1",'i',$offset));
 
     echo '<a href="?offset='.($offset+1).'" class="navigationLink" style="text-decoration:none;">&#9664; Zur&uuml;ck &#10074;</a>';
 

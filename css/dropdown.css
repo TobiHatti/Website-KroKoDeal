@@ -191,6 +191,9 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box; }
   .searchbar button {
+    display: inline-block;
+    width: auto;
+    height: auto;
     background: #444444;
     border: 2px outset #333333;
     border-radius: 0 10px 10px 0;

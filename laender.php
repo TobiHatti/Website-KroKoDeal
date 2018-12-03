@@ -10,7 +10,7 @@
         echo '<center>';
 
         $rows = MySQL::Cluster("SELECT * FROM countries INNER JOIN continents ON countries.continentID = continents.id WHERE continents.continentShort = ?",'s',$continent);
-        foreach($rows AS $row) echo CountryButton($row['countryShort'],true,true);
+        foreach($rows AS $row) echo CountryButton($row['countryShort'],true,false,true);
 
         echo '<br><br><br>';
 
@@ -42,7 +42,7 @@
         echo '<center>';
 
         $rows = MySQL::Cluster("SELECT * FROM countries");
-        foreach($rows AS $row) echo CountryButton($row['countryShort'],true,true);
+        foreach($rows AS $row) echo CountryButton($row['countryShort'],true,false,true);
 
         echo '<br><br><br>';
 

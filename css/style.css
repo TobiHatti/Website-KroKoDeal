@@ -75,6 +75,14 @@ h3 {
   text-shadow: 1px 1px 2px #000000;
   font-weight: lighter; }
 
+button {
+  background: #2B2B2B;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  height: 35px;
+  color: #FFFFFF; }
+
 .navigationPath {
   margin-top: 5px;
   padding-top: 0px;
@@ -176,13 +184,6 @@ h3 {
       background: #FFDFC7;
       border-radius: 10px;
       width: 120px; }
-      .bottlecapSingleContainer table.capDisplay tr:nth-child(2) td:nth-child(5) button {
-        background: #2B2B2B;
-        border: none;
-        border-radius: 5px;
-        width: 100%;
-        height: 30px;
-        color: #FFFFFF; }
 @keyframes overlayFadeIn {
   0% {
     opacity: 0; }
@@ -422,7 +423,8 @@ h3 {
     line-height: 70px;
     font-size: 13pt;
     font-family: komikax;
-    text-align: center; }
+    text-align: center;
+    text-shadow: 0px 0px 3px #000000; }
   .bottlecapColorSchemeContainer div:nth-child(4) {
     margin: 1px;
     top: 0.5px;
@@ -454,6 +456,9 @@ h3 {
     -ms-transition: all 0.1s ease-in-out;
     -o-transition: all 0.1s ease-in-out;
     transition: all 0.1s ease-in-out; }
+  .letterSelection #selected {
+    background: #FFC89E;
+    border-radius: 25%; }
 
 .pager {
   font-size: 16pt;
@@ -501,12 +506,355 @@ h3 {
   .breweryListTable tr td:nth-child(4) {
     background: #FFDFC7;
     border-radius: 10px; }
-    .breweryListTable tr td:nth-child(4) button {
-      background: #2B2B2B;
-      border: none;
+
+.bottlecapRowContainer {
+  position: relative; }
+  .bottlecapRowContainer table.capDisplay {
+    background: #333333;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 900px;
+    border-spacing: 3px;
+    border-collapse: separate; }
+    .bottlecapRowContainer table.capDisplay tr {
+      height: 200px; }
+      .bottlecapRowContainer table.capDisplay tr td:nth-child(1) {
+        width: 140px;
+        position: relative; }
+        .bottlecapRowContainer table.capDisplay tr td:nth-child(1) img:nth-child(1) {
+          width: 140px;
+          border-radius: 10px; }
+        .bottlecapRowContainer table.capDisplay tr td:nth-child(1) img:nth-child(2) {
+          position: absolute;
+          bottom: 0;
+          left: 0; }
+      .bottlecapRowContainer table.capDisplay tr td:nth-child(2) {
+        background: #FFFFFF;
+        border-radius: 10px 0 0 10px;
+        width: 150px; }
+        .bottlecapRowContainer table.capDisplay tr td:nth-child(2) img:nth-child(1) {
+          border-radius: 10px 0 0 10px;
+          max-height: 100px;
+          max-width: 150px;
+          display: block; }
+        .bottlecapRowContainer table.capDisplay tr td:nth-child(2) img:nth-child(2) {
+          margin-top: 5px;
+          max-height: 30px; }
+      @media only screen and (max-width: 700px) {
+        .bottlecapRowContainer table.capDisplay tr td:nth-child(3) {
+          background: #FFFFFF;
+          border-radius: 0 10px 10px 0; }
+        .bottlecapRowContainer table.capDisplay tr td:nth-child(4) {
+          display: none; } }
+      @media only screen and (min-width: 700px) {
+        .bottlecapRowContainer table.capDisplay tr td:nth-child(3) {
+          background: #FFFFFF; }
+        .bottlecapRowContainer table.capDisplay tr td:nth-child(4) {
+          background: #FFFFFF;
+          border-radius: 0 10px 10px 0; } }
+      .bottlecapRowContainer table.capDisplay tr td:nth-child(5) {
+        background: #FFDFC7;
+        border-radius: 10px;
+        width: 120px; }
+    .bottlecapRowContainer table.capDisplay tr:nth-child(1) {
+      height: 30px; }
+      .bottlecapRowContainer table.capDisplay tr:nth-child(1) td {
+        background: #FF8C00;
+        font-weight: bold;
+        color: #FFFFFF;
+        text-align: center;
+        border-radius: 10px; }
+@keyframes overlayFadeIn {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer {
+    position: absolute;
+    display: none;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 200px;
+    width: 100%;
+    max-width: 900px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px; }
+    .bottlecapRowContainer .infoOverlays .additionalInformationContainer .additionalInformationOverlay {
+      position: absolute;
+      top: 0px;
+      left: 155px;
+      right: 10px;
+      margin-top: 28px;
+      background: rgba(255, 255, 255, 0.9);
+      height: 150px;
       border-radius: 10px;
-      width: 100%;
-      height: 35px;
-      color: #FFFFFF; }
+      text-align: left;
+      overflow: hidden; }
+      .bottlecapRowContainer .infoOverlays .additionalInformationContainer .additionalInformationOverlay table.capData {
+        background: transparent;
+        border-spacing: 0;
+        border-collapse: collapse;
+        height: 100%; }
+        .bottlecapRowContainer .infoOverlays .additionalInformationContainer .additionalInformationOverlay table.capData tr td:nth-child(1),
+        .bottlecapRowContainer .infoOverlays .additionalInformationContainer .additionalInformationOverlay table.capData tr td:nth-child(3) {
+          text-align: right;
+          color: #696969;
+          border-right: none;
+          padding-right: 0; }
+        .bottlecapRowContainer .infoOverlays .additionalInformationContainer .additionalInformationOverlay table.capData tr td:nth-child(2),
+        .bottlecapRowContainer .infoOverlays .additionalInformationContainer .additionalInformationOverlay table.capData tr td:nth-child(4) {
+          text-align: left;
+          padding-left: 4px;
+          padding-right: 10px;
+          color: #000000;
+          border-right: 1px solid gray; }
+        .bottlecapRowContainer .infoOverlays .additionalInformationContainer .additionalInformationOverlay table.capData tr:nth-child(1) td:nth-child(1) {
+          width: 0px;
+          border-right: none; }
+        .bottlecapRowContainer .infoOverlays .additionalInformationContainer .additionalInformationOverlay table.capData tr:nth-child(1) td:nth-child(2),
+        .bottlecapRowContainer .infoOverlays .additionalInformationContainer .additionalInformationOverlay table.capData tr:nth-child(1) td:nth-child(4) {
+          text-align: right;
+          color: #696969;
+          border-right: none;
+          padding-right: 0; }
+        .bottlecapRowContainer .infoOverlays .additionalInformationContainer .additionalInformationOverlay table.capData tr:nth-child(1) td:nth-child(3),
+        .bottlecapRowContainer .infoOverlays .additionalInformationContainer .additionalInformationOverlay table.capData tr:nth-child(1) td:nth-child(5) {
+          text-align: left;
+          padding-left: 4px;
+          padding-right: 10px;
+          color: #000000;
+          border-right: 1px solid gray; }
+      .bottlecapRowContainer .infoOverlays .additionalInformationContainer .additionalInformationOverlay .close {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        width: 35px;
+        height: 150px;
+        border-radius: 0 10px 10px 0;
+        background: #2B2B2B;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        text-align: center;
+        line-height: 35px;
+        color: #FFFFFF;
+        font-size: 13pt;
+        -webkit-transition: all 0.4s ease-in-out;
+        -moz-transition: all 0.4s ease-in-out;
+        -ms-transition: all 0.4s ease-in-out;
+        -o-transition: all 0.4s ease-in-out;
+        transition: all 0.4s ease-in-out; }
+      .bottlecapRowContainer .infoOverlays .additionalInformationContainer .additionalInformationOverlay .close:hover {
+        background: #FF892E;
+        -webkit-transition: all 0.2s ease-in-out;
+        -moz-transition: all 0.2s ease-in-out;
+        -ms-transition: all 0.2s ease-in-out;
+        -o-transition: all 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:target {
+    display: block;
+    animation: overlayFadeIn;
+    animation-duration: 0.2s;
+    animation-iteration-count: 1; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(1) {
+    top: 36px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(2) {
+    top: 239px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(3) {
+    top: 442px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(4) {
+    top: 645px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(5) {
+    top: 848px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(6) {
+    top: 1051px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(7) {
+    top: 1254px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(8) {
+    top: 1457px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(9) {
+    top: 1660px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(10) {
+    top: 1863px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(11) {
+    top: 2066px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(12) {
+    top: 2269px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(13) {
+    top: 2472px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(14) {
+    top: 2675px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(15) {
+    top: 2878px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(16) {
+    top: 3081px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(17) {
+    top: 3284px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(18) {
+    top: 3487px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(19) {
+    top: 3690px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(20) {
+    top: 3893px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(21) {
+    top: 4096px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(22) {
+    top: 4299px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(23) {
+    top: 4502px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(24) {
+    top: 4705px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(25) {
+    top: 4908px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(26) {
+    top: 5111px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(27) {
+    top: 5314px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(28) {
+    top: 5517px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(29) {
+    top: 5720px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(30) {
+    top: 5923px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(31) {
+    top: 6126px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(32) {
+    top: 6329px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(33) {
+    top: 6532px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(34) {
+    top: 6735px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(35) {
+    top: 6938px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(36) {
+    top: 7141px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(37) {
+    top: 7344px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(38) {
+    top: 7547px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(39) {
+    top: 7750px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(40) {
+    top: 7953px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(41) {
+    top: 8156px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(42) {
+    top: 8359px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(43) {
+    top: 8562px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(44) {
+    top: 8765px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(45) {
+    top: 8968px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(46) {
+    top: 9171px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(47) {
+    top: 9374px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(48) {
+    top: 9577px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(49) {
+    top: 9780px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(50) {
+    top: 9983px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(51) {
+    top: 10186px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(52) {
+    top: 10389px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(53) {
+    top: 10592px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(54) {
+    top: 10795px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(55) {
+    top: 10998px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(56) {
+    top: 11201px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(57) {
+    top: 11404px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(58) {
+    top: 11607px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(59) {
+    top: 11810px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(60) {
+    top: 12013px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(61) {
+    top: 12216px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(62) {
+    top: 12419px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(63) {
+    top: 12622px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(64) {
+    top: 12825px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(65) {
+    top: 13028px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(66) {
+    top: 13231px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(67) {
+    top: 13434px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(68) {
+    top: 13637px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(69) {
+    top: 13840px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(70) {
+    top: 14043px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(71) {
+    top: 14246px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(72) {
+    top: 14449px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(73) {
+    top: 14652px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(74) {
+    top: 14855px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(75) {
+    top: 15058px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(76) {
+    top: 15261px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(77) {
+    top: 15464px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(78) {
+    top: 15667px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(79) {
+    top: 15870px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(80) {
+    top: 16073px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(81) {
+    top: 16276px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(82) {
+    top: 16479px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(83) {
+    top: 16682px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(84) {
+    top: 16885px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(85) {
+    top: 17088px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(86) {
+    top: 17291px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(87) {
+    top: 17494px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(88) {
+    top: 17697px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(89) {
+    top: 17900px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(90) {
+    top: 18103px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(91) {
+    top: 18306px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(92) {
+    top: 18509px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(93) {
+    top: 18712px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(94) {
+    top: 18915px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(95) {
+    top: 19118px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(96) {
+    top: 19321px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(97) {
+    top: 19524px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(98) {
+    top: 19727px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(99) {
+    top: 19930px; }
+  .bottlecapRowContainer .infoOverlays .additionalInformationContainer:nth-child(100) {
+    top: 20133px; }
 
 /*# sourceMappingURL=style.css.map */

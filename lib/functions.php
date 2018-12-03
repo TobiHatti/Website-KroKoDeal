@@ -145,7 +145,7 @@ function SetsAndA2ZButtons($ISOcode,$showBottlecapCount=false,$linkToCountries=f
                 <img src="/content/buttons/DE/a-z.png" alt="" />
     ';
 
-    if($showBottlecapCount) $retval .= '<div>'.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isOwned='1' AND countries.countryShort = ?",'s',$ISOcode).' St&uuml;ck</div>';
+    if($showBottlecapCount) $retval .= '<div>'.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isCounted='1' AND countries.countryShort = ?",'s',$ISOcode).' St&uuml;ck</div>';
 
     $retval .= '</div>'.($linkToCountries ? '</a>' : '');
 
@@ -158,7 +158,7 @@ function SetsAndA2ZButtons($ISOcode,$showBottlecapCount=false,$linkToCountries=f
                 <img src="/content/buttons/DE/sets.png" alt="" />
     ';
 
-    if($showBottlecapCount) $retval .= '<div>'.MySQL::Count("SELECT DISTINCT bottlecaps.setID FROM sets INNER JOIN bottlecaps ON sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isOwned='1' AND countries.countryShort = ?",'s',$ISOcode).' Sets</div>';
+    if($showBottlecapCount) $retval .= '<div>'.MySQL::Count("SELECT DISTINCT bottlecaps.setID FROM sets INNER JOIN bottlecaps ON sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isCounted='1' AND countries.countryShort = ?",'s',$ISOcode).' Sets</div>';
 
     $retval .= '</div>'.($linkToCountries ? '</a>' : '');
 
@@ -181,7 +181,7 @@ function ContinentButton($ISOcode,$showBottlecapCount=false,$linkToCountries=fal
     {
         $retval .= '
             <div>
-                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN continents ON countries.continentID = continents.id WHERE bottlecaps.isOwned='1' AND continents.continentShort = ?",'s',$ISOcode).' St&uuml;ck
+                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN continents ON countries.continentID = continents.id WHERE continents.continentShort = ?",'s',$ISOcode).' St&uuml;ck
             </div>
         ';
     }
@@ -194,14 +194,19 @@ function ContinentButton($ISOcode,$showBottlecapCount=false,$linkToCountries=fal
     return $retval;
 }
 
-function CountryButton($ISOcode,$showBottlecapCount=false,$linkToCollectionOrSubmenu = false)
+function CountryButton($ISOcode,$showBottlecapCount=false, $showSetCount=false,$linkToCollectionOrSubmenu = false)
 {
     $link = '';
 
-    if($linkToCollectionOrSubmenu)
+    if($linkToCollectionOrSubmenu AND $showBottlecapCount)
     {
         if(MySQL::Exist("SELECT regions.id FROM regions INNER JOIN countries ON regions.countryID = countries.id WHERE countries.countryShort = ?",'s',$ISOcode)) $link = '/laender/regionen/'.$ISOcode;
         else $link = '/kronkorken/'.$ISOcode;
+    }
+
+    if($linkToCollectionOrSubmenu AND $showSetCount)
+    {
+        $link = '/sets/'.$ISOcode;
     }
 
     $retval = '
@@ -214,7 +219,16 @@ function CountryButton($ISOcode,$showBottlecapCount=false,$linkToCollectionOrSub
     {
         $retval .= '
             <div>
-                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isOwned='1' AND countries.countryShort = ?",'s',$ISOcode).' St&uuml;ck
+                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isCounted='1' AND countries.countryShort = ?",'s',$ISOcode).' St&uuml;ck
+            </div>
+        ';
+    }
+
+    if($showSetCount)
+    {
+        $retval .= '
+            <div>
+                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE isSet = '1' AND countries.countryShort = ? GROUP BY setID",'s',$ISOcode).' Sets
             </div>
         ';
     }
@@ -247,7 +261,7 @@ function RegionButton($ISOcode,$showBottlecapCount=false,$linkToCollection = fal
     {
         $retval .= '
             <div>
-                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.ID INNER JOIN regions ON breweries.regionID = regions.id WHERE bottlecaps.isOwned = '1' AND regions.regionShort = ?",'s',$ISOcode).' St&uuml;ck
+                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.ID INNER JOIN regions ON breweries.regionID = regions.id WHERE bottlecaps.isCounted = '1' AND regions.regionShort = ?",'s',$ISOcode).' St&uuml;ck
             </div>
         ';
     }
@@ -281,8 +295,11 @@ function BottlecapColorScheme($capColorCode,$baseColor,$textColor,$isUsed = fals
 
 function BreweryListTile($breweryID,$showRegional=false)
 {
-    if($showRegional) $breweryData = MySQL::Row("SELECT * FROM breweries INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN regions ON breweries.regionID = regions.id WHERE breweries.id = ? ORDER BY breweries.breweryName ASC",'i',$breweryID);
-    else $breweryData = MySQL::Row("SELECT * FROM breweries INNER JOIN countries ON breweries.countryID = countries.id  WHERE breweries.id = ? ORDER BY breweries.breweryName ASC",'i',$breweryID);
+    if($showRegional) $breweryData = MySQL::Row("SELECT *,breweries.id AS breweryID FROM breweries INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN regions ON breweries.regionID = regions.id WHERE breweries.id = ? ORDER BY breweries.breweryName ASC",'i',$breweryID);
+    else $breweryData = MySQL::Row("SELECT *,breweries.id AS breweryID FROM breweries INNER JOIN countries ON breweries.countryID = countries.id  WHERE breweries.id = ? ORDER BY breweries.breweryName ASC",'i',$breweryID);
+
+    $bottleCapCount = MySQL::Count("SELECT * FROM bottlecaps WHERE isCounted = '1' AND isSet = '0' AND breweryID = ?",'i',$breweryData['breweryID']);
+    $tradeableCount = MySQL::Count("SELECT * FROM bottlecaps WHERE isCounted = '1' AND isSet = '0' AND isTradeable = '1' AND breweryID = ?",'i',$breweryData['breweryID']);
 
 
     $retval = '
@@ -294,8 +311,8 @@ function BreweryListTile($breweryID,$showRegional=false)
                 '.($showRegional ? ('<i>Bundesland:</i> '.$breweryData['regionDE']) : '').'
             </td>
             <td>
-                <i>Kronkorken:</i> '.MySQL::Count("SELECT id FROM bottlecaps WHERE isOwned = '1' AND isSet = '0' AND breweryID = ?",'i',$breweryData['id']).'<br>
-                <i>Tauschbar:</i> '.MySQL::Count("SELECT id FROM bottlecaps WHERE isOwned = '1' AND isSet = '0' AND isTradeable = '1' AND breweryID = ?",'i',$breweryData['id']).'
+                <i>Kronkorken:</i> '.$bottleCapCount.'<br>
+                <i>Tauschbar:</i> '.$tradeableCount.'
             </td>
             <td>
                 '.(($breweryData['breweryLink']!='') ? '<a target="_blank" href="'.$breweryData['breweryLink'].'"><button type="button"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
@@ -303,6 +320,22 @@ function BreweryListTile($breweryID,$showRegional=false)
                 <a href="/kronkorken/sammlung/'.$breweryData['countryShort'].'/brauerei/'.$breweryData['breweryFilepath'].'"><button type="button">Kronkorken dieser<br>Brauerei</button></a>
             </td>
         </tr>
+    ';
+
+    return $retval;
+}
+
+function SetTile($setID)
+{
+    $setData = MySQL::Row("SELECT * FROM sets INNER JOIN bottlecaps on sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE sets.id = ?",'i',$setID);
+
+    $retval = '
+        <table>
+            <tr><td colspan=3>'.$setData['setName'].'</td></tr>
+            <tr>
+                <td><img src="/files/sets/" alt="" /></td>
+            </tr>
+        </table>
     ';
 
     return $retval;

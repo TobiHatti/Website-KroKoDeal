@@ -26,24 +26,24 @@
             </div>
 
             <div>
-                <h3><u>Statistiken</u></h3>
+                <h3><u>Statistik</u></h3>
 
                 <table>
                     <tr>
                         <td>Aktueller Kronkorken-Stand:<br><br></td>
-                        <td>'.MySQL::Count("SELECT id FROM bottlecaps WHERE isOwned = 1").' Stück<br><br></td>
+                        <td>'.MySQL::Count("SELECT id FROM bottlecaps WHERE isCounted = 1").' Stück<br><br></td>
                     </tr>
                     <tr>
                         <td>Heute hinzugefügt:</td>
-                        <td>'.MySQL::Count("SELECT id FROM bottlecaps WHERE isOwned = 1 AND dateInserted LIKE '".date("Y-m-d")."'").' Stück</td>
+                        <td>'.MySQL::Count("SELECT id FROM bottlecaps WHERE dateInserted LIKE '".date("Y-m-d")."'").' Stück</td>
                     </tr>
                     <tr>
                         <td>Diesen Monat hinzugefügt:</td>
-                        <td>'.MySQL::Count("SELECT id FROM bottlecaps WHERE isOwned = 1 AND dateInserted LIKE '".date("Y-m-")."%'").' Stück</td>
+                        <td>'.MySQL::Count("SELECT id FROM bottlecaps WHERE dateInserted LIKE '".date("Y-m-")."%'").' Stück</td>
                     </tr>
                     <tr>
                         <td>Dieses Jahr hinzugefügt:</td>
-                        <td>'.MySQL::Count("SELECT id FROM bottlecaps WHERE isOwned = 1 AND dateInserted LIKE '".date("Y-")."%'").' Stück</td>
+                        <td>'.MySQL::Count("SELECT id FROM bottlecaps WHERE dateInserted LIKE '".date("Y-")."%'").' Stück</td>
                     </tr>
                 </table>
             </div>
