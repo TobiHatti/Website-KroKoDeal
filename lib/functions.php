@@ -327,13 +327,23 @@ function BreweryListTile($breweryID,$showRegional=false)
 
 function SetTile($setID)
 {
-    $setData = MySQL::Row("SELECT * FROM sets INNER JOIN bottlecaps on sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE sets.id = ?",'i',$setID);
+    $setData = MySQL::Row("SELECT * FROM sets INNER JOIN bottlecaps ON sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE sets.id = ?",'i',$setID);
+
+    $setThumbnail = MySQL::Scalar("SELECT capImage FROM bottlecaps WHERE id = ?",'i',$setData['thumbnailID']);
 
     $retval = '
-        <table>
+        <table class="setTileTable">
             <tr><td colspan=3>'.$setData['setName'].'</td></tr>
             <tr>
-                <td><img src="/files/sets/" alt="" /></td>
+                <td><img src="/files/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'/'.$setThumbnail.'" alt="" /></td>
+                <td>
+                    <b>Brauerei: </b> '.$setData['breweryName'].'<br><br>
+                    <b>Set-Gr&ouml;&szlig;e: </b>'.$setData['setSize'].'<br><br>
+                    <b>Land: </b>'.$setData['countryDE'].'
+                </td>
+                <td>
+                    <a href="/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'/"><button type="button">Set betrachten</button></a>
+                </td>
             </tr>
         </table>
     ';

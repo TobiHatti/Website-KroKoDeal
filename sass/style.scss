@@ -864,3 +864,49 @@ button{
     }
 }
 
+.setTileTable{
+    background: #2b2b2b;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    width: 70%;
+
+    tr{
+        td{
+            border-radius: 10px;
+        }
+
+    }
+
+    tr:nth-child(1){
+        td{
+            background: $theme-dark;
+            color: #FFFFFF;
+            text-align:center;
+        }
+    }
+
+    tr:nth-child(2){
+        td:nth-child(1){
+            background: transparent;
+            text-align:center;
+            width: 160px;
+            img{
+                width:150px;
+                border-radius: 10px;
+            }
+
+        }
+
+        td:nth-child(2){
+            background: #FFFFFF;
+        }
+
+        td:nth-child(3){
+            background: $theme-brighter;
+            width: 120px;
+        }
+    }
+
+
+
+}
