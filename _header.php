@@ -48,10 +48,12 @@
                             </li>
                             <div id="lavalamp"></div>
 
-                            <div class="searchbar">
-                                <input type="search" placeholder="Suche..."/>
-                                <button type="submit"><i class="fas fa-search"></i></button>
-                            </div>
+                            <form action="/suche" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                                <div class="searchbar">
+                                    <input type="search" placeholder="Suche..." name="searchValue"/>
+                                    <button type="submit"><i class="fas fa-search"></i></button>
+                                </div>
+                            </form>
                         </ul>
                     </div>
 

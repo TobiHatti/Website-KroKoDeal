@@ -169,4 +169,17 @@
         MySQL::NonQuery("UPDATE breweries SET breweryShort = ? WHERE id = ?",'@s',$short[1],$row['breweryID']);
     }
     */
+
+    /*
+
+    $strSQL = "SELECT * FROM breweries";
+    $rs=mysqli_query($link,$strSQL);
+    while($row=mysqli_fetch_assoc($rs)){
+        $id = $row['id'];
+        $newImage = SReplace($row['breweryImage'],'.');
+
+        MySQL::NonQuery("UPDATE breweries SET breweryImage = ? WHERE id = ?",'@s',$newImage,$id);
+    }
+
+    */
 ?>
