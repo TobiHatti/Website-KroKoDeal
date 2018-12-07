@@ -342,7 +342,7 @@ function SetTile($setID)
                     <b>Land: </b>'.$setData['countryDE'].'
                 </td>
                 <td>
-                    <a href="/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'/"><button type="button">Set betrachten</button></a>
+                    <a href="/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'"><button type="button">Set betrachten</button></a>
                 </td>
             </tr>
         </table>
@@ -351,5 +351,119 @@ function SetTile($setID)
     return $retval;
 }
 
+function BottleCapRowData($capData, $isSet, $countryHasRegions)
+{
+    if($isSet) $imagePath = '/files/sets/'.$capData['countryShort'].'/'.$capData['setFilepath'].'/'.$capData['capImage'];
+    else $imagePath = '/files/bottlecaps/'.$capData['countryShort'].'/'.$capData['breweryFilepath'].'/'.$capData['capImage'];
+
+
+    $retval = '
+        <tr>
+            <td>
+                '.($isSet ? '<a name="cap'.$capData['bottlecapID'].'">' : '').'
+                <img src="'.$imagePath.'" alt="" />
+            </td>
+            <td>
+                <center>
+                    <img src="/files/breweries/'.$capData['countryShort'].'/'.$capData['breweryImage'].'" alt="" />
+                    <img src="/files/sidesigns/'.$capData['sidesignImage'].'" alt="" />
+                    <br>
+                    <img src="/content/blank.gif" class="flag flag-'.strtolower($capData['countryShort2']).'" id="flag_img"  alt="" />
+                </center>
+            </td>
+            <td>
+                <b>Brauerei:</b><br>
+                '.$capData['breweryName'].'<br><br>
+                <b>Name:</b><br>
+                '.$capData['name'].'<br><br>
+                <b>Sorte:</b>
+                <br>'.$capData['flavorDE'].'
+                '.($isSet ? ('<br><br><b>In Sammlung: </b><br>'.($capData['isOwned'] ? 'Ja' : 'Nein' )) : '').'
+            </td>
+            <td>
+                <b>Land:</b>
+                '.$capData['countryDE'].' <br><br>
+                '.($countryHasRegions ? ('<b>Bundesland: </b>'.$capData['regionDE'].'<br><br>') : '').'
+                <b>Gekauft:</b><br>
+                '.$capData['locationAquired'].'<br><br>
+                <b>In Sammlung seit:</b><br>
+                '.$capData['dateAquired'].'
+            </td>
+            <td>
+                '.(($capData['breweryLink']!='') ? '<a target="_blank" href="'.$capData['breweryLink'].'"><button type="button"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
+
+                <a href="#zusatzinfos'.$capData['bottlecapID'].'"><button type="button" onclick="bgenScroll();"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
+            </td>
+        </tr>
+    ';
+
+    return $retval;
+}
+
+function BottleCapRowInfoOverlay($capData)
+{
+
+
+    $retval = '
+        <div class="additionalInformationContainer" id="zusatzinfos'.$capData['bottlecapID'].'">
+            <div class="additionalInformationOverlay">
+                <table class="capData">
+                    <tr>
+                        <td rowspan=7>'.BottlecapColorScheme($capData['bottlecapCapColorShort'],$capData['bottlecapBaseColorValue'],$capData['bottlecapTextColorValue'],$capData['isUsed'],$capData['isTwistlock']).'</td>
+                        <td>Kronkorkenfarbe: </td>
+                        <td>'.$capData['bottlecapCapColorName'].'</td>
+
+                        <td>Qualit&auml;t: </td>
+                        <td>'.$capData['quality'].'</td>
+                    </tr>
+                    <tr>
+                        <td>Grundfarbe: </td>
+                        <td>'.$capData['bottlecapBaseColorName'].'</td>
+
+                        <td>Auf Lager:</td>
+                        <td>'.$capData['stock'].' St&uuml;ck</td>
+                    </tr>
+                    <tr>
+                        <td>Textfarbe: </td>
+                        <td>'.$capData['bottlecapTextColorName'].'</td>
+
+                        <td>Tauschbar: </td>
+                        <td>'.($capData['isTradeable'] ? 'Ja' : 'Nein').'</td>
+                    </tr>
+                    <tr>
+                        <td><br></td>
+                        <td><br></td>
+                        <td><br></td>
+                        <td><br></td>
+                    </tr>
+                    <tr>
+                        <td>Set-Teil:</td>
+                        <td>'.($capData['isSet'] ? 'Ja' : 'Nein').'</td>
+
+                        <td>Randzeichen: </td>
+                        <td>'.$capData['sidesignName'].'</td>
+                    </tr>
+                    <tr>
+                        <td>Zustand: </td>
+                        <td>'.($capData['isUsed'] ? 'Gebraucht' : 'Neu').'</td>
+
+                        <td>KK-Nummer</td>
+                        <td>'.$capData['capNumber'].'</td>
+                    </tr>
+                    <tr>
+                        <td>Drehverschluss: </td>
+                        <td>'.($capData['isTwistlock'] ? 'Ja' : 'Nein').'</td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <a href="#"><div class="close" onclick="bgenScroll();">Schlie&szlig;en</div></a>
+            </div>
+        </div>
+    ';
+
+    return $retval;
+}
 
 ?>

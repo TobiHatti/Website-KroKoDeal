@@ -160,4 +160,9 @@
         @include box-sizing(border-box);
     }
 
+    input[type=search]:focus,
+    button{
+        outline: none;
+    }
+
 }

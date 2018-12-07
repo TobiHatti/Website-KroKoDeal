@@ -867,7 +867,8 @@ button {
   .setTileTable tr:nth-child(1) td {
     background: #FF8C00;
     color: #FFFFFF;
-    text-align: center; }
+    text-align: center;
+    font-weight: bold; }
   .setTileTable tr:nth-child(2) td:nth-child(1) {
     background: transparent;
     text-align: center;
@@ -880,5 +881,17 @@ button {
   .setTileTable tr:nth-child(2) td:nth-child(3) {
     background: #FFDFC7;
     width: 120px; }
+
+.setCapThumbnailContainer {
+  background: #2B2B2B;
+  border-radius: 10px;
+  padding: 5px; }
+  .setCapThumbnailContainer img {
+    width: 50px;
+    border-radius: 10px;
+    margin: 1px; }
+  .setCapThumbnailContainer img:hover {
+    margin: 0;
+    width: 52px; }
 
 /*# sourceMappingURL=style.css.map */

@@ -210,8 +210,46 @@
             $capDataArray = MySQL::Cluster($sqlStatement,'@s',$country,$brewery);
             $sqlPager = $pager->SQLAuto(str_replace(" LIMIT $pagerOffset,$pagerSize","",$sqlStatement),'@s',$country,$brewery);
             $tableHeader = 'Kronkorken aus '.$capDataArray[0]['countryDE'].' der Brauerei "'.$capDataArray[0]['breweryName'].'"';
+        }
+        if(isset($_GET['all']))
+        {
+            if(isset($_GET['letter'])) $letter = $_GET['letter'].'%';
+            else $letter="";
 
+            $sqlStatement = "SELECT *,
+            bottlecaps.id AS bottlecapID,
+            capColor.colorShort AS bottlecapCapColorShort,
+            capColor.colorDE AS bottlecapCapColorName,
+            baseColor.hex AS bottlecapBaseColorValue,
+            baseColor.colorDE AS bottlecapBaseColorName,
+            textColor.hex AS bottlecapTextColorValue,
+            textColor.colorDE AS bottlecapTextColorName
+            FROM bottlecaps
+            INNER JOIN breweries ON bottlecaps.breweryID = breweries.id
+            INNER JOIN countries ON breweries.countryID = countries.id
+            INNER JOIN flavors ON bottlecaps.flavorID = flavors.id
+            INNER JOIN sidesigns ON bottlecaps.sidesignID = sidesigns.id
+            INNER JOIN colors AS capColor ON bottlecaps.capColorID = capColor.id
+            INNER JOIN colors AS baseColor ON bottlecaps.baseColorID = baseColor.id
+            INNER JOIN colors AS textColor ON bottlecaps.textColorID = textColor.id
+            ".(isset($_GET['letter']) ? "WHERE breweries.breweryName LIKE ?" : "")."
+            ORDER BY breweries.breweryName, bottlecaps.capNumber ASC
+            LIMIT $pagerOffset,$pagerSize";
 
+            $countryHasRegions = false;
+
+            if(isset($_GET['letter'])) $capDataArray = MySQL::Cluster($sqlStatement,'s',$letter);
+            else $capDataArray = MySQL::Cluster($sqlStatement);
+
+            if(isset($_GET['letter'])) $sqlPager = $pager->SQLAuto(str_replace(" LIMIT $pagerOffset,$pagerSize","",$sqlStatement),'s',$letter);
+            else $sqlPager = $pager->SQLAuto(str_replace(" LIMIT $pagerOffset,$pagerSize","",$sqlStatement));
+
+            $tableHeader = 'Alle Kronkorken';
+
+            $alphaSortData = MySQL::Cluster("SELECT DISTINCT LEFT(breweries.breweryName , 1) AS letter FROM breweries INNER JOIN countries ON breweries.countryID = countries.id ORDER BY breweries.breweryName ASC");
+            $alphaSort = '<div class="letterSelection">';
+            foreach($alphaSortData AS $letter) $alphaSort .= '<a href="/kronkorken/alle/'.$letter['letter'].'"><span '.((isset($_GET['letter']) AND $_GET['letter'] == $letter['letter']) ? 'id="selected"' : '' ).'>'.$letter['letter'].'</span></a>';
+            $alphaSort .= '</div>';
         }
 
    
@@ -220,7 +258,7 @@
 
         echo '
             <center>
-                '.(isset($_GET['sortbyletter']) ? $alphaSort : '').'
+                '.((isset($_GET['sortbyletter']) OR isset($_GET['all'])) ? $alphaSort : '').'
                 <br>
                 '.$sqlPager.'
                 <div class="bottlecapRowContainer">
@@ -230,110 +268,11 @@
                         </tr>
         ';
 
-        foreach($capDataArray AS $capData)
-        {
-            echo  '
-                <tr>
-                    <td>
-                        <img src="/files/bottlecaps/'.$capData['countryShort'].'/'.$capData['breweryFilepath'].'/'.$capData['capImage'].'" alt="" />
-                    </td>
-                    <td>
-                        <center>
-                            <img src="/files/breweries/'.$capData['countryShort'].'/'.$capData['breweryImage'].'" alt="" />
-                            <img src="/files/sidesigns/'.$capData['sidesignImage'].'" alt="" />
-                            <br>
-                            <img src="/content/blank.gif" class="flag flag-'.strtolower($capData['countryShort2']).'" id="flag_img"  alt="" />
-                        </center>
-                    </td>
-                    <td>
-                        <b>Brauerei:</b><br>
-                        '.$capData['breweryName'].'<br><br>
-                        <b>Name:</b><br>
-                        '.$capData['name'].'<br><br>
-                        <b>Sorte:</b>
-                        <br>'.$capData['flavorDE'].'
-                    </td>
-                    <td>
-                        <b>Land:</b>
-                        '.$capData['countryDE'].' <br><br>
-                        '.($countryHasRegions ? ('<b>Bundesland: </b>'.$capData['regionDE'].'<br><br>') : '').'
-                        <b>Gekauft:</b><br>
-                        '.$capData['locationAquired'].'<br><br>
-                        <b>In Sammlung seit:</b><br>
-                        '.$capData['dateAquired'].'
-                    </td>
-                    <td>
-                        '.(($capData['breweryLink']!='') ? '<a target="_blank" href="'.$capData['breweryLink'].'"><button type="button"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
-
-                        <a href="#zusatzinfos'.$capData['bottlecapID'].'"><button type="button" onclick="bgenScroll();"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
-                    </td>
-                </tr>
-            ';
-        }
+        foreach($capDataArray AS $capData) echo BottleCapRowData($capData, false, $countryHasRegions);
 
         echo '</table><div class="infoOverlays">';
 
-        foreach($capDataArray AS $capData)
-        {
-            echo '
-                <div class="additionalInformationContainer" id="zusatzinfos'.$capData['bottlecapID'].'">
-                    <div class="additionalInformationOverlay">
-                        <table class="capData">
-                            <tr>
-                                <td rowspan=7>'.BottlecapColorScheme($capData['bottlecapCapColorShort'],$capData['bottlecapBaseColorValue'],$capData['bottlecapTextColorValue'],$capData['isUsed'],$capData['isTwistlock']).'</td>
-                                <td>Kronkorkenfarbe: </td>
-                                <td>'.$capData['bottlecapCapColorName'].'</td>
-
-                                <td>Qualit&auml;t: </td>
-                                <td>'.$capData['quality'].'</td>
-                            </tr>
-                            <tr>
-                                <td>Grundfarbe: </td>
-                                <td>'.$capData['bottlecapBaseColorName'].'</td>
-
-                                <td>Auf Lager:</td>
-                                <td>'.$capData['stock'].' St&uuml;ck</td>
-                            </tr>
-                            <tr>
-                                <td>Textfarbe: </td>
-                                <td>'.$capData['bottlecapTextColorName'].'</td>
-
-                                <td>Tauschbar: </td>
-                                <td>'.($capData['isTradeable'] ? 'Ja' : 'Nein').'</td>
-                            </tr>
-                            <tr>
-                                <td><br></td>
-                                <td><br></td>
-                                <td><br></td>
-                                <td><br></td>
-                            </tr>
-                            <tr>
-                                <td>Set-Teil:</td>
-                                <td>'.($capData['isSet'] ? 'Ja' : 'Nein').'</td>
-
-                                <td>Randzeichen: </td>
-                                <td>'.$capData['sidesignName'].'</td>
-                            </tr>
-                            <tr>
-                                <td>Zustand: </td>
-                                <td>'.($capData['isUsed'] ? 'Gebraucht' : 'Neu').'</td>
-
-                                <td>KK-Nummer</td>
-                                <td>'.$capData['capNumber'].'</td>
-                            </tr>
-                            <tr>
-                                <td>Drehverschluss: </td>
-                                <td>'.($capData['isTwistlock'] ? 'Ja' : 'Nein').'</td>
-
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </table>
-                        <a href="#"><div class="close" onclick="bgenScroll();">Schlie&szlig;en</div></a>
-                    </div>
-                </div>
-            ';
-        }
+        foreach($capDataArray AS $capData) echo BottleCapRowInfoOverlay($capData);
 
         echo '</div></div><br>'.$sqlPager.'</center>';
 

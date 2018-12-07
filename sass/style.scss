@@ -882,6 +882,7 @@ button{
             background: $theme-dark;
             color: #FFFFFF;
             text-align:center;
+            font-weight: bold;
         }
     }
 
@@ -906,7 +907,22 @@ button{
             width: 120px;
         }
     }
+}
 
+.setCapThumbnailContainer{
+    background: #2B2B2B;
+    border-radius: 10px;
+    padding: 5px;
 
+    img{
+        width: 50px;
+        border-radius: 10px;
+        margin: 1px;
+    }
+
+    img:hover{
+        margin: 0;
+        width: 52px;
+    }
 
 }

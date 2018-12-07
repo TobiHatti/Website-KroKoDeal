@@ -26,7 +26,7 @@
                                 <ul class="subs">
                                     <li><a href="/laender">Kronkorken</a></li>
                                     <li><a href="/sets">Sets</a></li>
-                                    <li><a href="#">Alle Kronkorken</a></li>
+                                    <li><a href="/kronkorken/alle">Alle Kronkorken</a></li>
                                     <li><a href="#">Unbekannte Kronkorken</a></li>
                                 </ul>
                             </li>
