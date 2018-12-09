@@ -5,6 +5,7 @@
     require("lib/page.lib.php");
     require("data/mysql_connect.php");
     require("lib/functions.php");
+    require("lib/formelements.php");
 
 
 ?>

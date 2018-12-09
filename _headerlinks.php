@@ -61,7 +61,6 @@
             <script>(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);</script>
         <!-- End of File Buttons -->
 
-
         <!-- Header-Parallax -->
             <script>
                 window.addEventListener("scroll", function(e) {
@@ -70,6 +69,16 @@
                 });
             </script>
         <!-- End of Header-Parallax -->
-    ';
+
+        ';
+
+        if(Page::This() == "sign-up")
+        {
+            echo '
+                <!-- reCaptcha -->
+                    <script src="https://www.google.com/recaptcha/api.js?render=6LdGnH8UAAAAAJ8y1OFQ9fknUd-uZ5ewXQJixETO"></script>
+                <!-- End of reCaptcha -->
+            ';
+        }
 
 ?>

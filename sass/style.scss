@@ -1,9 +1,208 @@
+/*
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+///////////////////////////////////////////////////////////////////////////////////////
+
+    Notes:
+    •   For every CSS-Grid a Fallback-Class needs to be created.
+    •   For Overriding CSS-Form Classes use the following syntax:
+        .container .element{} will override the Default, while
+        .element{} alone will not override the default without the use of !important
+        #element{} will override the default, but is not allways possible
+
+///////////////////////////////////////////////////////////////////////////////////////
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+    Content:
+    ====== $ -  SASS =======================
+    ($01)   SASS > Imports
+    ====== @ -  Fontfaces/Keyframes ========
+    (@01)   Keyframes > Staggered Fade
+    (@02)   Fontfaces > Komikax
+    ====== Z - General =====================
+    (Z01)   HTML-Structural-Tags
+    (Z02)   Default HTML-Tags
+    (Z03)   Headings
+    (Z04)   Double-Column Classes
+    (Z05)   Formating Classes
+    (Z06)   Pager
+    (Z06)   Modal
+    (Z07)   Notifications
+    ====== Y - Form-Elements ===============
+    (Y01)   Buttons
+    (Y02)   Textboxes
+    (Y03)   Textarea
+    (Y04)   Selectbox
+    (Y05)   Checkbox
+    (Y06)   Togglebox
+    (Y07)   Tickbox
+    (Y08)   Radio Button
+    (Y09)   Range Slider
+    (Y10)   File Selector
+    (Y11)   Date/Time Selectors
+    (Y12)   Custom Element-Lengths
+    (Y13)   Custom Element-Formats
+    (Y14)   Custom Element-Classes
+    ====== X - General Classes ==============
+    (X01)   Header-Contents
+    (X02)   Searchbar
+    (X03)   Footer-Contents
+    (X04)   Tables
+    (X05)   Animation-Easing
+    (X06)   iframes
+    ====== A - Home ========================
+    (A01)   Home > Tiles
+    (A01)   Home > Modern News-Tiles
+    ====== B - Vorstand ====================
+    (B01)   Vorstand > User-Tiles
+    (B02)   Vorstand > Additional Info
+    ====== C - Satzungen Ordnungen =========
+    ====== D - Vereine =====================
+    ====== E - Links =======================
+    (E01)   Links > Containers
+    ====== F - Downloads ===================
+    ====== G - Allg. Klasse ================
+    ====== H - Schüler/Jugend ==============
+
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+///////////////////////////////////////////////////////////////////////////////////////
+*/
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*================================    $ -  SASS      ================================*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+
+/*===================================================================================*/
+/* ($01) SASS > Imports                                                              */
+/*===================================================================================*/
+
 @import 'variables';
 @import 'mixins';
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*============================  @ -  Fontfaces/Keyframes   ==========================*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+
+/*===================================================================================*/
+/* (@01) Keyframes > Staggered Fade                                                  */
+/*===================================================================================*/
+
+@keyframes stag_fade_in_1{
+    0% { opacity: 0; }
+    10%{ opacity: 0; }
+    40%{ opacity: 1; }
+    100%{opacity: 1; }
+}
+
+.stagfade1{
+    @include animation(stag_fade_in_1, 1s, 1, 0s);
+}
+
+@keyframes stag_fade_in_2{
+    0% { opacity: 0; }
+    20%{ opacity: 0; }
+    50%{ opacity: 1; }
+    100%{opacity: 1; }
+}
+
+.stagfade2{
+    @include animation(stag_fade_in_2, 1s, 1, 0s);
+}
+
+@keyframes stag_fade_in_3{
+    0% { opacity: 0; }
+    30%{ opacity: 0; }
+    60%{ opacity: 1; }
+    100%{opacity: 1; }
+}
+
+.stagfade3{
+    @include animation(stag_fade_in_3, 1s, 1, 0s);
+}
+
+@keyframes stag_fade_in_4{
+    0% { opacity: 0; }
+    40%{ opacity: 0; }
+    70%{ opacity: 1; }
+    100%{opacity: 1; }
+}
+
+.stagfade4{
+    @include animation(stag_fade_in_4, 1s, 1, 0s);
+}
+
+@keyframes stag_fade_in_5{
+    0% { opacity: 0; }
+    50%{ opacity: 0; }
+    80%{ opacity: 1; }
+    100%{opacity: 1; }
+}
+
+.stagfade5{
+    @include animation(stag_fade_in_5, 1s, 1, 0s);
+}
+
+@keyframes stag_fade_in_6{
+    0% { opacity: 0; }
+    60%{ opacity: 0; }
+    90%{ opacity: 1; }
+    100%{opacity: 1; }
+}
+
+.stagfade6{
+    @include animation(stag_fade_in_6, 1s, 1, 0s);
+}
+
+@keyframes stag_fade_in_7{
+    0% { opacity: 0; }
+    70%{ opacity: 0; }
+    100%{opacity: 1; }
+}
+
+.stagfade7{
+    @include animation(stag_fade_in_7, 1s, 1, 0s);
+}
+
+/*===================================================================================*/
+/* (@02) Fontfaces > Komikax                                                         */
+/*===================================================================================*/
+
+@font-face {
+    font-family: komikax;
+    src: url(../content/komikax.ttf);
+}
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*================================   Z - GENERAL     ================================*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+
+/*===================================================================================*/
+/* (Z01) HTML-Structural-Tags                                                        */
+/*===================================================================================*/
+
+/* See layout.scss */
+
+/*===================================================================================*/
+/* (Z02) Default HTML-Tags                                                           */
+/*===================================================================================*/
 
 a{
     text-decoration: none;
 }
+
+/*===================================================================================*/
+/* (Z03) Headings                                                                    */
+/*===================================================================================*/
 
 h1{
     margin: 5px 0;
@@ -31,15 +230,735 @@ h3{
     font-weight: lighter;
 }
 
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*================================ Y - Form-Elements ================================*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+
+input, textarea, select{
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 12pt;
+}
+
+/*===================================================================================*/
+/* (Y01) FormElements > Buttons                                                      */
+/*===================================================================================*/
+/* DESIGN A - Simple Flat Responsive Buttons (Modern) */
+
+input[type="button"],
+input[type="reset"],
+input[type="submit"],
+input[type="color"],
 button{
     background: #2B2B2B;
     border: none;
     border-radius: 10px;
-    width: 100%;
     height: 35px;
     color: #FFFFFF;
+    @include ease(0.1s);
 }
 
+input[type="button"]:hover,
+input[type="reset"]:hover,
+input[type="submit"]:hover,
+input[type="color"]:hover,
+button:hover{
+    color: $theme-medium;
+}
+
+input[type="button"]:active,
+input[type="reset"]:active,
+input[type="submit"]:active,
+input[type="color"]:active,
+button:active{
+
+}
+
+input[type="button"]:focus,
+input[type="reset"]:focus,
+input[type="submit"]:focus,
+input[type="color"]:focus,
+button:focus{
+
+
+}
+
+input[type="button"]:disabled,
+input[type="reset"]:disabled,
+input[type="submit"]:disabled,
+input[type="color"]:disabled,
+button:disabled{
+    color: #999999;
+}
+
+/*===================================================================================*/
+/* (Y02) FormElements > Textboxes                                                    */
+/*===================================================================================*/
+
+input[type="text"],
+input[type="number"],
+input[type="password"],
+input[type="email"],
+input[type="search"],
+input[type="tel"],
+input[type="url"]{
+    padding: 3px;
+    margin: 0;
+    border: 1px solid $textbox-border;
+    color: #000000;
+    display: inline-block;
+    outline: none;
+    @include box-sizing(border-box);
+    @include ease(0.1s);
+
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus{
+    border-bottom: 1px solid $theme-medium;
+    color: $theme-dark;
+}
+
+input[type="text"]:read-only:focus,
+input[type="number"]:read-only:focus,
+input[type="password"]:read-only:focus,
+input[type="email"]:read-only:focus,
+input[type="search"]:read-only:focus,
+input[type="tel"]:read-only:focus,
+input[type="url"]:read-only:focus,
+textarea:read-only:focus{
+    border: 1px solid $textbox-border;
+    color: #000000;
+}
+
+input[type="text"]::placeholder,
+input[type="number"]::placeholder,
+input[type="password"]::placeholder,
+input[type="email"]::placeholder,
+input[type="search"]::placeholder,
+input[type="tel"]::placeholder,
+input[type="url"]::placeholder,
+textarea::placeholder{
+    opacity: 0.5;
+    @include ease(0.1s);
+}
+
+input[type="text"]:focus::placeholder,
+input[type="number"]:focus::placeholder,
+input[type="password"]:focus::placeholder,
+input[type="email"]:focus::placeholder,
+input[type="search"]:focus::placeholder,
+input[type="tel"]:focus::placeholder,
+input[type="url"]:focus::placeholder,
+textarea:focus::placeholder{
+    opacity: 0.7;
+    color: $theme-dark;
+}
+
+/*===================================================================================*/
+/* (Y03) FormElements > Textarea                                                     */
+/*===================================================================================*/
+
+textarea{
+    padding: 2px;
+    margin: 3px;
+    border: 1px solid $textbox-border;
+    color: #000000;
+    display: inline-block;
+    outline: none;
+    font-family: Calibri, Arial, sans-serif;
+    @include box-sizing(border-box);
+    @include ease(0.1s);
+}
+
+/* :focus in (Y02) */
+
+/*===================================================================================*/
+/* (Y04) FormElements > Selectbox                                                    */
+/*===================================================================================*/
+
+select{
+    padding: 4px 1px 4px 1px;
+    margin: 3px;
+    border: 1px solid $textbox-border;
+    color: #000000;
+    display: inline-block;
+    outline: none;
+    @include box-sizing(border-box);
+    @include ease(0.1s);
+}
+
+select:focus{
+    border-bottom: 1px solid $theme-medium;
+}
+
+/*===================================================================================*/
+/* (Y05) FormElements > Checkbox                                                     */
+/*===================================================================================*/
+
+input[type=checkbox].slidecheckbox{
+    height: 0;
+    width: 0;
+    display: none;
+}
+
+.checkbox_toggle_lable {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 50px;
+    height: 25px;
+    background: grey;
+    display: block;
+    @include border-radius(100px);
+    @include ease(0.15s);
+    position: relative;
+}
+
+.checkbox_toggle_lable:after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 15px;
+    height: 15px;
+    background: #fff;
+    @include border-radius(90px);
+    @include ease(0.3s);
+}
+
+input.slidecheckbox:checked + .checkbox_toggle_lable {
+    background: $theme-medium;
+}
+
+input.slidecheckbox:checked + .checkbox_toggle_lable:after {
+    left: calc(100% - 5px);
+    transform: translateX(-100%);
+}
+
+/*===================================================================================*/
+/* (Y06) FormElements > Togglebox                                                    */
+/*===================================================================================*/
+
+input[type=checkbox].togglecheckbox{
+    height: 0;
+    width: 0;
+    display: none;
+}
+
+.checkbox_toggle2_lable {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 50px;
+    height: 25px;
+    background: $theme-medium;
+    display: block;
+    @include border-radius(100px);
+    @include ease(0.15s);
+    position: relative;
+}
+
+.checkbox_toggle2_lable:after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 15px;
+    height: 15px;
+    background: #fff;
+    @include border-radius(90px);
+    @include ease(0.3s);
+}
+
+input.togglecheckbox:checked + .checkbox_toggle2_lable {
+    background: $theme-medium;
+}
+
+input.togglecheckbox:checked + .checkbox_toggle2_lable:after {
+    left: calc(100% - 5px);
+    transform: translateX(-100%);
+}
+
+/*===================================================================================*/
+/* (Y07) FormElements > Tickbox                                                      */
+/*===================================================================================*/
+
+.tickbox{
+    margin: 5px 0px 5px 0px;
+
+    [type="checkbox"]:not(:checked),
+    [type="checkbox"]:checked {
+        position: absolute;
+        left: -9999px;
+    }
+
+    [type="checkbox"]:not(:checked) + label,
+    [type="checkbox"]:checked + label {
+        position: relative;
+        padding-left: 1.40em;
+        cursor: pointer;
+    }
+
+    [type="checkbox"]:not(:checked) + label:before,
+    [type="checkbox"]:checked + label:before {
+        content: '';
+        position: absolute;
+        left: 0; top: 0;
+        width: 1.25em;
+        height: 1.25em;
+        border: 1px solid #333333;
+        background: #fff;
+        border-radius: 4px;
+        box-shadow: inset 0 1px 3px rgba(0,0,0,.1);
+    }
+
+    [type="checkbox"]:not(:checked) + label:after,
+    [type="checkbox"]:checked + label:after {
+        content: '\2713\0020';
+        position: absolute;
+        top: .15em;
+        left: .22em;
+        font-size: 1.3em;
+        line-height: 0.8;
+        color: $theme-medium;
+        transition: all .2s;
+        font-family: 'Lucida Sans Unicode', 'Arial Unicode MS', Arial;
+    }
+
+    [type="checkbox"]:not(:checked) + label:after {
+        opacity: 0;
+        transform: scale(0);
+    }
+    [type="checkbox"]:checked + label:after {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    [type="checkbox"]:disabled:not(:checked) + label:before,
+    [type="checkbox"]:disabled:checked + label:before {
+        box-shadow: none;
+        border-color: #bbb;
+        background-color: #ddd;
+    }
+
+    [type="checkbox"]:disabled:checked + label:after {
+        color: #999;
+    }
+
+    [type="checkbox"]:disabled + label {
+        color: #aaa;
+    }
+
+    [type="checkbox"]:checked:hover + label:before,
+    [type="checkbox"]:not(:checked):hover + label:before {
+        border: 1px solid $theme-medium;
+    }
+
+    label:hover:before {
+        border: 1px solid $theme-medium;
+        @include ease(0.2s);
+    }
+}
+
+/*===================================================================================*/
+/* (Y08) FormElements > Radio Button                                                 */
+/*===================================================================================*/
+
+.radiolabel {
+    display: block;
+    position: relative;
+    padding-left: 25px;
+    margin-left: 20px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.radiolabel input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radiocheckmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    @include border-radius(50%);
+}
+
+.radiolabel:hover input[type="radio"] ~ .radiocheckmark {
+    background-color: #ccc;
+}
+
+.radiolabel input[type="radio"]:checked ~ .radiocheckmark {
+    background-color: $theme-medium;
+}
+
+.radiocheckmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.radiolabel input[type="radio"]:checked ~ .radiocheckmark:after {
+    display: block;
+}
+
+.radiolabel .radiocheckmark:after {
+ 	top: 6px;
+    left: 6px;
+    width: 8px;
+    height: 8px;
+    @include border-radius(50%);
+    background: white;
+}
+
+/*===================================================================================*/
+/* (Y09) FormElements > Range Slider                                                 */
+/*===================================================================================*/
+
+input[type=range]::-webkit-slider-thumb {
+    box-shadow: 1px 1px 1px #000000;
+    border: 2px solid $theme-medium;
+    height: 20px;
+    width: 20px;
+    @include border-radius(20px);
+    background: #FFFFFF;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -8.5px;
+}
+
+input[type=range]::-moz-range-thumb {
+    box-shadow: 1px 1px 1px #000000;
+    border: 2px solid $theme-medium;
+    height: 20px;
+    width: 20px;
+    @include border-radius(20px);
+    background: #FFFFFF;
+    cursor: pointer;
+}
+
+input[type=range]::-ms-thumb {
+    margin-top: 1px;
+    box-shadow: 1px 1px 1px #000000;
+    border: 2px solid $theme-medium;
+    height: 20px;
+    width: 20px;
+    @include border-radius(20px);
+    background: #FFFFFF;
+    cursor: pointer;
+}
+
+input[type=range]::-ms-fill-lower {
+    background: #828282;
+    border: 0px solid $theme-medium;
+    @include border-radius(10px);
+    box-shadow: 1px 1px 1px #000000;
+}
+
+input[type=range]::-ms-fill-upper {
+    background: #828282;
+    border: 0px solid $theme-medium;
+    @include border-radius(10px);
+    box-shadow: 1px 1px 1px #000000;
+}
+
+input[type=range]:focus::-ms-fill-lower {
+    background: #828282;
+}
+
+input[type=range]:focus::-ms-fill-upper {
+    background: #828282;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #828282;
+}
+
+input[type=range] {
+    height: 10px;
+    -webkit-appearance: none;
+    margin: 10px 0;
+    width: 200px;
+}
+
+input[type=range]::-ms-track {
+    width: 200px;
+    height: 5px;
+    cursor: pointer;
+    animate: 0.2s;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 200px;
+    height: 5px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 1px 1px 1px #000000;
+    background: #828282;
+    @include border-radius(5px);
+    border: 0px solid $theme-medium;
+}
+
+input[type=range]::-moz-range-track {
+    width: 200px;
+    height: 5px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 1px 1px 1px #000000;
+    background: #828282;
+    @include border-radius(5px);
+    border: 0px solid $theme-medium;
+}
+
+/*===================================================================================*/
+/* (Y10) FormElements > File Selectors                                               */
+/*===================================================================================*/
+
+input[type="file"] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+input[type="file"] + label {
+    max-width: 80%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: 10px 20px;
+}
+
+.no-js input[type="file"] + label {
+    display: none;
+}
+
+input[type="file"]:focus + label,
+input[type="file"].has-focus + label {
+    outline: 1px dotted #000000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+
+input[type="file"] + label svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    fill: currentColor;
+    margin-top: -4px;
+    margin-right: 4px;
+}
+
+input[type="file"] + label {
+    color: #FFFFFF;
+    background-color: #2B2B2B;
+}
+
+input[type="file"]:focus + label,
+input[type="file"].has-focus + label,
+input[type="file"] + label:hover {
+    color: $theme-medium;
+}
+
+/*===================================================================================*/
+/* (Y11) FormElements > Date/Time Selectors                                          */
+/*===================================================================================*/
+
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="time"],
+input[type="week"]{
+    padding: 2px;
+    margin: 3px;
+    border: 1px solid $textbox-border;
+    color: #000000;
+    display: inline-block;
+    outline: none;
+    font-family: Arial, Helvetica, sans-serif;
+    @include box-sizing(border-box);
+    @include ease(0.1s);
+}
+
+input[type="date"]:focus,
+input[type="datetime-local"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus{
+    border-bottom: 1px solid $theme-medium;
+    color: #416586;
+}
+
+/*===================================================================================*/
+/* (Y12) FormElements > Custom Element-Lenghts                                       */
+/*===================================================================================*/
+
+/* Custom Element Lenghts : Width */
+.cel_xxs{
+    width: 25px
+}
+
+.cel_xs{
+    width:60px;
+}
+
+.cel_s{
+    width: 115px;
+}
+
+.cel_m{
+    width: 180px;
+}
+
+.cel_l{
+    width: 300px;
+}
+
+.cel_xl{
+    width: 500px;
+}
+
+.cel_xxl{
+    width:700px;
+}
+
+.cel_100{
+    width:100%;
+}
+
+.cel_50{
+    width: 50%;
+}
+
+.cel_33{
+    width:33%;
+}
+
+.cel_25{
+    width: 25%;
+}
+
+.cel_75{
+    width:75%;
+}
+
+/* Custom Element Lenghts : Height */
+
+.cel_h10{
+    height: 10px;
+    line-height: 10px;
+    padding: 0;
+}
+
+.cel_h18{
+    height: 18px;
+    line-height: 18px;
+    padding: 0;
+}
+
+.cel_h20{
+    height: 20px;
+    line-height: 20px;
+    padding: 0;
+}
+
+.cel_h25{
+    height: 25px;
+    line-height: 25px;
+    padding: 0;
+}
+
+/* Custom Element Lenghts : Font-Size */
+
+.cel_f13{
+    font-size:13pt;
+}
+
+.cel_f15{
+    font-size:15pt;
+}
+
+.cel_f18{
+    font-size:18pt;
+}
+
+/*===================================================================================*/
+/* (Y13) FormElements > Custom Element-Formats                                       */
+/*===================================================================================*/
+
+
+.cef_nobg{
+    background: none;
+}
+
+.cef_brdb{
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+}
+
+.cef_slim{
+    font-weight: lighter !important;
+}
+
+.cef_nomg{
+    margin: 0 !important;
+}
+
+.cef_nopd{
+    padding: 0 !important;
+}
+
+.cef_warning{
+    background: #FF0000;
+
+}
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*=============================== X - General Classes ===============================*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+
+/*===================================================================================*/
+/* (X01) Header-Contents                                                             */
+/*===================================================================================*/
+
+/* See layout.scss */
+
+/*===================================================================================*/
+/* (X02) Searchbar                                                                   */
+/*===================================================================================*/
+
+/* See layout.scss */
+
+/*===================================================================================*/
+/* (X03) Footer-Contents                                                             */
+/*===================================================================================*/
+
+/*===================================================================================*/
+/* (X04) Navigation-Bar                                                              */
+/*===================================================================================*/
 
 .navigationPath{
     margin-top: 5px;
@@ -72,254 +991,51 @@ button{
     }
 }
 
+/*===================================================================================*/
+/* (X05) Animation-Easing                                                            */
+/*===================================================================================*/
 
-.homeNewsAndStats{
-    div{
-        border: 2px ridge $theme-dark;
-        width: 300px;
-        height: 230px;
-        padding: 5px;
-        border-radius: 10px;
-        background: rgba(255, 165, 0, 0.3);
-        margin-bottom: 10px;
-
-        @include box-sizing(border-box);
-    }
-
-    div:nth-child(1){
-        float: left;
-    }
-
-    div:nth-child(2){
-        float: right;
-    }
-
+.ease10{
+    @include ease(0.10s);
 }
 
-.bottlecapSingleContainer{
-       position: relative;
+.ease25{
+    @include ease(0.25s);
+}
 
-    table.capDisplay{
-        background: #333333;
-        border-radius: 10px;
-        width: 100%;
-        max-width: 900px;
-        height: 203px;
+.ease50{
+    @include ease(0.50s);
+}
 
-        border-spacing: 3px;
-        border-collapse: separate;
+.ease1s{
+    @include ease(1s);
+}
 
-        tr:nth-child(1)
-        {
-            td{
-                background: $theme-dark;
-                font-weight: bold;
-                color: #FFFFFF;
-                text-align: center;
-                border-radius: 10px;
-            }
-        }
+/*===================================================================================*/
+/* (X06) Sign-In and Register bar                                                    */
+/*===================================================================================*/
 
-        tr:nth-child(2)
-        {
-            td:nth-child(1){
-                width: 140px;
-                position: relative;
+.signInButtonContainer{
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    color: #FFFFFF;
 
-                img:nth-child(1){
-                    width: 140px;
-                    border-radius: 10px;
-                }
-
-                img:nth-child(2){
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                }
-            }
-
-            td:nth-child(2){
-
-                background: #FFFFFF;
-                border-radius: 10px 0 0 10px;
-                width: 150px;
-
-                img:nth-child(1){
-                    border-radius: 10px 0 0 10px;
-                    max-height: 100px;
-                    max-width: 150px;
-                    display: block;
-                }
-
-                img:nth-child(2){
-                    margin-top: 5px;
-                    max-height: 30px;
-                }
-            }
-
-            @media only screen and (max-width: 700px){
-                td:nth-child(3){
-                    background: #FFFFFF;
-                    border-radius: 0 10px 10px 0;
-                }
-
-                td:nth-child(4){
-                    display: none;
-                }
-            }
-
-            @media only screen and (min-width: 700px){
-                td:nth-child(3){
-                    background: #FFFFFF;
-                }
-
-                td:nth-child(4){
-                    background: #FFFFFF;
-                    border-radius: 0 10px 10px 0;
-                }
-            }
-
-            td:nth-child(5){
-                background: $theme-brighter;
-                border-radius: 10px;
-
-                width: 120px;
-            }
-        }
+    a{
+        color: #FFFFFF;
+        text-decoration: none;
+        @include ease(0.3s);
     }
 
-    @keyframes overlayFadeIn{
-        0%{ opacity: 0; }
-        100%{ opacity: 1; }
-    }
-
-    .additionalInformationContainer{
-        position: absolute;
-        display: none;
-
-        top: 0px;
-        left: 50%;
-        transform: translateX(-50%);
-        height: 203px;
-
-        width: 100%;
-        max-width: 900px;
-
-        background: rgba(0, 0, 0, 0.6);
-        border-radius: 10px;
-
-
-        .additionalInformationOverlay{
-            position: absolute;
-
-            top: 15px;
-            left: 155px;
-            right: 10px;
-            margin-top: 28px;
-
-            background: rgba(255, 255, 255, 0.9);
-            height: 150px;
-            border-radius: 10px;
-
-            text-align: left;
-            overflow: hidden;
-
-
-            table.capData{
-                background: transparent;
-                border-spacing: 0;
-                border-collapse: collapse;
-                height: 100%;
-
-                tr{
-                    td:nth-child(1),
-                    td:nth-child(3){
-                        text-align: right;
-                        color: #696969;
-                        border-right: none;
-                        padding-right: 0;
-                    }
-
-                    td:nth-child(2),
-                    td:nth-child(4){
-                        text-align: left;
-                        padding-left: 4px;
-                        padding-right: 10px;
-                        color: #000000;
-                        border-right: 1px solid gray;
-                    }
-                }
-
-                tr:nth-child(1){
-                    td:nth-child(1){
-                        width: 0px;
-                        border-right: none;
-                    }
-
-                    td:nth-child(2),
-                    td:nth-child(4){
-                        text-align: right;
-                        color: #696969;
-                        border-right: none;
-                        padding-right: 0;
-                    }
-
-                    td:nth-child(3),
-                    td:nth-child(5){
-                        text-align: left;
-                        padding-left: 4px;
-                        padding-right: 10px;
-                        color: #000000;
-                        border-right: 1px solid gray;
-                    }
-                }
-
-
-
-
-            }
-
-            .close{
-                position: absolute;
-
-                right: 0px;
-                top: 0px;
-
-                width: 35px;
-                height: 150px;
-
-                border-radius: 0 10px 10px 0;
-                background: #2B2B2B;
-
-                writing-mode: vertical-rl;
-                text-orientation: mixed;
-                text-align: center;
-                line-height: 35px;
-                color: #FFFFFF;
-                font-size: 13pt;
-
-                @include ease(0.4s);
-            }
-
-            .close:hover{
-                background: $theme-medium;
-                @include ease(0.2s);
-            }
-
-        }
-
-
-    }
-
-    .additionalInformationContainer:target{
-        display: block;
-
-        animation: overlayFadeIn;
-        animation-duration: 0.2s;
-        animation-iteration-count: 1;
+    a:hover{
+        color: $theme-medium;
+        @include ease(0.1s);
     }
 }
 
+/*===================================================================================*/
+/* (X06) Navigation-Links                                                            */
+/*===================================================================================*/
 
 .navigationLink{
     text-decoration: none;
@@ -332,7 +1048,9 @@ button{
     @include ease(0.1s);
 }
 
-
+/*===================================================================================*/
+/* (X07) Country- Region- and Continent-Buttons                                      */
+/*===================================================================================*/
 
 .regionButtons{
     position: relative;
@@ -417,110 +1135,9 @@ button{
     }
 }
 
-
-.bottlecapColorSchemeContainer{
-    position: relative;
-    width: 100px;
-    height: 100px;
-
-
-    div{
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
-
-        border-radius: 100%;
-    }
-
-    div:nth-child(1){
-        margin: 0px;
-        top: 0.5px;
-
-        img{
-            width: 100%;
-        }
-
-        img#GLD{
-            filter: drop-shadow(0px 3px 5px black) saturate(0.50) hue-rotate(53deg);
-        }
-
-        img#SLV{
-            filter: drop-shadow(0px 3px 5px black) saturate(0);
-        }
-
-        img#WHT{
-            filter: drop-shadow(0px 3px 5px black) brightness(2.66) saturate(0) hue-rotate(172deg);
-        }
-
-        img#BLK{
-            filter: drop-shadow(0px 3px 5px black) brightness(0.2) saturate(0) hue-rotate(172deg);
-        }
-
-        img#GRY{
-            filter: drop-shadow(0px 3px 5px black) brightness(0.5) saturate(0) hue-rotate(172deg);
-        }
-
-        img#RED{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(0deg);
-        }
-
-        img#BLU{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(225deg);
-        }
-
-        img#GRN{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(145deg);
-        }
-
-        img#YLW{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(65deg);
-        }
-
-        img#ORA{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(50deg);
-        }
-
-        img#PUR{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(285deg);
-        }
-
-        img#BRN{
-            filter: drop-shadow(0px 3px 5px black) saturate(0.5) hue-rotate(35deg);
-        }
-
-        img#BRZ{
-            filter: drop-shadow(0px 3px 5px black) brightness(1.5) saturate(0.7) hue-rotate(35deg);
-        }
-
-        img#CYA{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(180deg);
-        }
-
-    }
-
-    div:nth-child(2){
-        margin: 13px;
-    }
-
-    div:nth-child(3){
-        margin: 13px;
-        line-height: 70px;
-        font-size: 13pt;
-        font-family: komikax;
-        text-align: center;
-        text-shadow: 0px 0px 3px #000000;
-    }
-
-    div:nth-child(4){
-        margin: 1px;
-        top:0.5px;
-        background-image: url(../content/twist.png);
-        background-size: 100%;
-    }
-}
-
+/*===================================================================================*/
+/* (X08) Letter-Selector                                                             */
+/*===================================================================================*/
 
 .letterSelection{
     background: #2b2b2b;
@@ -549,8 +1166,11 @@ button{
         background: $theme-bright;
         border-radius: 25%;
     }
-
 }
+
+/*===================================================================================*/
+/* (X09) Pager                                                                       */
+/*===================================================================================*/
 
 .pager{
     font-size: 16pt;
@@ -579,57 +1199,9 @@ button{
 
 }
 
-.breweryListTable{
-    background: #2B2B2B;
-    border-spacing: 3px;
-    border-collapse: separate;
-    border-radius: 10px;
-
-    tr{
-        td{
-            background: #FFFFFF;
-            padding: 3px;
-        }
-
-        td:nth-child(1){
-            border-radius: 10px 0 0 10px;
-            text-align: center;
-
-            img{
-                max-width: 150px;
-                max-height: 100px;
-            }
-        }
-
-        td:nth-child(2){
-            i{
-                font-style: normal;
-                color: #696969;
-            }
-        }
-
-        td:nth-child(3){
-            border-radius: 0 10px 10px 0;
-
-            i{
-                font-style: normal;
-                color: #696969;
-            }
-        }
-
-        td:nth-child(4){
-            background: $theme-brighter;
-            border-radius: 10px;
-        }
-
-    }
-
-}
-
-
-
-
-
+/*===================================================================================*/
+/* (X10) Bottlecap-Display                                                           */
+/*===================================================================================*/
 
 .bottlecapRowContainer{
     position: relative;
@@ -864,6 +1436,166 @@ button{
     }
 }
 
+/*===================================================================================*/
+/* (X11) Bottlecap-Color-Scheme                                                      */
+/*===================================================================================*/
+
+.bottlecapColorSchemeContainer{
+    position: relative;
+    width: 100px;
+    height: 100px;
+
+
+    div{
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+
+        border-radius: 100%;
+    }
+
+    div:nth-child(1){
+        margin: 0px;
+        top: 0.5px;
+
+        img{
+            width: 100%;
+        }
+
+        img#GLD{
+            filter: drop-shadow(0px 3px 5px black) saturate(0.50) hue-rotate(53deg);
+        }
+
+        img#SLV{
+            filter: drop-shadow(0px 3px 5px black) saturate(0);
+        }
+
+        img#WHT{
+            filter: drop-shadow(0px 3px 5px black) brightness(2.66) saturate(0) hue-rotate(172deg);
+        }
+
+        img#BLK{
+            filter: drop-shadow(0px 3px 5px black) brightness(0.2) saturate(0) hue-rotate(172deg);
+        }
+
+        img#GRY{
+            filter: drop-shadow(0px 3px 5px black) brightness(0.5) saturate(0) hue-rotate(172deg);
+        }
+
+        img#RED{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(0deg);
+        }
+
+        img#BLU{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(225deg);
+        }
+
+        img#GRN{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(145deg);
+        }
+
+        img#YLW{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(65deg);
+        }
+
+        img#ORA{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(50deg);
+        }
+
+        img#PUR{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(285deg);
+        }
+
+        img#BRN{
+            filter: drop-shadow(0px 3px 5px black) saturate(0.5) hue-rotate(35deg);
+        }
+
+        img#BRZ{
+            filter: drop-shadow(0px 3px 5px black) brightness(1.5) saturate(0.7) hue-rotate(35deg);
+        }
+
+        img#CYA{
+            filter: drop-shadow(0px 3px 5px black) hue-rotate(180deg);
+        }
+
+    }
+
+    div:nth-child(2){
+        margin: 13px;
+    }
+
+    div:nth-child(3){
+        margin: 13px;
+        line-height: 70px;
+        font-size: 13pt;
+        font-family: komikax;
+        text-align: center;
+        text-shadow: 0px 0px 3px #000000;
+    }
+
+    div:nth-child(4){
+        margin: 1px;
+        top:0.5px;
+        background-image: url(../content/twist.png);
+        background-size: 100%;
+    }
+}
+
+/*===================================================================================*/
+/* (X12) Brewery-Display                                                             */
+/*===================================================================================*/
+
+.breweryListTable{
+    background: #2B2B2B;
+    border-spacing: 3px;
+    border-collapse: separate;
+    border-radius: 10px;
+
+    tr{
+        td{
+            background: #FFFFFF;
+            padding: 3px;
+        }
+
+        td:nth-child(1){
+            border-radius: 10px 0 0 10px;
+            text-align: center;
+
+            img{
+                max-width: 150px;
+                max-height: 100px;
+            }
+        }
+
+        td:nth-child(2){
+            i{
+                font-style: normal;
+                color: #696969;
+            }
+        }
+
+        td:nth-child(3){
+            border-radius: 0 10px 10px 0;
+
+            i{
+                font-style: normal;
+                color: #696969;
+            }
+        }
+
+        td:nth-child(4){
+            background: $theme-brighter;
+            border-radius: 10px;
+        }
+    }
+}
+
+/*===================================================================================*/
+/* (X13) Set-Display and Thumbnail-Display                                           */
+/*===================================================================================*/
+
 .setTileTable{
     background: #2b2b2b;
     border-radius: 10px;
@@ -924,5 +1656,415 @@ button{
         margin: 0;
         width: 52px;
     }
+}
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*================================      A - HOME     ================================*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+
+/*===================================================================================*/
+/* (A01) Home > News and Stats                                                       */
+/*===================================================================================*/
+
+.homeNewsAndStats{
+    div{
+        border: 2px ridge $theme-dark;
+        width: 300px;
+        height: 230px;
+        padding: 5px;
+        border-radius: 10px;
+        background: rgba(255, 165, 0, 0.3);
+        margin-bottom: 10px;
+
+        @include box-sizing(border-box);
+    }
+
+    div:nth-child(1){
+        float: left;
+    }
+
+    div:nth-child(2){
+        float: right;
+    }
 
 }
+
+/*===================================================================================*/
+/* (A02) Home > Bottlecap-Display                                                    */
+/*===================================================================================*/
+
+.bottlecapSingleContainer{
+       position: relative;
+
+    table.capDisplay{
+        background: #333333;
+        border-radius: 10px;
+        width: 100%;
+        max-width: 900px;
+        height: 203px;
+
+        border-spacing: 3px;
+        border-collapse: separate;
+
+        tr:nth-child(1)
+        {
+            td{
+                background: $theme-dark;
+                font-weight: bold;
+                color: #FFFFFF;
+                text-align: center;
+                border-radius: 10px;
+            }
+        }
+
+        tr:nth-child(2)
+        {
+            td:nth-child(1){
+                width: 140px;
+                position: relative;
+
+                img:nth-child(1){
+                    width: 140px;
+                    border-radius: 10px;
+                }
+
+                img:nth-child(2){
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                }
+            }
+
+            td:nth-child(2){
+
+                background: #FFFFFF;
+                border-radius: 10px 0 0 10px;
+                width: 150px;
+
+                img:nth-child(1){
+                    border-radius: 10px 0 0 10px;
+                    max-height: 100px;
+                    max-width: 150px;
+                    display: block;
+                }
+
+                img:nth-child(2){
+                    margin-top: 5px;
+                    max-height: 30px;
+                }
+            }
+
+            @media only screen and (max-width: 700px){
+                td:nth-child(3){
+                    background: #FFFFFF;
+                    border-radius: 0 10px 10px 0;
+                }
+
+                td:nth-child(4){
+                    display: none;
+                }
+            }
+
+            @media only screen and (min-width: 700px){
+                td:nth-child(3){
+                    background: #FFFFFF;
+                }
+
+                td:nth-child(4){
+                    background: #FFFFFF;
+                    border-radius: 0 10px 10px 0;
+                }
+            }
+
+            td:nth-child(5){
+                background: $theme-brighter;
+                border-radius: 10px;
+
+                width: 120px;
+            }
+        }
+    }
+
+    @keyframes overlayFadeIn{
+        0%{ opacity: 0; }
+        100%{ opacity: 1; }
+    }
+
+    .additionalInformationContainer{
+        position: absolute;
+        display: none;
+
+        top: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 203px;
+
+        width: 100%;
+        max-width: 900px;
+
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 10px;
+
+
+        .additionalInformationOverlay{
+            position: absolute;
+
+            top: 15px;
+            left: 155px;
+            right: 10px;
+            margin-top: 28px;
+
+            background: rgba(255, 255, 255, 0.9);
+            height: 150px;
+            border-radius: 10px;
+
+            text-align: left;
+            overflow: hidden;
+
+
+            table.capData{
+                background: transparent;
+                border-spacing: 0;
+                border-collapse: collapse;
+                height: 100%;
+
+                tr{
+                    td:nth-child(1),
+                    td:nth-child(3){
+                        text-align: right;
+                        color: #696969;
+                        border-right: none;
+                        padding-right: 0;
+                    }
+
+                    td:nth-child(2),
+                    td:nth-child(4){
+                        text-align: left;
+                        padding-left: 4px;
+                        padding-right: 10px;
+                        color: #000000;
+                        border-right: 1px solid gray;
+                    }
+                }
+
+                tr:nth-child(1){
+                    td:nth-child(1){
+                        width: 0px;
+                        border-right: none;
+                    }
+
+                    td:nth-child(2),
+                    td:nth-child(4){
+                        text-align: right;
+                        color: #696969;
+                        border-right: none;
+                        padding-right: 0;
+                    }
+
+                    td:nth-child(3),
+                    td:nth-child(5){
+                        text-align: left;
+                        padding-left: 4px;
+                        padding-right: 10px;
+                        color: #000000;
+                        border-right: 1px solid gray;
+                    }
+                }
+            }
+
+            .close{
+                position: absolute;
+
+                right: 0px;
+                top: 0px;
+
+                width: 35px;
+                height: 150px;
+
+                border-radius: 0 10px 10px 0;
+                background: #2B2B2B;
+
+                writing-mode: vertical-rl;
+                text-orientation: mixed;
+                text-align: center;
+                line-height: 35px;
+                color: #FFFFFF;
+                font-size: 13pt;
+
+                @include ease(0.4s);
+            }
+
+            .close:hover{
+                background: $theme-medium;
+                @include ease(0.2s);
+            }
+        }
+    }
+
+    .additionalInformationContainer:target{
+        display: block;
+
+        animation: overlayFadeIn;
+        animation-duration: 0.2s;
+        animation-iteration-count: 1;
+    }
+}
+
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*=============================   B - Sign-In/Sign-Up   =============================*/
+/*-------------------------------|||----------------|||------------------------------*/
+/*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
+
+/*===================================================================================*/
+/* (B01)  SignIn Table                                                               */
+/*===================================================================================*/
+
+.loginRegisterTable{
+    padding: 10px;
+    background: #A9A9A9;
+    border-radius: 10px;
+    box-shadow: 0 1px 1px 1px #000000;
+
+    tr{
+        td{
+            padding: 2px;
+            color: #000000;
+        }
+    }
+
+    tr:last-child{
+        text-align: center;
+    }
+
+    i{
+        color: #CC0000;
+        font-style: normal;
+    }
+
+    sub{
+        color: #525252;
+    }
+
+}
+
+
+.addCapTable{
+    background: #A9A9A9;
+    padding: 10px;
+    border-radius: 10px;
+
+    border-spacing: 5px;
+    border-collapse: separate;
+
+    tr{
+        td{
+
+
+        }
+    }
+
+    tr:nth-child(1),
+    tr:nth-child(7),{
+        td{
+            background: $theme-medium;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            color: #FFFFFF;
+        }
+    }
+
+    tr:nth-child(2),
+    tr:nth-child(3),
+    tr:nth-child(4),
+    tr:nth-child(5),
+    tr:nth-child(6){
+
+        td:nth-child(1){
+            background: #FFFFFF;
+            text-align: right;
+            border-radius: 5px 0 0 5px;
+            padding-right: 5px;
+        }
+
+        td:nth-child(2){
+            background: #FFFFFF;
+            text-align: center;
+            border-radius: 0 5px 5px 0;
+
+            input,select{
+                border-radius: 0 5px 5px 0;
+                border: 1px solid;
+            }
+        }
+
+        td:nth-child(3){
+            background: $theme-brighter;
+            border-radius: 5px;
+            text-align:center;
+            padding: 0 4px;
+        }
+
+        td:nth-child(4),
+        td:nth-child(5){
+            background: transparent;
+            div,
+            img{
+
+            }
+        }
+    }
+
+    tr:nth-child(8),
+    tr:nth-child(9),
+    tr:nth-child(10),
+    tr:nth-child(11),
+    tr:nth-child(12),
+    tr:nth-child(13){
+
+        td:nth-child(1),
+        td:nth-child(4){
+            background: #FFFFFF;
+            text-align: right;
+            border-radius: 5px 0 0 5px;
+            padding-right: 5px;
+        }
+
+        td:nth-child(2),
+        td:nth-child(5){
+            background: #FFFFFF;
+            text-align: center;
+            border-radius: 0 5px 5px 0;
+
+            input,select{
+                border-radius: 0 5px 5px 0;
+                border: 1px solid;
+            }
+
+            table{
+                tr{
+                    td{
+                        color: #000000;
+                        font-weight: normal;
+                    }
+                }
+            }
+        }
+
+        td:nth-child(3),
+        td:nth-child(6){
+            background: $theme-brighter;
+            border-radius: 5px;
+            text-align:center;
+            padding: 0 4px;
+        }
+    }
+
+
+}
+
+
+

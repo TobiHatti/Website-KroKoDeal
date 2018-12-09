@@ -141,7 +141,8 @@
         background: #444444;
         border: 2px inset #333333;
         border-radius: 10px 0 0 10px;
-        padding: 3px 5px;
+        padding: 1px 5px;
+        margin:0;
         color: #FFFFFF;
 
         @include box-sizing(border-box);

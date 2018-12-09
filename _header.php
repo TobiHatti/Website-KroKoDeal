@@ -16,7 +16,9 @@
             </head>
             <body id="mainBody">
                 <header>
-
+                    <div class="signInButtonContainer">
+                        '.((isset($_SESSION['userID'])) ? ('Angemeldet als '.$_SESSION['userUsername'].' - <a href="/sign-out">Abmelden</a>') : ('<a href="/sign-in">Anmelden</a>|<a href="/sign-up">Registrieren</a>')).'
+                    </div>
                 </header>
                 <nav>
                     <div class="container">
@@ -46,12 +48,30 @@
                                     <li><a href="#">Brauereien</a></li>
                                 </ul>
                             </li>
+                            ';
+
+                            if(isset($_SESSION['userID']) AND $_SESSION['userRank'] > 90)
+                            {
+                                echo '
+                                    <li><a class="hsubs" href="#">Verwaltung</a>
+                                        <ul class="subs">
+                                            <li><a href="/eintragen/kronkorken">Kronkorken hinzuf&uuml;gen</a></li>
+                                            <li><a href="/eintragen/set">Set hinzuf&uuml;gen</a></li>
+                                            <li><a href="/eintragen/brauerei">Brauerei hinzuf&uuml;gen</a></li>
+                                            <li><a href="/eintragen/sorte">Sorte hinzuf&uuml;gen</a></li>
+                                            <li><a href="/eintragen/randzeichen">Randzeichen hinzuf&uuml;gen</a></li>
+                                        </ul>
+                                    </li>
+                                ';
+                            }
+
+                            echo '
                             <div id="lavalamp"></div>
 
                             <form action="/suche" method="post" accept-charset="utf-8" enctype="multipart/form-data">
                                 <div class="searchbar">
-                                    <input type="search" placeholder="Suche..." name="searchValue"/>
-                                    <button type="submit"><i class="fas fa-search"></i></button>
+                                    <input type="search" class="cef_nomg" placeholder="Suche..." name="searchValue"/>
+                                    <button type="submit" class="cef_nomg"><i class="fas fa-search"></i></button>
                                 </div>
                             </form>
                         </ul>

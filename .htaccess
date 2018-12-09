@@ -29,6 +29,8 @@ RewriteRule ^kronkorken/sammlung/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/brauerei/([a-zA
 RewriteRule ^sets/([a-zA-Z0-9-]+)/?$ sets.php?country=$1 [NC,QSA,L]
 RewriteRule ^sets/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$/?$ sets.php?country=$1&set=$2 [NC,QSA,L]
 
+RewriteRule ^eintragen/([a-zA-Z0-9-]+)/?$ eintragen.php?section=$1 [NC,QSA,L]
+
 #Ignore .php-Extension
 RewriteRule ^([^\.]+)$ $1.php [NC,L]
 
