@@ -949,6 +949,75 @@ input[type="week"]:focus {
 .cef_warning {
   background: #FF0000; }
 
+/*===================================================================================*/
+/* (Z07) Modal                                                                       */
+/*===================================================================================*/
+.modal_wrapper {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  left: -10000px;
+  z-index: 100000; }
+  .modal_wrapper .modal_bg {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 100000;
+    opacity: 0;
+    cursor: default;
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out; }
+  .modal_wrapper .modal_container {
+    position: absolute;
+    background: #FFFFFF;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 20%;
+    box-shadow: 0 0 40px 5px #000000;
+    z-index: 100001;
+    opacity: 0;
+    padding: 20px;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out; }
+  .modal_wrapper .close_cross {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    padding: 4px;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out; }
+  .modal_wrapper .close_cross:hover {
+    border: 2px solid black;
+    transform: rotate(90deg);
+    -webkit-transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -ms-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out; }
+
+.modal_wrapper:target {
+  left: 0px; }
+  .modal_wrapper:target .modal_bg {
+    opacity: 1; }
+  .modal_wrapper:target .modal_container {
+    opacity: 1; }
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
 /*-------------------------------|||----------------|||------------------------------*/
 /*=============================== X - General Classes ===============================*/
@@ -1626,6 +1695,66 @@ input[type="week"]:focus {
     background-image: url(../content/twist.png);
     background-size: 100%; }
 
+.bottlecapColorSchemeContainerEntry {
+  position: relative;
+  width: 130px;
+  height: 130px; }
+  .bottlecapColorSchemeContainerEntry div {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    border-radius: 100%; }
+  .bottlecapColorSchemeContainerEntry div:nth-child(1) {
+    margin: 0px;
+    top: 0.5px; }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img {
+      width: 100%; }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#GLD {
+      filter: drop-shadow(0px 3px 5px black) saturate(0.5) hue-rotate(53deg); }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#SLV {
+      filter: drop-shadow(0px 3px 5px black) saturate(0); }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#WHT {
+      filter: drop-shadow(0px 3px 5px black) brightness(2.66) saturate(0) hue-rotate(172deg); }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#BLK {
+      filter: drop-shadow(0px 3px 5px black) brightness(0.2) saturate(0) hue-rotate(172deg); }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#GRY {
+      filter: drop-shadow(0px 3px 5px black) brightness(0.5) saturate(0) hue-rotate(172deg); }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#RED {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(0deg); }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#BLU {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(225deg); }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#GRN {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(145deg); }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#YLW {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(65deg); }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#ORA {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(50deg); }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#PUR {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(285deg); }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#BRN {
+      filter: drop-shadow(0px 3px 5px black) saturate(0.5) hue-rotate(35deg); }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#BRZ {
+      filter: drop-shadow(0px 3px 5px black) brightness(1.5) saturate(0.7) hue-rotate(35deg); }
+    .bottlecapColorSchemeContainerEntry div:nth-child(1) img#CYA {
+      filter: drop-shadow(0px 3px 5px black) hue-rotate(180deg); }
+  .bottlecapColorSchemeContainerEntry div:nth-child(2) {
+    margin: 18px; }
+  .bottlecapColorSchemeContainerEntry div:nth-child(3) {
+    margin: 15px;
+    line-height: 95px;
+    margin-right: 5px;
+    font-size: 15pt;
+    font-family: komikax;
+    text-align: center;
+    text-shadow: 0px 0px 3px #000000; }
+  .bottlecapColorSchemeContainerEntry div#shown:nth-child(4) {
+    margin: 5px;
+    top: 0.5px;
+    background-image: url(../content/twist.png);
+    background-size: 100%; }
+
 /*===================================================================================*/
 /* (X12) Brewery-Display                                                             */
 /*===================================================================================*/
@@ -1898,7 +2027,9 @@ input[type="week"]:focus {
   padding: 10px;
   border-radius: 10px;
   border-spacing: 5px;
-  border-collapse: separate; }
+  border-collapse: separate;
+  display: inline-table;
+  vertical-align: top; }
   .addCapTable tr:nth-child(1) td,
   .addCapTable tr:nth-child(7) td {
     background: #FF892E;
@@ -1943,17 +2074,19 @@ input[type="week"]:focus {
     border-radius: 5px;
     text-align: center;
     padding: 0 4px; }
-  .addCapTable tr:nth-child(2) td:nth-child(4),
   .addCapTable tr:nth-child(2) td:nth-child(5),
-  .addCapTable tr:nth-child(3) td:nth-child(4),
   .addCapTable tr:nth-child(3) td:nth-child(5),
-  .addCapTable tr:nth-child(4) td:nth-child(4),
   .addCapTable tr:nth-child(4) td:nth-child(5),
-  .addCapTable tr:nth-child(5) td:nth-child(4),
   .addCapTable tr:nth-child(5) td:nth-child(5),
-  .addCapTable tr:nth-child(6) td:nth-child(4),
   .addCapTable tr:nth-child(6) td:nth-child(5) {
     background: transparent; }
+    .addCapTable tr:nth-child(2) td:nth-child(5) img,
+    .addCapTable tr:nth-child(3) td:nth-child(5) img,
+    .addCapTable tr:nth-child(4) td:nth-child(5) img,
+    .addCapTable tr:nth-child(5) td:nth-child(5) img,
+    .addCapTable tr:nth-child(6) td:nth-child(5) img {
+      max-width: 130px;
+      max-height: 130px; }
   .addCapTable tr:nth-child(8) td:nth-child(1),
   .addCapTable tr:nth-child(8) td:nth-child(4),
   .addCapTable tr:nth-child(9) td:nth-child(1),
@@ -2040,5 +2173,89 @@ input[type="week"]:focus {
     border-radius: 5px;
     text-align: center;
     padding: 0 4px; }
+  .addCapTable tr:nth-child(14) td {
+    text-align: center; }
+
+.addCapSidesignTable {
+  background: #A9A9A9;
+  padding: 10px;
+  border-radius: 10px;
+  border-spacing: 5px;
+  border-collapse: separate;
+  width: 420px;
+  display: inline-table;
+  vertical-align: top; }
+  .addCapSidesignTable tr:nth-child(1) td {
+    background: #FF892E;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 10px;
+    color: #FFFFFF; }
+  .addCapSidesignTable tr:nth-child(2) td {
+    text-align: center; }
+    .addCapSidesignTable tr:nth-child(2) td label div {
+      display: inline-block;
+      vertical-align: top;
+      width: 60px;
+      height: 30px;
+      background: #FFFFFF;
+      margin: 3px;
+      border-radius: 10px;
+      border: 3px solid transparent;
+      box-shadow: none;
+      -webkit-transition: all 0.5s ease-in-out;
+      -moz-transition: all 0.5s ease-in-out;
+      -ms-transition: all 0.5s ease-in-out;
+      -o-transition: all 0.5s ease-in-out;
+      transition: all 0.5s ease-in-out; }
+      .addCapSidesignTable tr:nth-child(2) td label div img {
+        max-width: 55px;
+        max-height: 30px;
+        border-radius: 10px; }
+    .addCapSidesignTable tr:nth-child(2) td input[type="radio"]:checked + label div {
+      border: 3px solid #FF8C00;
+      box-shadow: 0 0 3px 2px #000000;
+      -webkit-transition: all 0.1s ease-in-out;
+      -moz-transition: all 0.1s ease-in-out;
+      -ms-transition: all 0.1s ease-in-out;
+      -o-transition: all 0.1s ease-in-out;
+      transition: all 0.1s ease-in-out; }
+  .addCapSidesignTable tr:nth-child(3) td {
+    background: #2B2B2B;
+    text-align: center;
+    border-radius: 10px; }
+    .addCapSidesignTable tr:nth-child(3) td a {
+      color: #FFFFFF; }
+
+.sideSignButtons {
+  overflow-y: scroll;
+  height: 80%; }
+  .sideSignButtons label div {
+    display: inline-block;
+    vertical-align: top;
+    width: 60px;
+    height: 30px;
+    background: #FFFFFF;
+    margin: 3px;
+    border-radius: 10px;
+    border: 3px solid transparent;
+    box-shadow: none;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -ms-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out; }
+    .sideSignButtons label div img {
+      max-width: 55px;
+      max-height: 30px;
+      border-radius: 10px; }
+  .sideSignButtons input[type="radio"]:checked + label div {
+    border: 3px solid #FF8C00;
+    box-shadow: 0 0 3px 2px #000000;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out; }
 
 /*# sourceMappingURL=style.css.map */

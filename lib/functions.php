@@ -58,9 +58,9 @@ function BottlecapSingleBox($bottlecapID)
                     '.$row['dateAquired'].'
                 </td>
                 <td>
-                    '.(($row['breweryLink']!='') ? '<a target="_blank" href="'.$row['breweryLink'].'"><button type="button"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
+                    '.(($row['breweryLink']!='') ? '<a target="_blank" href="'.$row['breweryLink'].'"><button type="button" class="cel_100"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
 
-                    <a href="#zusatzinfos" ><button type="button"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
+                    <a href="#zusatzinfos" ><button type="button" class="cel_100"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
                 </td>
             </tr>
 
@@ -315,9 +315,9 @@ function BreweryListTile($breweryID,$showRegional=false)
                 <i>Tauschbar:</i> '.$tradeableCount.'
             </td>
             <td>
-                '.(($breweryData['breweryLink']!='') ? '<a target="_blank" href="'.$breweryData['breweryLink'].'"><button type="button"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
+                '.(($breweryData['breweryLink']!='') ? '<a target="_blank" href="'.$breweryData['breweryLink'].'"><button type="button" class="cel_100"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
 
-                <a href="/kronkorken/sammlung/'.$breweryData['countryShort'].'/brauerei/'.$breweryData['breweryFilepath'].'"><button type="button">Kronkorken dieser<br>Brauerei</button></a>
+                <a href="/kronkorken/sammlung/'.$breweryData['countryShort'].'/brauerei/'.$breweryData['breweryFilepath'].'"><button type="button" class="cel_100">Kronkorken dieser<br>Brauerei</button></a>
             </td>
         </tr>
     ';

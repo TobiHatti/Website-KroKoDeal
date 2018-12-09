@@ -934,6 +934,82 @@ input[type="week"]:focus{
 
 }
 
+/*===================================================================================*/
+/* (Z07) Modal                                                                       */
+/*===================================================================================*/
+
+.modal_wrapper{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: -10000px;
+    z-index: 100000;
+
+    .modal_bg{
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        z-index: 100000;
+        opacity: 0;
+        cursor: default;
+        @include ease(0.2s);
+    }
+
+    .modal_container{
+        position: absolute;
+        // Define Width in inline-css inside the HTML-file
+        //width: 50%;
+        //height: 60%;
+        background: #FFFFFF;
+        left: 50%;
+        transform: translateX(-50%);
+        top:20%;
+        box-shadow: 0 0 40px 5px #000000;
+        z-index: 100001;
+        opacity: 0;
+        padding: 20px;
+        @include ease(0.5s);
+    }
+
+
+    .close_cross{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+        padding: 4px;
+
+        border: 2px solid transparent;
+        border-radius: 50%;
+
+        @include ease(0.5s);
+    }
+
+    .close_cross:hover{
+        border: 2px solid black;
+        transform: rotate(90deg);
+        @include ease(0.2s);
+    }
+
+}
+
+
+.modal_wrapper:target{
+    left: 0px;
+
+    .modal_bg{
+        opacity: 1;
+    }
+
+    .modal_container{
+        opacity: 1;
+    }
+}
+
 /*+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+*/
 /*-------------------------------|||----------------|||------------------------------*/
 /*=============================== X - General Classes ===============================*/
@@ -1464,62 +1540,20 @@ input[type="week"]:focus{
             width: 100%;
         }
 
-        img#GLD{
-            filter: drop-shadow(0px 3px 5px black) saturate(0.50) hue-rotate(53deg);
-        }
-
-        img#SLV{
-            filter: drop-shadow(0px 3px 5px black) saturate(0);
-        }
-
-        img#WHT{
-            filter: drop-shadow(0px 3px 5px black) brightness(2.66) saturate(0) hue-rotate(172deg);
-        }
-
-        img#BLK{
-            filter: drop-shadow(0px 3px 5px black) brightness(0.2) saturate(0) hue-rotate(172deg);
-        }
-
-        img#GRY{
-            filter: drop-shadow(0px 3px 5px black) brightness(0.5) saturate(0) hue-rotate(172deg);
-        }
-
-        img#RED{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(0deg);
-        }
-
-        img#BLU{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(225deg);
-        }
-
-        img#GRN{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(145deg);
-        }
-
-        img#YLW{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(65deg);
-        }
-
-        img#ORA{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(50deg);
-        }
-
-        img#PUR{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(285deg);
-        }
-
-        img#BRN{
-            filter: drop-shadow(0px 3px 5px black) saturate(0.5) hue-rotate(35deg);
-        }
-
-        img#BRZ{
-            filter: drop-shadow(0px 3px 5px black) brightness(1.5) saturate(0.7) hue-rotate(35deg);
-        }
-
-        img#CYA{
-            filter: drop-shadow(0px 3px 5px black) hue-rotate(180deg);
-        }
-
+        img#GLD{ filter: drop-shadow(0px 3px 5px black) saturate(0.50) hue-rotate(53deg); }
+        img#SLV{ filter: drop-shadow(0px 3px 5px black) saturate(0); }
+        img#WHT{ filter: drop-shadow(0px 3px 5px black) brightness(2.66) saturate(0) hue-rotate(172deg); }
+        img#BLK{ filter: drop-shadow(0px 3px 5px black) brightness(0.2) saturate(0) hue-rotate(172deg); }
+        img#GRY{ filter: drop-shadow(0px 3px 5px black) brightness(0.5) saturate(0) hue-rotate(172deg); }
+        img#RED{ filter: drop-shadow(0px 3px 5px black) hue-rotate(0deg); }
+        img#BLU{ filter: drop-shadow(0px 3px 5px black) hue-rotate(225deg); }
+        img#GRN{ filter: drop-shadow(0px 3px 5px black) hue-rotate(145deg); }
+        img#YLW{ filter: drop-shadow(0px 3px 5px black) hue-rotate(65deg); }
+        img#ORA{ filter: drop-shadow(0px 3px 5px black) hue-rotate(50deg); }
+        img#PUR{ filter: drop-shadow(0px 3px 5px black) hue-rotate(285deg); }
+        img#BRN{ filter: drop-shadow(0px 3px 5px black) saturate(0.5) hue-rotate(35deg); }
+        img#BRZ{ filter: drop-shadow(0px 3px 5px black) brightness(1.5) saturate(0.7) hue-rotate(35deg); }
+        img#CYA{ filter: drop-shadow(0px 3px 5px black) hue-rotate(180deg); }
     }
 
     div:nth-child(2){
@@ -1537,6 +1571,68 @@ input[type="week"]:focus{
 
     div:nth-child(4){
         margin: 1px;
+        top:0.5px;
+        background-image: url(../content/twist.png);
+        background-size: 100%;
+    }
+}
+
+.bottlecapColorSchemeContainerEntry{
+    position: relative;
+    width: 130px;
+    height: 130px;
+
+
+    div{
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+
+        border-radius: 100%;
+    }
+
+    div:nth-child(1){
+        margin: 0px;
+        top: 0.5px;
+
+        img{
+            width: 100%;
+        }
+
+        img#GLD{ filter: drop-shadow(0px 3px 5px black) saturate(0.50) hue-rotate(53deg); }
+        img#SLV{ filter: drop-shadow(0px 3px 5px black) saturate(0); }
+        img#WHT{ filter: drop-shadow(0px 3px 5px black) brightness(2.66) saturate(0) hue-rotate(172deg); }
+        img#BLK{ filter: drop-shadow(0px 3px 5px black) brightness(0.2) saturate(0) hue-rotate(172deg); }
+        img#GRY{ filter: drop-shadow(0px 3px 5px black) brightness(0.5) saturate(0) hue-rotate(172deg); }
+        img#RED{ filter: drop-shadow(0px 3px 5px black) hue-rotate(0deg); }
+        img#BLU{ filter: drop-shadow(0px 3px 5px black) hue-rotate(225deg); }
+        img#GRN{ filter: drop-shadow(0px 3px 5px black) hue-rotate(145deg); }
+        img#YLW{ filter: drop-shadow(0px 3px 5px black) hue-rotate(65deg); }
+        img#ORA{ filter: drop-shadow(0px 3px 5px black) hue-rotate(50deg); }
+        img#PUR{ filter: drop-shadow(0px 3px 5px black) hue-rotate(285deg); }
+        img#BRN{ filter: drop-shadow(0px 3px 5px black) saturate(0.5) hue-rotate(35deg); }
+        img#BRZ{ filter: drop-shadow(0px 3px 5px black) brightness(1.5) saturate(0.7) hue-rotate(35deg); }
+        img#CYA{ filter: drop-shadow(0px 3px 5px black) hue-rotate(180deg); }
+    }
+
+    div:nth-child(2){
+        margin: 18px;
+    }
+
+    div:nth-child(3){
+        margin: 15px;
+        line-height: 95px;
+        margin-right: 5px;
+        font-size: 15pt;
+        font-family: komikax;
+        text-align: center;
+        text-shadow: 0px 0px 3px #000000;
+    }
+
+    div#shown:nth-child(4){
+        margin: 5px;
         top:0.5px;
         background-image: url(../content/twist.png);
         background-size: 100%;
@@ -1959,6 +2055,9 @@ input[type="week"]:focus{
     border-spacing: 5px;
     border-collapse: separate;
 
+    display: inline-table;
+    vertical-align: top;
+
     tr{
         td{
 
@@ -2008,12 +2107,11 @@ input[type="week"]:focus{
             padding: 0 4px;
         }
 
-        td:nth-child(4),
         td:nth-child(5){
             background: transparent;
-            div,
             img{
-
+                max-width: 130px;
+                max-height: 130px;
             }
         }
     }
@@ -2063,7 +2161,115 @@ input[type="week"]:focus{
         }
     }
 
+    tr:nth-child(14){
+        td{
+            text-align: center;
+        }
+    }
+}
 
+.addCapSidesignTable{
+    background: #A9A9A9;
+    padding: 10px;
+    border-radius: 10px;
+
+    border-spacing: 5px;
+    border-collapse: separate;
+
+    width: 420px;
+    display: inline-table;
+    vertical-align: top;
+
+    tr:nth-child(1){
+        td{
+            background: $theme-medium;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            color: #FFFFFF;
+        }
+    }
+
+    tr:nth-child(2){
+        td{
+            text-align: center;
+            label{
+                div{
+                    display: inline-block;
+                    vertical-align: top;
+                    width: 60px;
+                    height: 30px;
+                    background: #FFFFFF;
+                    margin: 3px;
+                    border-radius: 10px;
+
+                    border: 3px solid transparent;
+                    box-shadow: none;
+                    @include ease(0.5s);
+
+                    img{
+                        max-width: 55px;
+                        max-height: 30px;
+                        border-radius: 10px;
+                    }
+                }
+            }
+
+            input[type="radio"]:checked+label{
+                div{
+                    border: 3px solid $theme-dark;
+                    box-shadow: 0 0 3px 2px #000000;
+                    @include ease(0.1s);
+                }
+            }
+        }
+    }
+
+    tr:nth-child(3){
+        td{
+            background: #2B2B2B;
+            text-align: center;
+            border-radius: 10px;
+            a{
+                color: #FFFFFF;
+            }
+
+        }
+    }
+}
+
+.sideSignButtons{
+    overflow-y: scroll;
+    height: 80%;
+    label{
+        div{
+            display: inline-block;
+            vertical-align: top;
+            width: 60px;
+            height: 30px;
+            background: #FFFFFF;
+            margin: 3px;
+            border-radius: 10px;
+
+            border: 3px solid transparent;
+            box-shadow: none;
+            @include ease(0.5s);
+
+            img{
+                max-width: 55px;
+                max-height: 30px;
+                border-radius: 10px;
+            }
+        }
+    }
+
+    input[type="radio"]:checked+label{
+        div{
+            border: 3px solid $theme-dark;
+            box-shadow: 0 0 3px 2px #000000;
+            @include ease(0.1s);
+        }
+    }
 }
 
 
