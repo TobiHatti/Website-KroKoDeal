@@ -1,26 +1,29 @@
 <?php
-    require("lib/barcode.lib.php");
+	include("_header.php");
 
-    $format = 'png';
-    $symbology = 'code-128';
-    $symbology = 'qr';
-    $symbology = 'dmtx';
-    $data = 'AT_ZI_1265';
-    $options = '';
 
-    $generator = new barcode_generator();
+    if(isset($_POST['subm']))
+    {
+        $fileUploader = new FileUploader();
 
-    /* Output directly to standard output. */
-    $generator->output_image($format, $symbology, $data, $options);
+        $fileUploader->SetFileElement("sampleUpload");
+        $fileUploader->SetName("test");
+        $fileUploader->SetPath("testImg/");
+        $fileUploader->SetFileTypes("png","jpg");
+        $fileUploader->SetMaxFileSize("106KB");
+        //$fileUploader->SetTargetAspectRatio("10:1");
+        //$fileUploader->SetTargetResolution(300,350);
+        $fileUploader->SetScaleFactor(2);
+        $fileUploader->OverrideDuplicates(false);
+        $fileUploader->Upload();
 
-    /* Create bitmap image. */
-    $image = $generator->render_image($symbology, $data, $options);
-    imagepng($image);
-    imagedestroy($image);
+    }
 
-    /* Generate SVG markup. */
-    $svg = $generator->render_svg($symbology, $data, $options);
-    echo $svg;
+
+    echo '<br><br><br><br><form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">';
+    echo FileButton("sampleUpload","sampleUpload");
+    echo '<br><button type="submit" name="subm">Send</button></form>';
+
 
 
 	include("_footer.php");

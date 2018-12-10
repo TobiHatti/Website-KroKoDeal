@@ -2048,6 +2048,7 @@ input[type="week"]:focus{
 
 
 .addCapTable{
+    margin: 5px;
     background: #A9A9A9;
     padding: 10px;
     border-radius: 10px;
@@ -2121,7 +2122,8 @@ input[type="week"]:focus{
     tr:nth-child(10),
     tr:nth-child(11),
     tr:nth-child(12),
-    tr:nth-child(13){
+    tr:nth-child(13),
+    tr:nth-child(14){
 
         td:nth-child(1),
         td:nth-child(4){
@@ -2161,7 +2163,7 @@ input[type="week"]:focus{
         }
     }
 
-    tr:nth-child(14){
+    tr:last-child{
         td{
             text-align: center;
         }
@@ -2172,6 +2174,7 @@ input[type="week"]:focus{
     background: #A9A9A9;
     padding: 10px;
     border-radius: 10px;
+    margin: 5px;
 
     border-spacing: 5px;
     border-collapse: separate;

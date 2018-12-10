@@ -2023,6 +2023,7 @@ input[type="week"]:focus {
     color: #525252; }
 
 .addCapTable {
+  margin: 5px;
   background: #A9A9A9;
   padding: 10px;
   border-radius: 10px;
@@ -2098,7 +2099,9 @@ input[type="week"]:focus {
   .addCapTable tr:nth-child(12) td:nth-child(1),
   .addCapTable tr:nth-child(12) td:nth-child(4),
   .addCapTable tr:nth-child(13) td:nth-child(1),
-  .addCapTable tr:nth-child(13) td:nth-child(4) {
+  .addCapTable tr:nth-child(13) td:nth-child(4),
+  .addCapTable tr:nth-child(14) td:nth-child(1),
+  .addCapTable tr:nth-child(14) td:nth-child(4) {
     background: #FFFFFF;
     text-align: right;
     border-radius: 5px 0 0 5px;
@@ -2114,7 +2117,9 @@ input[type="week"]:focus {
   .addCapTable tr:nth-child(12) td:nth-child(2),
   .addCapTable tr:nth-child(12) td:nth-child(5),
   .addCapTable tr:nth-child(13) td:nth-child(2),
-  .addCapTable tr:nth-child(13) td:nth-child(5) {
+  .addCapTable tr:nth-child(13) td:nth-child(5),
+  .addCapTable tr:nth-child(14) td:nth-child(2),
+  .addCapTable tr:nth-child(14) td:nth-child(5) {
     background: #FFFFFF;
     text-align: center;
     border-radius: 0 5px 5px 0; }
@@ -2140,7 +2145,11 @@ input[type="week"]:focus {
     .addCapTable tr:nth-child(13) td:nth-child(2) input,
     .addCapTable tr:nth-child(13) td:nth-child(2) select,
     .addCapTable tr:nth-child(13) td:nth-child(5) input,
-    .addCapTable tr:nth-child(13) td:nth-child(5) select {
+    .addCapTable tr:nth-child(13) td:nth-child(5) select,
+    .addCapTable tr:nth-child(14) td:nth-child(2) input,
+    .addCapTable tr:nth-child(14) td:nth-child(2) select,
+    .addCapTable tr:nth-child(14) td:nth-child(5) input,
+    .addCapTable tr:nth-child(14) td:nth-child(5) select {
       border-radius: 0 5px 5px 0;
       border: 1px solid; }
     .addCapTable tr:nth-child(8) td:nth-child(2) table tr td,
@@ -2154,7 +2163,9 @@ input[type="week"]:focus {
     .addCapTable tr:nth-child(12) td:nth-child(2) table tr td,
     .addCapTable tr:nth-child(12) td:nth-child(5) table tr td,
     .addCapTable tr:nth-child(13) td:nth-child(2) table tr td,
-    .addCapTable tr:nth-child(13) td:nth-child(5) table tr td {
+    .addCapTable tr:nth-child(13) td:nth-child(5) table tr td,
+    .addCapTable tr:nth-child(14) td:nth-child(2) table tr td,
+    .addCapTable tr:nth-child(14) td:nth-child(5) table tr td {
       color: #000000;
       font-weight: normal; }
   .addCapTable tr:nth-child(8) td:nth-child(3),
@@ -2168,18 +2179,21 @@ input[type="week"]:focus {
   .addCapTable tr:nth-child(12) td:nth-child(3),
   .addCapTable tr:nth-child(12) td:nth-child(6),
   .addCapTable tr:nth-child(13) td:nth-child(3),
-  .addCapTable tr:nth-child(13) td:nth-child(6) {
+  .addCapTable tr:nth-child(13) td:nth-child(6),
+  .addCapTable tr:nth-child(14) td:nth-child(3),
+  .addCapTable tr:nth-child(14) td:nth-child(6) {
     background: #FFDFC7;
     border-radius: 5px;
     text-align: center;
     padding: 0 4px; }
-  .addCapTable tr:nth-child(14) td {
+  .addCapTable tr:last-child td {
     text-align: center; }
 
 .addCapSidesignTable {
   background: #A9A9A9;
   padding: 10px;
   border-radius: 10px;
+  margin: 5px;
   border-spacing: 5px;
   border-collapse: separate;
   width: 420px;

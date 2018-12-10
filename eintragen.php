@@ -20,6 +20,7 @@
         $isTraded = isset($_POST['isTraded']) ? 1 : 0;
         $isTradeable = isset($_POST['isTradeable']) ? 1 : 0;
         $alcohol = ($_POST['alcohol']=="") ? null : $_POST['alcohol'];
+        $stock = ($_POST['stock']=="") ? 0 : $_POST['stock'];
 
         $capColorID = explode('-',$_POST['capColorID'])[0];
         $baseColorID = explode('-',$_POST['baseColorID'])[0];
@@ -30,8 +31,6 @@
 
         $sidesignID = $_POST['sidesignID'];
         $dateInserted = date("Y-m-d");
-        $isSet = 0;
-        $stock=0;
 
         $sqlStatement = "
         INSERT INTO bottlecaps
@@ -46,12 +45,15 @@
         $breweryFilepath = MySQL::Scalar("SELECT breweryFilepath FROM breweries WHERE id = ?",'i',$breweryID);
 
         $fileUploader = new FileUploader();
-
-        $fileUploader->SetFile("capImage");
+        $fileUploader->SetFileElement("capImage");
+        $fileUploader->SetTargetAspectRatio("1:1")
+        $fileUploader->SetTargetResolution(500,500);
         $fileUploader->SetPath("files/bottlecaps/$countryShort/$breweryFilepath/");
         $fileUploader->SetSQLEntry("UPDATE bottlecaps SET capImage = '@FILENAME' WHERE id = '$capID'");
         $fileUploader->SetName($capNumber.'-'.uniqid());
         $fileUploader->Upload();
+
+
 
         Page::Redirect(Page::This());
         die();
@@ -127,7 +129,7 @@
                         <table class="addCapTable">
                             <tr>
                                 <td colspan=3>Allgemeines</td>
-                                <td rowspan=13></td>
+                                <td rowspan=14></td>
                                 <td colspan=3>Bilder</td>
                             </tr>
 
@@ -261,12 +263,12 @@
                             </tr>
 
                             <tr>
-                                <td>Getauscht</td>
+                                <td>Erhalten durch</td>
                                 <td>
                                     <table>
                                         <tr>
-                                            <td>'.RadioButton("Ja","isTraded",false,"1").'</td>
-                                            <td>'.RadioButton("Nein","isTraded",true,"0").'</td>
+                                            <td>'.RadioButton("Tausch","isTraded",false,"1").'</td>
+                                            <td>'.RadioButton("Kauf","isTraded",true,"0").'</td>
                                         </tr>
                                     </table>
                                 </td>
@@ -310,13 +312,22 @@
 
                             <tr>
                                 <td>Alkoholgehalt</td>
-                                <td><input class="cel_m" type="number" step=0.1 name="alcohol" placeholder="Alkoholgehalt..."/></td>
+                                <td><input class="cel_m" type="number" step="0.1" name="alcohol" placeholder="Alkoholgehalt..."/></td>
+                                <td>'.Tickbox("saveAlcohol","saveAlcohol","",true).'</td>
+
+
+                            </tr>
+
+                            <tr>
+                                <td>Auf Lager</td>
+                                <td><input class="cel_m" type="number" step="1" name="stock" placeholder="Auf Lager..."/></td>
                                 <td>'.Tickbox("saveAlcohol","saveAlcohol","",true).'</td>
 
                                 <td>Mitz&auml;hlen</td>
                                 <td>'.Tickbox("isCounted","isCounted","",true).'</td>
                                 <td>'.Tickbox("saveIsCounted","saveIsCounted","",true).'</td>
                             </tr>
+
                             <tr>
                                 <td colspan=7>
                                     <br>
