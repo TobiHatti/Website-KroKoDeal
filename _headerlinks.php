@@ -3,6 +3,8 @@
 
     $__pageRevision = 4.0;
 
+
+
     echo '
         <!-- Own links -->
             <link rel="stylesheet" type="text/css" href="/css/style.css?'.$__pageRevision.'">
@@ -12,7 +14,7 @@
             <link rel="stylesheet" type="text/css" href="/css/fonts.css?'.$__pageRevision.'" />
             <link rel="stylesheet" type="text/css" href="/css/modal.css?'.$__pageRevision.'" />
             <link rel="stylesheet" type="text/css" href="/css/flags.css?'.$__pageRevision.'" />
-            <link href="/content/favicon.png?'.$__pageRevision.'" rel="icon" type="image/x-icon" />
+            <link href="/content/logo.png?'.$__pageRevision.'" rel="icon" type="image/x-icon" />
         <!-- End own links -->
 
 
@@ -29,6 +31,9 @@
             <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <!-- End of External Links/Scripts -->
 
+        <!-- DynLoad.lib -->
+
+        <!-- End of DynLoad.lib -->
 
         <!-- Froala-Texteditor -->
             <link rel="stylesheet" href="/plugins/froala_style/froala_editor.css">
@@ -71,6 +76,8 @@
         <!-- End of Header-Parallax -->
 
         ';
+
+        echo DynLoad::Link();
 
         if(Page::This() == "sign-up")
         {

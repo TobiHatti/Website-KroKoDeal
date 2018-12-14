@@ -63,6 +63,20 @@
             '.(isset($_GET['errorUsername']) ? '<h4 style="color:red">Benutzername bereits vergeben!</h4>' : '').'
             '.(isset($_GET['errorEmail']) ? '<h4 style="color:red">E-Mail Adresse bereits registriert!</h4>' : '').'
 
+            <input type="hidden" value="0" id="outUsernameExists"/>
+            <input type="hidden" value="0" id="outEmailExists"/>
+
+            <script>
+                setInterval(function() {
+                    ToggleElementVisibilityByElement("outUsernameExists","warningUsername","block");
+                    ToggleElementVisibilityByElement("outEmailExists","warningEmail","block");
+
+                    if(document.getElementById("outUsernameExists").value != 0 || document.getElementById("outEmailExists").value != 0) document.getElementById("submitButton").disabled = true;
+                    else document.getElementById("submitButton").disabled = false;
+
+                }, 100);
+            </script>
+
             <form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">
                 <table class="loginRegisterTable">
                     <tr>
@@ -89,11 +103,19 @@
 
                     <tr>
                         <td>Benutzername<i>*</i></td>
-                        <td><input required type="text" class="cel_100" name="username" placeholder="Benutzername..."/></td>
+                        <td>
+                            <output id="warningUsername" style="color: #CC0000; display: none;">Benutzername bereits vergeben!</output>
+                            <input required type="text" class="cel_100" name="username" placeholder="Benutzername..." oninput="DynLoadExist(this,\'outUsernameExists\',\'SELECT * FROM users WHERE username = ??\');"/>
+                        </td>
                     </tr>
+
+
                     <tr>
                         <td>E-Mail Adresse<i>*</i></td>
-                        <td><input required type="email" class="cel_100" name="email" placeholder="E-Mail..."/></td>
+                        <td>
+                            <output id="warningEmail" style="color: #CC0000; display: none;">E-Mail bereits registriert!</output>
+                            <input required type="email" class="cel_100" name="email" placeholder="E-Mail..." oninput="DynLoadExist(this,\'outEmailExists\',\'SELECT * FROM users WHERE email = ??\');"/>
+                        </td>
                     </tr>
                     <tr>
                         <td>Geburtsdatum<i>*</i></td>

@@ -84,4 +84,6 @@
                 <main>
     ';
 
+    echo DynLoad::Start();
+
 ?>

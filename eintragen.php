@@ -46,15 +46,52 @@
 
         $fileUploader = new FileUploader();
         $fileUploader->SetFileElement("capImage");
-        $fileUploader->SetTargetAspectRatio("1:1")
         $fileUploader->SetTargetResolution(500,500);
         $fileUploader->SetPath("files/bottlecaps/$countryShort/$breweryFilepath/");
         $fileUploader->SetSQLEntry("UPDATE bottlecaps SET capImage = '@FILENAME' WHERE id = '$capID'");
-        $fileUploader->SetName($capNumber.'-'.uniqid());
+        $fileUploader->SetName($capNumber);
+        $fileUploader->OverrideDuplicates(false);
         $fileUploader->Upload();
 
+        Page::Redirect(Page::This());
+        die();
+    }
 
+    if(isset($_POST['addBrewery']))
+    {
+        $countryID = $_POST['countryID'];
+        $regionID = isset($_POST['regionID']) ? $_POST['regionID'] : 0;
+        $link = $_POST['link'];
+        $name = $_POST['name'];
+        $short = $_POST['breweryShort'];
+        $saveName = StringOp::SReplace($name);
 
+        $sqlStatement = "INSERT INTO breweries
+        (id,countryID,regionID,breweryName,breweryShort,breweryLink,breweryFilepath)
+        VALUES
+        (NULL,?,?,?,?,?,?)";
+
+        MySQL::NonQuery($sqlStatement,'@s',$countryID,$regionID,$name,$short,$link,$saveName);
+        $breweryID = MySQL::Scalar("SELECT id FROM breweries ORDER BY id DESC");
+        $countryShort = MySQL::Scalar("SELECT countryShort FROM countries INNER JOIN breweries ON countries.id = breweries.countryID WHERE breweries.id = ?",'i',$breweryID);
+
+        $fileUploader = new FileUploader();
+        $fileUploader->SetFileElement("breweryImage");
+        $fileUploader->SetTargetResolution(1000,1000);
+        $fileUploader->SetPath("files/breweries/$countryShort/");
+        $fileUploader->SetSQLEntry("UPDATE breweries SET breweryImage = '@FILENAME' WHERE id = '$breweryID'");
+        $fileUploader->SetName($saveName);
+        $fileUploader->OverrideDuplicates(false);
+        $fileUploader->Upload();
+
+        Page::Redirect(Page::This());
+        die();
+    }
+
+    if(isset($_POST['addFlavor']))
+    {
+        $flavor = $_POST['flavor'];
+        MySQL::NonQuery("INSERT INTO flavors (id,flavorDE) VALUES (NULL,?)",'s',$flavor);
         Page::Redirect(Page::This());
         die();
     }
@@ -78,7 +115,7 @@
         {
             echo '<h2>Kronkorken hinzuf&uuml;gen</h2>';
 
-            $countryList = MySQL::Cluster("SELECT * FROM countries ORDER BY countryDE ASC");
+            $countryList = MySQL::Cluster("SELECT * FROM countries RIGHT JOIN breweries ON countries.id = breweries.countryID GROUP BY breweries.countryID ORDER BY countries.countryDE ASC");
             $flavorList = MySQL::Cluster("SELECT * FROM flavors");
             $colorList = MySQL::Cluster("SELECT * FROM colors");
             $sidesignFrequentList = MySQL::Cluster("SELECT *,COUNT(sidesignID) AS sidesignCount FROM bottlecaps INNER JOIN sidesigns ON bottlecaps.sidesignID = sidesigns.id GROUP BY sidesignID HAVING sidesignCount >= 3");
@@ -87,43 +124,6 @@
             $qualityDisplayList = array("A" => "A - Neu","B" => "B - Benutzt, Sehr guter Zustand","C" => "C - Benutzt, kleine Kratzer/Knicke","D" => "D - Benutzt, gro&szlig;e Kratzer/Knicke","E" => "E - Benutzt, schlechter zust.");
 
             echo '
-                <script>
-                    function UpdateBreweryList()
-                    {
-                        $("#breweryList")
-                            .find("option")
-                            .remove()
-                        ;
-
-                        var listpre = document.getElementById("countryList");
-                        var countryID = listpre.options[listpre.selectedIndex].value;
-                        var option;
-
-                        ';
-
-                        foreach($countryList AS $country)
-                        {
-                            $breweryList = MySQL::Cluster("SELECT * FROM breweries WHERE countryID = ? ORDER BY breweryName ASC",'i',$country['id']);
-
-                            echo 'if(countryID=='.$country['id'].'){';
-
-                            foreach($breweryList AS $brewery)
-                            {
-                                echo '
-                                    option = document.createElement("option");
-                                    option.text = "'.$brewery['breweryName'].'";
-                                    option.value = "'.$brewery['id'].'";
-
-                                    document.getElementById("breweryList").add(option);
-                                ';
-                            }
-                            echo '}';
-                        }
-                        echo '
-                    }
-
-                </script>
-
                 <center>
                     <form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">
                         <table class="addCapTable">
@@ -136,10 +136,10 @@
                             <tr>
                                 <td>Land</td>
                                 <td>
-                                    <select name="countryID" class="cel_100 cef_nomg cef_nopd" id="countryList" onchange="UpdateBreweryList()">
+                                    <select name="countryID" class="cel_100 cef_nomg cef_nopd" id="countryList" onchange="DynLoadList(this,\'breweryList\',\'SELECT breweryName AS dynLoadText, id AS dynLoadValue FROM breweries WHERE countryID = ?? ORDER BY breweryName ASC\')">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($countryList AS $country) echo '<option value="'.$country['id'].'">'.$country['countryDE'].'</option>';
+                                        foreach($countryList AS $country) echo '<option value="'.$country['countryID'].'">'.$country['countryDE'].'</option>';
                                         echo '
                                     </select>
                                 </td>
@@ -407,6 +407,74 @@
         if($_GET['section'] == 'brauerei')
         {
             echo '<h2>Brauerei hinzuf&uuml;gen</h2>';
+
+            echo '
+                <input type="hidden" value="0" id="outCountryHasRegions"/>
+                <script>
+                    setInterval(function() {
+                        ToggleElementVisibilityByElement("outCountryHasRegions","tableRowRegions","table-row");
+                    }, 100);
+                </script>
+
+                <form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                    <center>
+                        <table class="addBreweryTable">
+                            <tr>
+                                <td colspan=3>Brauerei eintragen</td>
+                            </tr>
+                            <tr>
+                                <td>Brauerei-Name: </td>
+                                <td><input type="text" name="name" placeholder="Brauerei..." class="cel_m cef_nomg"/></td>
+                                <td rowspan=5>
+                                    <img src="#" alt="" id="breweryImagePreview"/><br><br>
+                                    '.FileButton("breweryImage","breweryImage",false,"ReadURL(this,'breweryImagePreview');","","width: 100px; line-height: 5px;",true).'
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Brauerei-K&uuml;rzel: </td>
+                                <td><input type="text" name="breweryShort" placeholder="K&uuml;rzel..." class="cel_m cef_nomg"/></td>
+                            </tr>
+                            <tr>
+                                <td>Land: </td>
+                                <td>
+                                    <select name="countryID" id="" class="cel_m cef_nomg" onchange="DynLoadExist(this,\'outCountryHasRegions\',\'SELECT * FROM regions WHERE countryID = ??\');">
+                                        <option value="" disabled selected>--- Ausw&auml;hlen ---</option>
+                                        ';
+                                        $countryList = MySQL::Cluster("SELECT * FROM countries ORDER BY countryDE ASC");
+                                        foreach($countryList AS $country) echo '<option value="'.$country['id'].'">'.$country['countryDE'].'</option>';
+                                        echo '
+                                    </select>
+                                </td>
+                            </tr>
+
+
+
+                            <tr id="tableRowRegions" style="display:none;">
+                                <td>Bundesland: </td>
+                                <td>
+                                    <select name="regionID" id="" class="cel_m cef_nomg">
+                                        <option value="" disabled selected>--- Ausw&auml;hlen ---</option>
+                                        ';
+                                        $regionList = MySQL::Cluster("SELECT * FROM regions ORDER BY regionDE ASC");
+                                        foreach($regionList AS $region) echo '<option value="'.$region['id'].'">'.$region['regionDE'].'</option>';
+                                        echo '
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Homepage-Link: </td>
+                                <td><input type="url" name="link" placeholder="http://..." class="cel_m cef_nomg"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan=3>
+                                    <br>
+                                    <button type="submit" name="addBrewery">Brauerei hinzuf&uuml;gen</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                </form>
+            ';
         }
 
 //========================================================================================
@@ -418,6 +486,29 @@
         if($_GET['section'] == 'sorte')
         {
             echo '<h2>Sorte hinzuf&uuml;gen</h2>';
+
+            echo '
+                <form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                    <center>
+                        <table class="addFlavorTable">
+                            <tr>
+                                <td colspan=2>Sorte hinzuf&uuml;gen</td>
+                            </tr>
+                            <tr>
+                                <td class="cel_xs">Sorte: </td>
+                                <td><input type="text" name="flavor" placeholder="Sorte..." class="cel_m cef_nomg"/></td>
+                            </tr>
+
+                            <tr>
+                                <td colspan=3>
+                                    <br>
+                                    <button type="submit" name="addFlavor">Sorte hinzuf&uuml;gen</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                </form>
+            ';
         }
 
 //========================================================================================

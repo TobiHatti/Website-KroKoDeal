@@ -2275,5 +2275,119 @@ input[type="week"]:focus{
     }
 }
 
+.addBreweryTable{
+    background: #A9A9A9;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px;
 
+    border-spacing: 5px;
+    border-collapse: separate;
+
+
+    tr:nth-child(2),
+    tr:nth-child(3),
+    tr:nth-child(4),
+    tr:nth-child(5),
+    tr:nth-child(6){
+
+        td:nth-child(1){
+            background: #FFFFFF;
+            text-align: right;
+            border-radius: 5px 0 0 5px;
+            padding-right: 5px;
+        }
+
+        td:nth-child(2){
+            background: #FFFFFF;
+            text-align: center;
+            border-radius: 0 5px 5px 0;
+            padding-right: 5px;
+
+            input,select{
+                border-radius: 0 5px 5px 0;
+                border: 1px solid;
+            }
+        }
+
+        td:nth-child(3){
+            text-align: center;
+            background: #FFFFFF;
+            border-radius: 10px;
+            padding: 5px;
+
+            img{
+                max-width: 100px;
+                max-height: 100px;
+            }
+
+        }
+
+    }
+
+    tr:first-child{
+        td{
+            background: $theme-medium;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            color: #FFFFFF;
+        }
+    }
+
+    tr:last-child{
+        td{
+            text-align: center;
+        }
+    }
+}
+
+.addFlavorTable{
+    background: #A9A9A9;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px;
+
+    border-spacing: 5px;
+    border-collapse: separate;
+
+
+    tr:nth-child(2){
+
+        td:nth-child(1){
+            background: #FFFFFF;
+            text-align: right;
+            border-radius: 5px 0 0 5px;
+            padding-right: 5px;
+        }
+
+        td:nth-child(2){
+            background: #FFFFFF;
+            text-align: center;
+            border-radius: 0 5px 5px 0;
+            padding-right: 5px;
+
+            input,select{
+                border-radius: 0 5px 5px 0;
+                border: 1px solid;
+            }
+        }
+    }
+
+    tr:first-child{
+        td{
+            background: $theme-medium;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            color: #FFFFFF;
+        }
+    }
+
+    tr:last-child{
+        td{
+            text-align: center;
+        }
+    }
+}
 

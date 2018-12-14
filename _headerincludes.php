@@ -3,7 +3,9 @@
     require("lib/setting.lib.php");
     require("lib/upload.lib.php");
     require("lib/pager.lib.php");
+    require("lib/string.lib.php");
     require("lib/page.lib.php");
+    require("lib/dynload.lib.php");
     require("data/mysql_connect.php");
     require("lib/functions.php");
     require("lib/formelements.php");

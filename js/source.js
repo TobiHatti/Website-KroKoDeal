@@ -66,6 +66,23 @@ function InsertCapUpdateCapPreview()
 }
 
 
+function ToggleElementVisibilityByValue(isVisible,toggleElementID,displayStyle)
+{
+    if(isVisible) document.getElementById(toggleElementID).style.display = displayStyle;
+    else document.getElementById(toggleElementID).style.display = "none";
+}
+
+function ToggleElementVisibilityByElement(sourceElementID,toggleElementID,displayStyle)
+{
+    if(document.getElementById(sourceElementID).value != "0") document.getElementById(toggleElementID).style.display = displayStyle;
+    else document.getElementById(toggleElementID).style.display = "none";
+}
+
+function ToggleElementVisibilityByAction(e,toggleElementID,displayStyle)
+{
+    if(e.checked) document.getElementById(toggleElementID).style.display = displayStyle;
+    else document.getElementById(toggleElementID).style.display = "none";
+}
 
 
 

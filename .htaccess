@@ -39,7 +39,6 @@ RewriteRule ^([^\.]+)$ $1.php [NC,L]
 ###############################
 RewriteRule (^|/)backup(/|$) - [F]
 RewriteRule (^|/)sass(/|$) - [F]
-RewriteRule (^|/)lib(/|$) - [F]
 
 ###############################
 #       Error Ducuments       #
