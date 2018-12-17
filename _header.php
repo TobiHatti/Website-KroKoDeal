@@ -84,6 +84,10 @@
                 <main>
     ';
 
-    echo DynLoad::Start();
+    echo DynLoad::Start(1);
+    echo DynLoad::Start(2);
+    echo DynLoad::Start(3);
+    echo DynLoad::Start(4);
+    echo DynLoad::Start(5);
 
 ?>

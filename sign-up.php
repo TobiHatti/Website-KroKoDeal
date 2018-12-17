@@ -105,7 +105,7 @@
                         <td>Benutzername<i>*</i></td>
                         <td>
                             <output id="warningUsername" style="color: #CC0000; display: none;">Benutzername bereits vergeben!</output>
-                            <input required type="text" class="cel_100" name="username" placeholder="Benutzername..." oninput="DynLoadExist(this,\'outUsernameExists\',\'SELECT * FROM users WHERE username = ??\');"/>
+                            <input required type="text" class="cel_100" name="username" placeholder="Benutzername..." oninput="DynLoadExist(1,this,\'outUsernameExists\',\'SELECT * FROM users WHERE username = ??\');"/>
                         </td>
                     </tr>
 
@@ -114,7 +114,7 @@
                         <td>E-Mail Adresse<i>*</i></td>
                         <td>
                             <output id="warningEmail" style="color: #CC0000; display: none;">E-Mail bereits registriert!</output>
-                            <input required type="email" class="cel_100" name="email" placeholder="E-Mail..." oninput="DynLoadExist(this,\'outEmailExists\',\'SELECT * FROM users WHERE email = ??\');"/>
+                            <input required type="email" class="cel_100" name="email" placeholder="E-Mail..." oninput="DynLoadExist(2,this,\'outEmailExists\',\'SELECT * FROM users WHERE email = ??\');"/>
                         </td>
                     </tr>
                     <tr>

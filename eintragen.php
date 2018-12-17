@@ -90,10 +90,23 @@
 
     if(isset($_POST['addFlavor']))
     {
-        $flavor = $_POST['flavor'];
-        MySQL::NonQuery("INSERT INTO flavors (id,flavorDE) VALUES (NULL,?)",'s',$flavor);
+        $flavorDE = $_POST['flavorDE'];
+        $flavorEN = $_POST['flavorEN'];
+        MySQL::NonQuery("INSERT INTO flavors (id,flavorDE,flavorEN) VALUES (NULL,?)",'s',$flavorDE,$flavorEN);
         Page::Redirect(Page::This());
         die();
+    }
+
+    if(isset($_POST['addSidesign']))
+    {
+        $sidesignName = $_POST['name'];
+
+        $fileUploader = new FileUploader();
+        $fileUploader->SetFileElement("sidesignImage");
+        $fileUploader->SetPath("files/sidesigns/");
+        $fileUploader->SetSQLEntry("INSERT INTO sidesigns (id, sidesignName, sidesignImage) VALUES (NULL,'$sidesignName','@FILENAME')");
+        $fileUploader->OverrideDuplicates(false);
+        $fileUploader->Upload();
     }
 
 //########################################################################################
@@ -126,6 +139,10 @@
             echo '
                 <center>
                     <form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+
+                        <input type="hidden" id="outBreweryShort"/>
+                        <input type="hidden" id="outCountryShort"/>
+
                         <table class="addCapTable">
                             <tr>
                                 <td colspan=3>Allgemeines</td>
@@ -136,7 +153,7 @@
                             <tr>
                                 <td>Land</td>
                                 <td>
-                                    <select name="countryID" class="cel_100 cef_nomg cef_nopd" id="countryList" onchange="DynLoadList(this,\'breweryList\',\'SELECT breweryName AS dynLoadText, id AS dynLoadValue FROM breweries WHERE countryID = ?? ORDER BY breweryName ASC\')">
+                                    <select name="countryID" class="cel_100 cef_nomg cef_nopd" id="countryList" onchange="DynLoadList(1,this,\'--- Ausw\u00e4hlen ---\',\'breweryList\',\'SELECT breweryName AS dynLoadText, id AS dynLoadValue FROM breweries WHERE countryID = ?? ORDER BY breweryName ASC\'); DynLoadScalar(2,this,\'outCountryShort\',\'SELECT countryShort2 FROM countries WHERE id = ??\')">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
                                         foreach($countryList AS $country) echo '<option value="'.$country['countryID'].'">'.$country['countryDE'].'</option>';
@@ -167,7 +184,9 @@
                             <tr>
                                 <td>Brauerei</td>
                                 <td>
-                                    <select name="breweryID" class="cel_m cef_nomg cef_nopd" id="breweryList" required>
+                                    <select name="breweryID" class="cel_m cef_nomg cef_nopd" id="breweryList" required
+                                    onchange="DynLoadScalar(3,this,\'outBreweryShort\',\'SELECT breweryShort FROM breweries WHERE id = ??\'); CopyShortsToCapNumber(false);"
+                                    onclick="DynLoadScalar(3,this,\'outBreweryShort\',\'SELECT breweryShort FROM breweries WHERE id = ??\'); CopyShortsToCapNumber(false)">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                     </select>
                                 </td>
@@ -195,7 +214,7 @@
 
                             <tr>
                                 <td>Kapsel-Nr</td>
-                                <td><input class="cel_m" type="text" name="capNumber" placeholder="XX_XX_XXXX" required/></td>
+                                <td><input class="cel_m" type="text" name="capNumber" id="capNumber" placeholder="XX_XX_XXXX" required onclick="CopyShortsToCapNumber(true)"/></td>
                                 <td>'.Tickbox("saveCapNumber","saveCapNumber","",true).'</td>
                             </tr>
 
@@ -495,10 +514,13 @@
                                 <td colspan=2>Sorte hinzuf&uuml;gen</td>
                             </tr>
                             <tr>
-                                <td class="cel_xs">Sorte: </td>
-                                <td><input type="text" name="flavor" placeholder="Sorte..." class="cel_m cef_nomg"/></td>
+                                <td>Sorte (DE): </td>
+                                <td><input type="text" name="flavorDE" placeholder="Sorte Deutsch..." class="cel_m cef_nomg"/></td>
                             </tr>
-
+                            <tr>
+                                <td>Sorte (EN): </td>
+                                <td><input type="text" name="flavorEN" placeholder="Sorte Englisch..." class="cel_m cef_nomg"/></td>
+                            </tr>
                             <tr>
                                 <td colspan=3>
                                     <br>
@@ -520,6 +542,35 @@
         if($_GET['section'] == 'randzeichen')
         {
             echo '<h2>Randzeichen hinzuf&uuml;gen</h2>';
+
+            echo '
+                <form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                    <center>
+                        <table class="addFlavorTable">
+                            <tr>
+                                <td colspan=2>Randzeichen hinzuf&uuml;gen</td>
+                            </tr>
+                            <tr>
+                                <td>Bezeichnung: </td>
+                                <td><input type="text" name="name" placeholder="Randzeichen-Bez. ..." class="cel_m cef_nomg"/></td>
+                            </tr>
+                            <tr>
+                                <td>Bild: </td>
+                                <td>
+                                    <img src="#" alt="" id="SidesignImagePreview"/><br><br>
+                                    '.FileButton("sidesignImage","sidesignImage",false,"ReadURL(this,'SidesignImagePreview');","","width: 100px; line-height: 5px;",true).'
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=3>
+                                    <br>
+                                    <button type="submit" name="addSidesign">Randzeichen hinzuf&uuml;gen</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                </form>
+            ';
         }
     }
 	

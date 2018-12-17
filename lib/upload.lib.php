@@ -230,6 +230,11 @@ class FileUploader
                             // Create new image
                             $newImage = imagecreatetruecolor($newWidth, $newHeight);
 
+                            imagealphablending($newImage, false);
+                            imagesavealpha($newImage,true);
+                            $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
+                            imagefilledrectangle($newImage, 0, 0, $newWidth, $newHeight, $transparent);
+
                             switch(exif_imagetype($fileName))
                             {
                                 case IMAGETYPE_GIF: $oldImage = imagecreatefromgif($fileName); break;
@@ -270,6 +275,11 @@ class FileUploader
                             // Create new image
                             $newImage = imagecreatetruecolor($newWidth, $newHeight);
 
+                            imagealphablending($newImage, false);
+                            imagesavealpha($newImage,true);
+                            $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
+                            imagefilledrectangle($newImage, 0, 0, $newWidth, $newHeight, $transparent);
+
                             switch(exif_imagetype($fileName))
                             {
                                 case IMAGETYPE_GIF: $oldImage = imagecreatefromgif($fileName); break;
@@ -302,6 +312,11 @@ class FileUploader
 
                             // Create new image
                             $newImage = imagecreatetruecolor($newWidth, $newHeight);
+
+                            imagealphablending($newImage, false);
+                            imagesavealpha($newImage,true);
+                            $transparent = imagecolorallocatealpha($newImage, 255, 255, 255, 127);
+                            imagefilledrectangle($newImage, 0, 0, $newWidth, $newHeight, $transparent);
 
                             switch(exif_imagetype($fileName))
                             {

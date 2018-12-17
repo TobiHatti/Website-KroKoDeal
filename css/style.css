@@ -2340,17 +2340,21 @@ input[type="week"]:focus {
   margin: 5px;
   border-spacing: 5px;
   border-collapse: separate; }
-  .addFlavorTable tr:nth-child(2) td:nth-child(1) {
+  .addFlavorTable tr:nth-child(2) td:nth-child(1),
+  .addFlavorTable tr:nth-child(3) td:nth-child(1) {
     background: #FFFFFF;
     text-align: right;
     border-radius: 5px 0 0 5px;
     padding-right: 5px; }
-  .addFlavorTable tr:nth-child(2) td:nth-child(2) {
+  .addFlavorTable tr:nth-child(2) td:nth-child(2),
+  .addFlavorTable tr:nth-child(3) td:nth-child(2) {
     background: #FFFFFF;
     text-align: center;
     border-radius: 0 5px 5px 0;
     padding-right: 5px; }
-    .addFlavorTable tr:nth-child(2) td:nth-child(2) input, .addFlavorTable tr:nth-child(2) td:nth-child(2) select {
+    .addFlavorTable tr:nth-child(2) td:nth-child(2) input, .addFlavorTable tr:nth-child(2) td:nth-child(2) select,
+    .addFlavorTable tr:nth-child(3) td:nth-child(2) input,
+    .addFlavorTable tr:nth-child(3) td:nth-child(2) select {
       border-radius: 0 5px 5px 0;
       border: 1px solid; }
   .addFlavorTable tr:first-child td {

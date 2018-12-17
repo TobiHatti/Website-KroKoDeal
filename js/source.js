@@ -84,6 +84,36 @@ function ToggleElementVisibilityByAction(e,toggleElementID,displayStyle)
     else document.getElementById(toggleElementID).style.display = "none";
 }
 
+function CopyShortsToCapNumber(isCopyFunction)
+{
+    if(isCopyFunction)
+    {
+        var capPrefix = document.getElementById("outCountryShort").value + "_" +
+                        document.getElementById("outBreweryShort").value + "_";
+
+        var capNumberText = document.getElementById("capNumber").value;
+
+        if((capNumberText.split('_')[2] == null ||
+        capNumberText == "Klicken zum F\u00fcllen" ||
+        capNumberText.split('_')[0] != document.getElementById("outCountryShort").value ||
+        capNumberText.split('_')[1] != document.getElementById("outBreweryShort").value) &&
+        document.getElementById("outCountryShort").value != "" &&
+        document.getElementById("outBreweryShort").value != "")
+        {
+            document.getElementById("capNumber").value = capPrefix;
+        }
+    }
+    else
+    {
+        var capNumberText = document.getElementById("capNumber").value;
+
+        if(capNumberText.split('_')[0] != document.getElementById("outCountryShort").value ||
+        capNumberText.split('_')[1] != document.getElementById("outBreweryShort").value)
+        {
+            document.getElementById("capNumber").value = "Klicken zum F\u00fcllen";
+        }
+    }
+}
 
 
 
