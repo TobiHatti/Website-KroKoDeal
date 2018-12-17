@@ -2189,6 +2189,146 @@ input[type="week"]:focus {
   .addCapTable tr:last-child td {
     text-align: center; }
 
+.addSet1Table {
+  margin: 5px;
+  background: #A9A9A9;
+  padding: 10px;
+  border-radius: 10px;
+  border-spacing: 5px;
+  border-collapse: separate;
+  display: inline-table;
+  vertical-align: top; }
+  .addSet1Table tr:nth-child(1) td,
+  .addSet1Table tr:nth-child(7) td {
+    background: #FF892E;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 10px;
+    color: #FFFFFF; }
+  .addSet1Table tr:nth-child(2) td:nth-child(1),
+  .addSet1Table tr:nth-child(3) td:nth-child(1),
+  .addSet1Table tr:nth-child(4) td:nth-child(1),
+  .addSet1Table tr:nth-child(5) td:nth-child(1),
+  .addSet1Table tr:nth-child(6) td:nth-child(1) {
+    background: #FFFFFF;
+    text-align: right;
+    border-radius: 5px 0 0 5px;
+    padding-right: 5px; }
+  .addSet1Table tr:nth-child(2) td:nth-child(2),
+  .addSet1Table tr:nth-child(3) td:nth-child(2),
+  .addSet1Table tr:nth-child(4) td:nth-child(2),
+  .addSet1Table tr:nth-child(5) td:nth-child(2),
+  .addSet1Table tr:nth-child(6) td:nth-child(2) {
+    background: #FFFFFF;
+    text-align: center;
+    border-radius: 0 5px 5px 0; }
+    .addSet1Table tr:nth-child(2) td:nth-child(2) input, .addSet1Table tr:nth-child(2) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(3) td:nth-child(2) input,
+    .addSet1Table tr:nth-child(3) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(4) td:nth-child(2) input,
+    .addSet1Table tr:nth-child(4) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(5) td:nth-child(2) input,
+    .addSet1Table tr:nth-child(5) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(6) td:nth-child(2) input,
+    .addSet1Table tr:nth-child(6) td:nth-child(2) select {
+      border-radius: 0 5px 5px 0;
+      border: 1px solid; }
+  .addSet1Table tr:nth-child(2) td:nth-child(4),
+  .addSet1Table tr:nth-child(3) td:nth-child(4),
+  .addSet1Table tr:nth-child(4) td:nth-child(4),
+  .addSet1Table tr:nth-child(5) td:nth-child(4),
+  .addSet1Table tr:nth-child(6) td:nth-child(4) {
+    background: transparent; }
+    .addSet1Table tr:nth-child(2) td:nth-child(4) img,
+    .addSet1Table tr:nth-child(3) td:nth-child(4) img,
+    .addSet1Table tr:nth-child(4) td:nth-child(4) img,
+    .addSet1Table tr:nth-child(5) td:nth-child(4) img,
+    .addSet1Table tr:nth-child(6) td:nth-child(4) img {
+      max-width: 130px;
+      max-height: 130px; }
+  .addSet1Table tr:nth-child(8) td:nth-child(1),
+  .addSet1Table tr:nth-child(8) td:nth-child(3),
+  .addSet1Table tr:nth-child(9) td:nth-child(1),
+  .addSet1Table tr:nth-child(9) td:nth-child(3),
+  .addSet1Table tr:nth-child(10) td:nth-child(1),
+  .addSet1Table tr:nth-child(10) td:nth-child(3),
+  .addSet1Table tr:nth-child(11) td:nth-child(1),
+  .addSet1Table tr:nth-child(11) td:nth-child(3),
+  .addSet1Table tr:nth-child(12) td:nth-child(1),
+  .addSet1Table tr:nth-child(12) td:nth-child(3),
+  .addSet1Table tr:nth-child(13) td:nth-child(1),
+  .addSet1Table tr:nth-child(13) td:nth-child(3),
+  .addSet1Table tr:nth-child(14) td:nth-child(1),
+  .addSet1Table tr:nth-child(14) td:nth-child(3) {
+    background: #FFFFFF;
+    text-align: right;
+    border-radius: 5px 0 0 5px;
+    padding-right: 5px; }
+  .addSet1Table tr:nth-child(8) td:nth-child(2),
+  .addSet1Table tr:nth-child(8) td:nth-child(4),
+  .addSet1Table tr:nth-child(9) td:nth-child(2),
+  .addSet1Table tr:nth-child(9) td:nth-child(4),
+  .addSet1Table tr:nth-child(10) td:nth-child(2),
+  .addSet1Table tr:nth-child(10) td:nth-child(4),
+  .addSet1Table tr:nth-child(11) td:nth-child(2),
+  .addSet1Table tr:nth-child(11) td:nth-child(4),
+  .addSet1Table tr:nth-child(12) td:nth-child(2),
+  .addSet1Table tr:nth-child(12) td:nth-child(4),
+  .addSet1Table tr:nth-child(13) td:nth-child(2),
+  .addSet1Table tr:nth-child(13) td:nth-child(4),
+  .addSet1Table tr:nth-child(14) td:nth-child(2),
+  .addSet1Table tr:nth-child(14) td:nth-child(4) {
+    background: #FFFFFF;
+    text-align: center;
+    border-radius: 0 5px 5px 0; }
+    .addSet1Table tr:nth-child(8) td:nth-child(2) input, .addSet1Table tr:nth-child(8) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(8) td:nth-child(4) input,
+    .addSet1Table tr:nth-child(8) td:nth-child(4) select,
+    .addSet1Table tr:nth-child(9) td:nth-child(2) input,
+    .addSet1Table tr:nth-child(9) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(9) td:nth-child(4) input,
+    .addSet1Table tr:nth-child(9) td:nth-child(4) select,
+    .addSet1Table tr:nth-child(10) td:nth-child(2) input,
+    .addSet1Table tr:nth-child(10) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(10) td:nth-child(4) input,
+    .addSet1Table tr:nth-child(10) td:nth-child(4) select,
+    .addSet1Table tr:nth-child(11) td:nth-child(2) input,
+    .addSet1Table tr:nth-child(11) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(11) td:nth-child(4) input,
+    .addSet1Table tr:nth-child(11) td:nth-child(4) select,
+    .addSet1Table tr:nth-child(12) td:nth-child(2) input,
+    .addSet1Table tr:nth-child(12) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(12) td:nth-child(4) input,
+    .addSet1Table tr:nth-child(12) td:nth-child(4) select,
+    .addSet1Table tr:nth-child(13) td:nth-child(2) input,
+    .addSet1Table tr:nth-child(13) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(13) td:nth-child(4) input,
+    .addSet1Table tr:nth-child(13) td:nth-child(4) select,
+    .addSet1Table tr:nth-child(14) td:nth-child(2) input,
+    .addSet1Table tr:nth-child(14) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(14) td:nth-child(4) input,
+    .addSet1Table tr:nth-child(14) td:nth-child(4) select {
+      border-radius: 0 5px 5px 0;
+      border: 1px solid; }
+    .addSet1Table tr:nth-child(8) td:nth-child(2) table tr td,
+    .addSet1Table tr:nth-child(8) td:nth-child(4) table tr td,
+    .addSet1Table tr:nth-child(9) td:nth-child(2) table tr td,
+    .addSet1Table tr:nth-child(9) td:nth-child(4) table tr td,
+    .addSet1Table tr:nth-child(10) td:nth-child(2) table tr td,
+    .addSet1Table tr:nth-child(10) td:nth-child(4) table tr td,
+    .addSet1Table tr:nth-child(11) td:nth-child(2) table tr td,
+    .addSet1Table tr:nth-child(11) td:nth-child(4) table tr td,
+    .addSet1Table tr:nth-child(12) td:nth-child(2) table tr td,
+    .addSet1Table tr:nth-child(12) td:nth-child(4) table tr td,
+    .addSet1Table tr:nth-child(13) td:nth-child(2) table tr td,
+    .addSet1Table tr:nth-child(13) td:nth-child(4) table tr td,
+    .addSet1Table tr:nth-child(14) td:nth-child(2) table tr td,
+    .addSet1Table tr:nth-child(14) td:nth-child(4) table tr td {
+      color: #000000;
+      font-weight: normal; }
+  .addSet1Table tr:last-child td {
+    text-align: center; }
+
 .addCapSidesignTable {
   background: #A9A9A9;
   padding: 10px;

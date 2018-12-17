@@ -2170,6 +2170,114 @@ input[type="week"]:focus{
     }
 }
 
+.addSet1Table{
+    margin: 5px;
+    background: #A9A9A9;
+    padding: 10px;
+    border-radius: 10px;
+
+    border-spacing: 5px;
+    border-collapse: separate;
+
+    display: inline-table;
+    vertical-align: top;
+
+    tr{
+        td{
+
+
+        }
+    }
+
+    tr:nth-child(1),
+    tr:nth-child(7),{
+        td{
+            background: $theme-medium;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 10px;
+            color: #FFFFFF;
+        }
+    }
+
+    tr:nth-child(2),
+    tr:nth-child(3),
+    tr:nth-child(4),
+    tr:nth-child(5),
+    tr:nth-child(6){
+
+        td:nth-child(1){
+            background: #FFFFFF;
+            text-align: right;
+            border-radius: 5px 0 0 5px;
+            padding-right: 5px;
+        }
+
+        td:nth-child(2){
+            background: #FFFFFF;
+            text-align: center;
+            border-radius: 0 5px 5px 0;
+
+            input,select{
+                border-radius: 0 5px 5px 0;
+                border: 1px solid;
+            }
+        }
+
+        td:nth-child(4){
+            background: transparent;
+            img{
+                max-width: 130px;
+                max-height: 130px;
+            }
+        }
+    }
+
+    tr:nth-child(8),
+    tr:nth-child(9),
+    tr:nth-child(10),
+    tr:nth-child(11),
+    tr:nth-child(12),
+    tr:nth-child(13),
+    tr:nth-child(14){
+
+        td:nth-child(1),
+        td:nth-child(3){
+            background: #FFFFFF;
+            text-align: right;
+            border-radius: 5px 0 0 5px;
+            padding-right: 5px;
+        }
+
+        td:nth-child(2),
+        td:nth-child(4){
+            background: #FFFFFF;
+            text-align: center;
+            border-radius: 0 5px 5px 0;
+
+            input,select{
+                border-radius: 0 5px 5px 0;
+                border: 1px solid;
+            }
+
+            table{
+                tr{
+                    td{
+                        color: #000000;
+                        font-weight: normal;
+                    }
+                }
+            }
+        }
+    }
+
+    tr:last-child{
+        td{
+            text-align: center;
+        }
+    }
+}
+
 .addCapSidesignTable{
     background: #A9A9A9;
     padding: 10px;
