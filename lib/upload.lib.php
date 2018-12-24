@@ -163,6 +163,7 @@ class FileUploader
 
         // Upload Files to Server
         $count=0;
+        $imgUploadCtr = 1;
 
         foreach ($this->SaveReplace($_FILES[$this->fileFormElementName]['name']) AS $file => $name)
         {
@@ -192,7 +193,7 @@ class FileUploader
 
                     $fileName = $this->fileUploadDirectory.$name;
 
-                    if($this->fileCustomName != "") $fileName = $this->fileUploadDirectory.$this->fileCustomName.'.'.$fileExtension;
+                    if($this->fileCustomName != "") $fileName = $this->fileUploadDirectory.str_replace('{#i}',$imgUploadCtr,$this->fileCustomName).'.'.$fileExtension;
 
                     if(!$this->fileOverride)
                     {
@@ -200,15 +201,13 @@ class FileUploader
                         $dupFilename = $fileName;
                         while(file_exists($dupFilename))
                         {
-                            $dupFilename = $this->fileUploadDirectory.$this->fileCustomName.'('.$i++.').'.$fileExtension;
+                            $dupFilename = $this->fileUploadDirectory.str_replace('{#i}',$imgUploadCtr,$this->fileCustomName).'('.$i++.').'.$fileExtension;
                         }
                         $fileName = $dupFilename;
                     }
 
                     if(move_uploaded_file($tempFileName, $fileName))
                     {
-
-
                         if($this->fileAspectRatio != "")
                         {
                             $ratioParts = explode(':',$this->fileAspectRatio);
@@ -341,17 +340,18 @@ class FileUploader
                             }
                         }
 
+                        if($this->fileSQLEntry != "")
+                        {
+                            $fileSQLStatement = $this->fileSQLEntry;
+
+                            $fileSQLStatement = str_replace("@FILENAME",$fileName,$fileSQLStatement);
+                            $fileSQLStatement = str_replace("@FILEEXTENSION",pathinfo($this->fileUploadDirectory.$fileName, PATHINFO_EXTENSION),$fileSQLStatement);
+
+                            self::MySQLNonQuery($fileSQLStatement);
+                        }
 
                         $count++;
-                    }
-                    if($this->fileSQLEntry != "")
-                    {
-                        $fileSQLStatement = $this->fileSQLEntry;
-
-                        $fileSQLStatement = str_replace("@FILENAME",$fileName,$fileSQLStatement);
-                        $fileSQLStatement = str_replace("@FILEEXTENSION",pathinfo($this->fileUploadDirectory.$fileName, PATHINFO_EXTENSION),$fileSQLStatement);
-
-                        self::MySQLNonQuery($fileSQLStatement);
+                        $imgUploadCtr++;
                     }
                 }
             }

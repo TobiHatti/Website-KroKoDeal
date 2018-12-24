@@ -115,6 +115,17 @@ function CopyShortsToCapNumber(isCopyFunction)
     }
 }
 
+function SetCapImageIDSet(capImgId)
+{
+    document.getElementById("selectedCapImage").value=capImgId;
+}
+
+function SelectCapImageSet(imgPath)
+{
+    var selectedImage = document.getElementById("selectedCapImage").value;
+    document.getElementById("setImage" + selectedImage).src = imgPath;
+}
+
 
 
 

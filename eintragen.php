@@ -109,6 +109,54 @@
         $fileUploader->Upload();
     }
 
+    if(isset($_POST['addSetPart1']))
+    {
+        $breweryID = $_POST['breweryID'];
+        $name = $_POST['setName'];
+        $namePath = StringOp::SReplace($_POST['setName']);
+        $flavorID = $_POST['flavorID'];
+        $capNumberBase = $_POST['capNumberBase'];
+        $setSize = $_POST['setSize'];
+
+        $locationAquired = $_POST['locationAquired'];
+        $dateAquired = $_POST['dateAquired'];
+        $quality = $_POST['quality'];
+        $isTraded = isset($_POST['isTraded']) ? 1 : 0;
+        $isTradeable = isset($_POST['isTradeable']) ? 1 : 0;
+        $alcohol = ($_POST['alcohol']=="") ? null : $_POST['alcohol'];
+
+        $capColorID = explode('-',$_POST['capColorID'])[0];
+        $baseColorID = explode('-',$_POST['baseColorID'])[0];
+        $textColorID = explode('-',$_POST['textColorID'])[0];
+        $isUsed = isset($_POST['isUsed']) ? 1 : 0;
+        $isTwistLock = isset($_POST['isTwistLock']) ? 1 : 0;
+
+        $isSetsAndCollection = isset($_POST['showInCollection']) ? 1 : 0;
+
+        $sidesignID = $_POST['sidesignID'];
+
+        $setTmpData = "breweryID=$breweryID;;flavorID=$flavorID;;capNumberBase=$capNumberBase;;locationAquired=$locationAquired;;dateAquired=$dateAquired;;quality=$quality;;isTraded=$isTraded;;isTradeable=$isTradeable;;alcohol=$alcohol;;capColorID=$capColorID;;baseColorID=$baseColorID;;textColorID=$textColorID;;isUsed=$isUsed;;isTwistLock=$isTwistLock;;isSetsAndCollection=$isSetsAndCollection;sidesignID=$sidesignID";
+
+        $sqlStatement  = "
+        INSERT INTO sets
+        (id,setSize,setName,setFilePath,setTmpData)
+        VALUES
+        (NULL,?,?,?,?)";
+
+        MySQL::NonQuery($sqlStatement,'@s',$setSize,$name,$namePath,$setTmpData);
+
+        $fileUploader = new FileUploader();
+        $fileUploader->SetFileElement("capImages");
+        $fileUploader->SetName("tmpSetUpload{#i}");
+        $fileUploader->SetPath("files/sets/AUT/$namePath");
+        $fileUploader->OverrideDuplicates(false);
+        $fileUploader->Upload();
+
+
+        Page::Redirect("/eintragen/set-konfigurieren?set=$namePath");
+        die();
+    }
+
 //########################################################################################
 //########################################################################################
 //      MAIN PAGE
@@ -446,7 +494,7 @@
                                     </select>
                                 </td>
 
-                                <td rowspan=5>
+                                <td rowspan=6>
                                     <center>
                                         <div class="bottlecapColorSchemeContainerEntry">
                                             <div><img name="capPreviewCapColor" id="GLD" src="/content/capUsedColored.png" alt="" /></div>
@@ -456,10 +504,10 @@
                                         </div>
                                     </center>
                                 </td>
-                                <td rowspan=5 colspan=2>
+                                <td rowspan=6 colspan=2>
                                     <center>
                                         <img src="" alt="" id="capImagePreview"/><br>
-                                        '.FileButton("capImage","capImage",true,"ReadURL(this,'capImagePreview');","","width: 100px; line-height: 5px;",true).'
+                                        '.FileButton("capImages","capImages",true,"ReadURL(this,'capImagePreview');","","width: 100px; line-height: 5px;",true).'
                                     </center>
                                 </td>
 
@@ -493,9 +541,12 @@
 
                             <tr>
                                 <td>Set-K&uuml;rzel</td>
-                                <td><input class="cel_m" type="text" name="capNumber" placeholder="XX_XX_XXXX" required onclick="CopyShortsToCapNumber(true)"/></td>
+                                <td><input class="cel_m" type="text" name="capNumberBase" placeholder="XX_XX_XXXX" required onclick="CopyShortsToCapNumber(true)"/></td>
                             </tr>
-
+                            <tr>
+                                <td>Set-Gr&ouml;&szlig;e</td>
+                                <td><input class="cel_m" type="number" name="setSize" placeholder="Anzahl..." required/></td>
+                            </tr>
                             <tr>
                                 <td colspan=3>Zusatzinfos</td>
                                 <td colspan=3>Optische angaben</td>
@@ -602,10 +653,9 @@
                                 <td><input class="cel_m" type="number" step="0.1" name="alcohol" placeholder="Alkoholgehalt..."/></td>
                             </tr>
                             <tr>
-                                <td>Anzeigen in</td>
+                                <td>In Sets & Sammlung<br>zeigen</td>
                                 <td style="text-align:left; padding-left: 10px;" >
-                                    '.Tickbox("showInSets","showInSets","Sets",true).'
-                                    '.Tickbox("showInCollection","showInCollection","Sammlung",false).'
+                                    '.Tickbox("showInCollection","showInCollection","&nbsp;&nbsp;Ja",false).'
                                 </td>
                             </tr>
                             <tr>
@@ -665,6 +715,102 @@
                     </form>
                 </center>
             ';
+        }
+
+        if($_GET['section'] == "set-konfigurieren")
+        {
+            $setData = MySQL::Row("SELECT * FROM sets WHERE setFilepath = ?",'s',$_GET['set']);
+
+
+            $setDetailInfo = explode(';;',$setData['setTmpData']);
+            $capData = array();
+            for($i = 0 ; $i < count($setDetailInfo) - 1 ; $i ++)
+            {
+                $cd = explode('=',$setDetailInfo[$i]);
+                $capData[str_replace(' ','',$cd[0])] = $cd[1];
+            }
+
+            $breweryData = MySQL::Row("SELECT * FROM breweries WHERE id = ?",'i',$capData['flavorID']);
+            $countryData = MySQL::Row("SELECT * FROM countries WHERE id = ?",'i',$breweryData['countryID']);
+
+            echo '<h2>Set hinzuf&uuml;gen</h2>';
+
+            echo '
+                <input type="" id="selectedCapImage"/>
+            ';
+
+            echo '<center>';
+            for($i = 0 ; $i < $setData['setSize'] ; $i++)
+            {
+                echo '
+                    <table class="addSet2Table">
+                        <tr>
+                            <td>
+                                <img src="/content/not_found.png" alt="" id="setImage'.$i.'"/>
+                                <a href="#capImgSelect"><button type="button" onclick="SetCapImageIDSet('.$i.');">Foto w&auml;hlen</button></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" class="cel_100" placeholder="Kapsel-Nummer..."/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="number" class="cel_100" placeholder="Auf Lager"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <center>
+                                <select name="" id="" class="cel_30 cef_nomg">
+                                    <option value="">Kapsel</option>
+                                </select>
+                                <select name="" id="" class="cel_30 cef_nomg">
+                                    <option value="">Grund</option>
+                                </select>
+                                <select name="" id="" class="cel_30 cef_nomg">
+                                    <option value="">Text</option>
+                                </select>
+                                </center>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                '.Tickbox("isOwned$i","isOwned$i","&nbsp;In Besitz",true).'
+                            </td>
+                        </tr>
+                    </table>
+                ';
+            }
+            echo '</center>';
+
+
+            echo '
+                <div class="modal_wrapper" id="capImgSelect">
+                    <a href="#c"><div class="modal_bg"></div></a>
+                    <div class="modal_container" style="width: 50%; height: 60%; background: #2b2b2b; border-radius: 20px;">
+                        <h3>Bild Ausw&auml;hlen</h3>
+                        <div class="setCapSelector">
+                        <center>
+
+                        ';
+
+                        $directory = 'files/sets/'.$countryData['countryShort'].'/'.$setData['setFilepath'].'/';
+                        $scanned_directory = array_diff(scandir($directory), array('..', '.'));
+
+                        foreach($scanned_directory as $file)
+                        {
+                            echo '<a href="#" onclick="SelectCapImageSet(\'/'.$directory.$file.'\')"><img src="/'.$directory.$file.'"/></a>';
+                        }
+
+                        echo '
+                        </center>
+                        </div>
+                    </div>
+                </div>
+            ';
+
         }
 
 //========================================================================================

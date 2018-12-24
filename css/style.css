@@ -889,6 +889,9 @@ input[type="week"]:focus {
 .cel_33 {
   width: 33%; }
 
+.cel_30 {
+  width: 30%; }
+
 .cel_25 {
   width: 25%; }
 
@@ -2199,7 +2202,7 @@ input[type="week"]:focus {
   display: inline-table;
   vertical-align: top; }
   .addSet1Table tr:nth-child(1) td,
-  .addSet1Table tr:nth-child(7) td {
+  .addSet1Table tr:nth-child(8) td {
     background: #FF892E;
     text-align: center;
     font-weight: bold;
@@ -2209,7 +2212,8 @@ input[type="week"]:focus {
   .addSet1Table tr:nth-child(3) td:nth-child(1),
   .addSet1Table tr:nth-child(4) td:nth-child(1),
   .addSet1Table tr:nth-child(5) td:nth-child(1),
-  .addSet1Table tr:nth-child(6) td:nth-child(1) {
+  .addSet1Table tr:nth-child(6) td:nth-child(1),
+  .addSet1Table tr:nth-child(7) td:nth-child(1) {
     background: #FFFFFF;
     text-align: right;
     border-radius: 5px 0 0 5px;
@@ -2218,7 +2222,8 @@ input[type="week"]:focus {
   .addSet1Table tr:nth-child(3) td:nth-child(2),
   .addSet1Table tr:nth-child(4) td:nth-child(2),
   .addSet1Table tr:nth-child(5) td:nth-child(2),
-  .addSet1Table tr:nth-child(6) td:nth-child(2) {
+  .addSet1Table tr:nth-child(6) td:nth-child(2),
+  .addSet1Table tr:nth-child(7) td:nth-child(2) {
     background: #FFFFFF;
     text-align: center;
     border-radius: 0 5px 5px 0; }
@@ -2230,24 +2235,26 @@ input[type="week"]:focus {
     .addSet1Table tr:nth-child(5) td:nth-child(2) input,
     .addSet1Table tr:nth-child(5) td:nth-child(2) select,
     .addSet1Table tr:nth-child(6) td:nth-child(2) input,
-    .addSet1Table tr:nth-child(6) td:nth-child(2) select {
+    .addSet1Table tr:nth-child(6) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(7) td:nth-child(2) input,
+    .addSet1Table tr:nth-child(7) td:nth-child(2) select {
       border-radius: 0 5px 5px 0;
       border: 1px solid; }
   .addSet1Table tr:nth-child(2) td:nth-child(4),
   .addSet1Table tr:nth-child(3) td:nth-child(4),
   .addSet1Table tr:nth-child(4) td:nth-child(4),
   .addSet1Table tr:nth-child(5) td:nth-child(4),
-  .addSet1Table tr:nth-child(6) td:nth-child(4) {
+  .addSet1Table tr:nth-child(6) td:nth-child(4),
+  .addSet1Table tr:nth-child(7) td:nth-child(4) {
     background: transparent; }
     .addSet1Table tr:nth-child(2) td:nth-child(4) img,
     .addSet1Table tr:nth-child(3) td:nth-child(4) img,
     .addSet1Table tr:nth-child(4) td:nth-child(4) img,
     .addSet1Table tr:nth-child(5) td:nth-child(4) img,
-    .addSet1Table tr:nth-child(6) td:nth-child(4) img {
+    .addSet1Table tr:nth-child(6) td:nth-child(4) img,
+    .addSet1Table tr:nth-child(7) td:nth-child(4) img {
       max-width: 130px;
       max-height: 130px; }
-  .addSet1Table tr:nth-child(8) td:nth-child(1),
-  .addSet1Table tr:nth-child(8) td:nth-child(3),
   .addSet1Table tr:nth-child(9) td:nth-child(1),
   .addSet1Table tr:nth-child(9) td:nth-child(3),
   .addSet1Table tr:nth-child(10) td:nth-child(1),
@@ -2259,13 +2266,13 @@ input[type="week"]:focus {
   .addSet1Table tr:nth-child(13) td:nth-child(1),
   .addSet1Table tr:nth-child(13) td:nth-child(3),
   .addSet1Table tr:nth-child(14) td:nth-child(1),
-  .addSet1Table tr:nth-child(14) td:nth-child(3) {
+  .addSet1Table tr:nth-child(14) td:nth-child(3),
+  .addSet1Table tr:nth-child(15) td:nth-child(1),
+  .addSet1Table tr:nth-child(15) td:nth-child(3) {
     background: #FFFFFF;
     text-align: right;
     border-radius: 5px 0 0 5px;
     padding-right: 5px; }
-  .addSet1Table tr:nth-child(8) td:nth-child(2),
-  .addSet1Table tr:nth-child(8) td:nth-child(4),
   .addSet1Table tr:nth-child(9) td:nth-child(2),
   .addSet1Table tr:nth-child(9) td:nth-child(4),
   .addSet1Table tr:nth-child(10) td:nth-child(2),
@@ -2277,15 +2284,13 @@ input[type="week"]:focus {
   .addSet1Table tr:nth-child(13) td:nth-child(2),
   .addSet1Table tr:nth-child(13) td:nth-child(4),
   .addSet1Table tr:nth-child(14) td:nth-child(2),
-  .addSet1Table tr:nth-child(14) td:nth-child(4) {
+  .addSet1Table tr:nth-child(14) td:nth-child(4),
+  .addSet1Table tr:nth-child(15) td:nth-child(2),
+  .addSet1Table tr:nth-child(15) td:nth-child(4) {
     background: #FFFFFF;
     text-align: center;
     border-radius: 0 5px 5px 0; }
-    .addSet1Table tr:nth-child(8) td:nth-child(2) input, .addSet1Table tr:nth-child(8) td:nth-child(2) select,
-    .addSet1Table tr:nth-child(8) td:nth-child(4) input,
-    .addSet1Table tr:nth-child(8) td:nth-child(4) select,
-    .addSet1Table tr:nth-child(9) td:nth-child(2) input,
-    .addSet1Table tr:nth-child(9) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(9) td:nth-child(2) input, .addSet1Table tr:nth-child(9) td:nth-child(2) select,
     .addSet1Table tr:nth-child(9) td:nth-child(4) input,
     .addSet1Table tr:nth-child(9) td:nth-child(4) select,
     .addSet1Table tr:nth-child(10) td:nth-child(2) input,
@@ -2307,11 +2312,13 @@ input[type="week"]:focus {
     .addSet1Table tr:nth-child(14) td:nth-child(2) input,
     .addSet1Table tr:nth-child(14) td:nth-child(2) select,
     .addSet1Table tr:nth-child(14) td:nth-child(4) input,
-    .addSet1Table tr:nth-child(14) td:nth-child(4) select {
+    .addSet1Table tr:nth-child(14) td:nth-child(4) select,
+    .addSet1Table tr:nth-child(15) td:nth-child(2) input,
+    .addSet1Table tr:nth-child(15) td:nth-child(2) select,
+    .addSet1Table tr:nth-child(15) td:nth-child(4) input,
+    .addSet1Table tr:nth-child(15) td:nth-child(4) select {
       border-radius: 0 5px 5px 0;
       border: 1px solid; }
-    .addSet1Table tr:nth-child(8) td:nth-child(2) table tr td,
-    .addSet1Table tr:nth-child(8) td:nth-child(4) table tr td,
     .addSet1Table tr:nth-child(9) td:nth-child(2) table tr td,
     .addSet1Table tr:nth-child(9) td:nth-child(4) table tr td,
     .addSet1Table tr:nth-child(10) td:nth-child(2) table tr td,
@@ -2323,11 +2330,49 @@ input[type="week"]:focus {
     .addSet1Table tr:nth-child(13) td:nth-child(2) table tr td,
     .addSet1Table tr:nth-child(13) td:nth-child(4) table tr td,
     .addSet1Table tr:nth-child(14) td:nth-child(2) table tr td,
-    .addSet1Table tr:nth-child(14) td:nth-child(4) table tr td {
+    .addSet1Table tr:nth-child(14) td:nth-child(4) table tr td,
+    .addSet1Table tr:nth-child(15) td:nth-child(2) table tr td,
+    .addSet1Table tr:nth-child(15) td:nth-child(4) table tr td {
       color: #000000;
       font-weight: normal; }
   .addSet1Table tr:last-child td {
     text-align: center; }
+
+.addSet2Table {
+  background: #2b2b2b;
+  border-radius: 10px;
+  border-spacing: 5px;
+  border-collapse: separate;
+  width: 200px;
+  display: inline-table;
+  margin: 10px; }
+  .addSet2Table tr td {
+    background: #FFFFFF;
+    border-radius: 10px;
+    text-align: center; }
+    .addSet2Table tr td img {
+      max-width: 150px;
+      max-height: 150px;
+      border-radius: 10px; }
+    .addSet2Table tr td input {
+      border-radius: 10px; }
+    .addSet2Table tr td select:nth-child(1) {
+      border-radius: 10px 0 0 10px; }
+    .addSet2Table tr td select:nth-child(2) {
+      border-radius: 0; }
+    .addSet2Table tr td select:nth-child(3) {
+      border-radius: 0 10px 10px 0; }
+
+.setCapSelector {
+  overflow-y: scroll;
+  height: 80%; }
+  .setCapSelector img {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 10px;
+    display: inline-block;
+    vertical-align: top;
+    margin: 3px; }
 
 .addCapSidesignTable {
   background: #A9A9A9;

@@ -854,6 +854,10 @@ input[type="week"]:focus{
     width:33%;
 }
 
+.cel_30{
+    width:30%;
+}
+
 .cel_25{
     width: 25%;
 }
@@ -2190,7 +2194,7 @@ input[type="week"]:focus{
     }
 
     tr:nth-child(1),
-    tr:nth-child(7),{
+    tr:nth-child(8),{
         td{
             background: $theme-medium;
             text-align: center;
@@ -2204,7 +2208,8 @@ input[type="week"]:focus{
     tr:nth-child(3),
     tr:nth-child(4),
     tr:nth-child(5),
-    tr:nth-child(6){
+    tr:nth-child(6),
+    tr:nth-child(7){
 
         td:nth-child(1){
             background: #FFFFFF;
@@ -2233,13 +2238,13 @@ input[type="week"]:focus{
         }
     }
 
-    tr:nth-child(8),
     tr:nth-child(9),
     tr:nth-child(10),
     tr:nth-child(11),
     tr:nth-child(12),
     tr:nth-child(13),
-    tr:nth-child(14){
+    tr:nth-child(14),
+    tr:nth-child(15){
 
         td:nth-child(1),
         td:nth-child(3){
@@ -2277,6 +2282,69 @@ input[type="week"]:focus{
         }
     }
 }
+
+.addSet2Table{
+    background: #2b2b2b;
+    border-radius: 10px;
+    border-spacing: 5px;
+    border-collapse: separate;
+    width: 200px;
+    display: inline-table;
+    margin: 10px;
+
+    tr{
+        td{
+            background: #FFFFFF;
+            border-radius: 10px;
+            text-align:center;
+
+            img{
+                max-width:150px;
+                max-height: 150px;
+                border-radius: 10px;
+            }
+
+            input{
+                border-radius: 10px;
+            }
+
+            select:nth-child(1)
+            {
+                border-radius: 10px 0 0 10px;
+            }
+
+            select:nth-child(2)
+            {
+                border-radius: 0;
+            }
+
+            select:nth-child(3)
+            {
+                border-radius: 0 10px 10px 0;
+            }
+
+        }
+
+    }
+
+}
+
+
+
+.setCapSelector{
+    overflow-y: scroll;
+    height: 80%;
+
+    img{
+        max-width: 150px;
+        max-height: 150px;
+        border-radius: 10px;
+        display: inline-block;
+        vertical-align: top;
+        margin: 3px;
+    }
+}
+
 
 .addCapSidesignTable{
     background: #A9A9A9;
