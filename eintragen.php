@@ -135,7 +135,7 @@
 
         $sidesignID = $_POST['sidesignID'];
 
-        $setTmpData = "breweryID=$breweryID;;flavorID=$flavorID;;capNumberBase=$capNumberBase;;locationAquired=$locationAquired;;dateAquired=$dateAquired;;quality=$quality;;isTraded=$isTraded;;isTradeable=$isTradeable;;alcohol=$alcohol;;capColorID=$capColorID;;baseColorID=$baseColorID;;textColorID=$textColorID;;isUsed=$isUsed;;isTwistLock=$isTwistLock;;isSetsAndCollection=$isSetsAndCollection;sidesignID=$sidesignID";
+        $setTmpData = "breweryID=$breweryID;;flavorID=$flavorID;;capNumberBase=$capNumberBase;;locationAquired=$locationAquired;;dateAquired=$dateAquired;;quality=$quality;;isTraded=$isTraded;;isTradeable=$isTradeable;;alcohol=$alcohol;;capColorID=$capColorID;;baseColorID=$baseColorID;;textColorID=$textColorID;;isUsed=$isUsed;;isTwistLock=$isTwistLock;;isSetsAndCollection=$isSetsAndCollection;;sidesignID=$sidesignID";
 
         $sqlStatement  = "
         INSERT INTO sets
@@ -147,7 +147,7 @@
 
         $fileUploader = new FileUploader();
         $fileUploader->SetFileElement("capImages");
-        $fileUploader->SetName("tmpSetUpload{#i}");
+        $fileUploader->SetName("tmpSetUpload{#u}");
         $fileUploader->SetPath("files/sets/AUT/$namePath");
         $fileUploader->OverrideDuplicates(false);
         $fileUploader->Upload();
@@ -155,6 +155,77 @@
 
         Page::Redirect("/eintragen/set-konfigurieren?set=$namePath");
         die();
+    }
+
+    if(isset($_POST['addSetPart2']))
+    {
+        $setData = MySQL::Row("SELECT * FROM sets WHERE setFilepath = ?",'s',$_POST['addSetPart2']);
+
+        $setDetailInfo = explode(';;',$setData['setTmpData']);
+        $capData = array();
+        for($i = 0 ; $i < count($setDetailInfo) ; $i ++)
+        {
+            $cd = explode('=',$setDetailInfo[$i]);
+            $capData[str_replace(' ','',$cd[0])] = $cd[1];
+        }
+
+        $breweryData = MySQL::Row("SELECT * FROM breweries WHERE id = ?",'i',$capData['flavorID']);
+        $countryData = MySQL::Row("SELECT * FROM countries WHERE id = ?",'i',$breweryData['countryID']);
+
+        $sqlStatement = "
+        INSERT INTO bottlecaps
+        (id, name, capNumber, flavorID, breweryID, sidesignID, baseColorID, capColorID, textColorID, setID, isSet, isTraded, isUsed, isTwistlock, isTradeable, isCounted, isSetsAndCollection, isOwned, locationAquired, dateAquired, dateInserted, quality, alcohol, stock, capImage)
+        VALUES ";
+
+
+
+        $breweryID = $capData['breweryID'];
+        $flavorID = $capData['flavorID'];
+
+        $locationAquired = $capData['locationAquired'];
+        $dateAquired = $capData['dateAquired'];
+        $quality = $capData['quality'];
+        $isTraded = isset($capData['isTraded']) ? 1 : 0;
+        $isTradeable = isset($capData['isTradeable']) ? 1 : 0;
+        $alcohol = ($capData['alcohol']=="") ? null : $capData['alcohol'];
+
+        $isUsed = isset($capData['isUsed']) ? 1 : 0;
+        $isTwistLock = isset($capData['isTwistLock']) ? 1 : 0;
+
+        $isSetsAndCollection = isset($capData['isSetsAndCollection']) ? 1 : 0;
+
+        $sidesignID = $capData['sidesignID'];
+        $dateInserted = date("Y-m-d");
+
+        $setID = $setData['id'];
+
+
+        $first = true;
+        for($i = 0 ; $i < $setData['setSize'] ; $i++)
+        {
+            $capNumber = $_POST['capNumber'.$i];
+            $capName = $_POST['capName'.$i];
+            $stock = $_POST['stock'.$i];
+            $capColorID = $_POST['capColor'.$i];
+            $baseColorID = $_POST['baseColor'.$i];
+            $textColorID = $_POST['textColor'.$i];
+            $isOwned = isset($_POST['isOwned'.$i]) ? 1 : 0;
+
+            $originalImage = ltrim($_POST['capImage'.$i],'/');
+            $fileExtension = pathinfo($originalImage, PATHINFO_EXTENSION);
+            rename($originalImage,'files/sets/'.$countryData['countryShort'].'/'.$setData['setFilepath'].'/'.$capNumber.'.'.$fileExtension);
+            $capImage = $capNumber.'.'.$fileExtension;
+
+            if($first)
+            {
+                $sqlStatement .= "(NULL,'$capName','$capNumber','$flavorID','$breweryID','$sidesignID','$baseColorID','$capColorID','$textColorID','$setID','1','$isTraded','$isUsed','$isTwistLock','$isTradeable','$isOwned','$isSetsAndCollection','$isOwned','$locationAquired','$dateAquired','$dateInserted','$quality',".($alcohol == null ? "NULL" : "'$alcohol'").",'$stock','$capImage')";
+                $first = false;
+            }
+            else $sqlStatement .= ",(NULL,'$capName','$capNumber','$flavorID','$breweryID','$sidesignID','$baseColorID','$capColorID','$textColorID','$setID','1','$isTraded','$isUsed','$isTwistLock','$isTradeable','$isOwned','$isSetsAndCollection','$isOwned','$locationAquired','$dateAquired','$dateInserted','$quality',".($alcohol == null ? "NULL" : "'$alcohol'").",'$stock','$capImage')";
+        }
+
+        Page::Redirect('/sets/'.$countryData['countryShort'].'/'.$setData['setFilepath']);
+
     }
 
 //########################################################################################
@@ -548,8 +619,8 @@
                                 <td><input class="cel_m" type="number" name="setSize" placeholder="Anzahl..." required/></td>
                             </tr>
                             <tr>
-                                <td colspan=3>Zusatzinfos</td>
-                                <td colspan=3>Optische angaben</td>
+                                <td colspan=2>Zusatzinfos</td>
+                                <td colspan=2>Optische angaben</td>
                             </tr>
 
                             <tr>
@@ -724,7 +795,7 @@
 
             $setDetailInfo = explode(';;',$setData['setTmpData']);
             $capData = array();
-            for($i = 0 ; $i < count($setDetailInfo) - 1 ; $i ++)
+            for($i = 0 ; $i < count($setDetailInfo) ; $i ++)
             {
                 $cd = explode('=',$setDetailInfo[$i]);
                 $capData[str_replace(' ','',$cd[0])] = $cd[1];
@@ -732,17 +803,23 @@
 
             $breweryData = MySQL::Row("SELECT * FROM breweries WHERE id = ?",'i',$capData['flavorID']);
             $countryData = MySQL::Row("SELECT * FROM countries WHERE id = ?",'i',$breweryData['countryID']);
+            $colorList = MySQL::Cluster("SELECT * FROM colors");
 
             echo '<h2>Set hinzuf&uuml;gen</h2>';
 
             echo '
-                <input type="" id="selectedCapImage"/>
+                <form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                    <input type="hidden" id="selectedCapImage"/>
             ';
 
-            echo '<center>';
+            echo '
+                <center>
+                <iframe src="/_iframe_setImageExtraUpload?set='.$_GET['set'].'&country='.$countryData['countryShort'].'" frameborder="0" style="height: 140px;" scrolling="no"></iframe><br><br>
+            ';
             for($i = 0 ; $i < $setData['setSize'] ; $i++)
             {
                 echo '
+                    <input type="hidden" name="capImage'.$i.'" id="capImage'.$i.'"/>
                     <table class="addSet2Table">
                         <tr>
                             <td>
@@ -752,25 +829,39 @@
                         </tr>
                         <tr>
                             <td>
-                                <input type="text" class="cel_100" placeholder="Kapsel-Nummer..."/>
+                                <input type="text" name="capNumber'.$i.'" class="cel_100" placeholder="Kapsel-Nummer..." value="'.$capData['capNumberBase'].'"/>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <input type="number" class="cel_100" placeholder="Auf Lager"/>
+                                <input type="text" name="capName'.$i.'" class="cel_100" placeholder="Name / Info..."/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="number" name="stock'.$i.'" class="cel_100" placeholder="Auf Lager"/>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <center>
-                                <select name="" id="" class="cel_30 cef_nomg">
+                                <select name="capColor'.$i.'" id="" class="cel_30 cef_nomg">
                                     <option value="">Kapsel</option>
+                                    ';
+                                        foreach($colorList AS $color) echo '<option '.(($capData['capColorID'] == $color['id']) ? 'selected' : '').' style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'">'.$color['colorDE'].'</option>';
+                                    echo '
                                 </select>
-                                <select name="" id="" class="cel_30 cef_nomg">
+                                <select name="baseColor'.$i.'" id="" class="cel_30 cef_nomg">
                                     <option value="">Grund</option>
+                                    ';
+                                        foreach($colorList AS $color) echo '<option '.(($capData['baseColorID'] == $color['id']) ? 'selected' : '').' style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'">'.$color['colorDE'].'</option>';
+                                    echo '
                                 </select>
-                                <select name="" id="" class="cel_30 cef_nomg">
+                                <select name="textColor'.$i.'" id="" class="cel_30 cef_nomg">
                                     <option value="">Text</option>
+                                    ';
+                                        foreach($colorList AS $color) echo '<option '.(($capData['textColorID'] == $color['id']) ? 'selected' : '').' style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'">'.$color['colorDE'].'</option>';
+                                    echo '
                                 </select>
                                 </center>
                             </td>
@@ -783,7 +874,12 @@
                     </table>
                 ';
             }
-            echo '</center>';
+            echo '
+                        <br><br>
+                        <button type="submit" value="'.$_GET['set'].'" name="addSetPart2" class="cel_l">Set eintragen</button>
+                    </center>
+                </form>
+            ';
 
 
             echo '
@@ -791,22 +887,7 @@
                     <a href="#c"><div class="modal_bg"></div></a>
                     <div class="modal_container" style="width: 50%; height: 60%; background: #2b2b2b; border-radius: 20px;">
                         <h3>Bild Ausw&auml;hlen</h3>
-                        <div class="setCapSelector">
-                        <center>
-
-                        ';
-
-                        $directory = 'files/sets/'.$countryData['countryShort'].'/'.$setData['setFilepath'].'/';
-                        $scanned_directory = array_diff(scandir($directory), array('..', '.'));
-
-                        foreach($scanned_directory as $file)
-                        {
-                            echo '<a href="#" onclick="SelectCapImageSet(\'/'.$directory.$file.'\')"><img src="/'.$directory.$file.'"/></a>';
-                        }
-
-                        echo '
-                        </center>
-                        </div>
+                        <iframe src="/_iframe_setImageSelector?set='.$setData['setFilepath'].'&country='.$countryData['countryShort'].'" frameborder="0" style="width: 100%; height: 100%;"></iframe>
                     </div>
                 </div>
             ';

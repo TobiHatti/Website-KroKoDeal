@@ -193,7 +193,7 @@ class FileUploader
 
                     $fileName = $this->fileUploadDirectory.$name;
 
-                    if($this->fileCustomName != "") $fileName = $this->fileUploadDirectory.str_replace('{#i}',$imgUploadCtr,$this->fileCustomName).'.'.$fileExtension;
+                    if($this->fileCustomName != "") $fileName = $this->fileUploadDirectory.str_replace('{#i}',$imgUploadCtr,str_replace('{#u}',uniqid(),$this->fileCustomName)).'.'.$fileExtension;
 
                     if(!$this->fileOverride)
                     {
@@ -201,7 +201,7 @@ class FileUploader
                         $dupFilename = $fileName;
                         while(file_exists($dupFilename))
                         {
-                            $dupFilename = $this->fileUploadDirectory.str_replace('{#i}',$imgUploadCtr,$this->fileCustomName).'('.$i++.').'.$fileExtension;
+                            $dupFilename = $this->fileUploadDirectory.str_replace('{#i}',$imgUploadCtr,str_replace('{#u}',uniqid(),$this->fileCustomName)).'('.$i++.').'.$fileExtension;
                         }
                         $fileName = $dupFilename;
                     }
