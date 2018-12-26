@@ -224,6 +224,12 @@
             else $sqlStatement .= ",(NULL,'$capName','$capNumber','$flavorID','$breweryID','$sidesignID','$baseColorID','$capColorID','$textColorID','$setID','1','$isTraded','$isUsed','$isTwistLock','$isTradeable','$isOwned','$isSetsAndCollection','$isOwned','$locationAquired','$dateAquired','$dateInserted','$quality',".($alcohol == null ? "NULL" : "'$alcohol'").",'$stock','$capImage')";
         }
 
+
+
+        // Add thumbnail to set
+        $thumbnail = MySQL::Scalar("SELECT id FROM bottlecaps WHERE setID = ?",'s',$setID);
+        MySQL::NonQuery("UPDATE sets SET thumbnailID = ? WHERE id = ?",'s',$thumbnail,$setID);
+
         Page::Redirect('/sets/'.$countryData['countryShort'].'/'.$setData['setFilepath']);
 
     }
