@@ -7,7 +7,7 @@
 //########################################################################################
 //########################################################################################
 
-    if(isset($_POST['addBottlecap']))
+    if(isset($_POST['addBottlecap']) OR isset($_POST['editBottlecap']))
     {
         $breweryID = $_POST['breweryID'];
         $name = $_POST['name'];
@@ -29,31 +29,114 @@
         $isTwistLock = isset($_POST['isTwistLock']) ? 1 : 0;
         $isCounted = isset($_POST['isCounted']) ? 1 : 0;
 
+        $isOwned = isset($_POST['isOwned']) ? 1 : 0;
+
         $sidesignID = $_POST['sidesignID'];
         $dateInserted = date("Y-m-d");
 
-        $sqlStatement = "
-        INSERT INTO bottlecaps
-        (id, name, capNumber, flavorID, breweryID, sidesignID, baseColorID, capColorID, textColorID, isTraded, isUsed, isTwistlock, isTradeable, isCounted, locationAquired, dateAquired, dateInserted, quality, alcohol, stock)
-        VALUES
-        (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
-        MySQL::NonQuery($sqlStatement,'@s',$name,$capNumber,$flavorID,$breweryID,$sidesignID,$baseColorID,$capColorID,$textColorID,$isTraded,$isUsed,$isTwistLock,$isTradeable,$isCounted,$locationAquired,$dateAquired,$dateInserted,$quality,$alcohol,$stock);
-
-        $capID = MySQL::Scalar("SELECT id FROM bottlecaps ORDER BY id DESC");
         $countryShort = MySQL::Scalar("SELECT countryShort FROM countries INNER JOIN breweries ON countries.id = breweries.countryID WHERE breweries.id = ?",'i',$breweryID);
         $breweryFilepath = MySQL::Scalar("SELECT breweryFilepath FROM breweries WHERE id = ?",'i',$breweryID);
 
         $fileUploader = new FileUploader();
         $fileUploader->SetFileElement("capImage");
         $fileUploader->SetTargetResolution(500,500);
-        $fileUploader->SetPath("files/bottlecaps/$countryShort/$breweryFilepath/");
-        $fileUploader->SetSQLEntry("UPDATE bottlecaps SET capImage = '@FILENAME' WHERE id = '$capID'");
+
+
+        if(isset($_POST['addBottlecap']))
+        {
+            $sqlStatement = "
+            INSERT INTO bottlecaps
+            (id, name, capNumber, flavorID, breweryID, sidesignID, baseColorID, capColorID, textColorID, isTraded, isUsed, isTwistlock, isTradeable, isCounted, locationAquired, dateAquired, dateInserted, quality, alcohol, stock)
+            VALUES
+            (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+            MySQL::NonQuery($sqlStatement,'@s',$name,$capNumber,$flavorID,$breweryID,$sidesignID,$baseColorID,$capColorID,$textColorID,$isTraded,$isUsed,$isTwistLock,$isTradeable,$isCounted,$locationAquired,$dateAquired,$dateInserted,$quality,$alcohol,$stock);
+
+            $capID = MySQL::Scalar("SELECT id FROM bottlecaps ORDER BY id DESC");
+
+            $fileUploader->SetPath("files/bottlecaps/$countryShort/$breweryFilepath/");
+            $fileUploader->SetSQLEntry("UPDATE bottlecaps SET capImage = '@FILENAME' WHERE id = '$capID'");
+        }
+
+        if(isset($_POST['editBottlecap']))
+        {
+            $capEditData = MySQL::Row("SELECT * FROM bottlecaps WHERE id = ?",'s',$_POST['editBottlecap']);
+
+            if($capEditData['isSet'])
+            {
+                // includes IsSetsAndCollection and isOwned (isOwned = isCounted)
+                $setFilepath = MySQL::Scalar("SELECT setFilepath FROM sets WHERE id = ?",'s',$capEditData['setID']);
+
+                $sqlStatement = "
+                    UPDATE bottlecaps SET
+                    name = ?,
+                    capNumber = ?,
+                    flavorID = ?,
+                    breweryID = ?,
+                    sidesignID = ?,
+                    baseColorID = ?,
+                    capColorID = ?,
+                    textColorID = ?,
+                    isTraded = ?,
+                    isUsed = ?,
+                    isTwistLock = ?,
+                    isTradeable = ?,
+                    isCounted = ?,
+                    isOwned = ?,
+                    locationAquired = ?,
+                    dateAquired = ?,
+                    quality = ?,
+                    alcohol = ?,
+                    stock = ?
+                    WHERE id = ?
+                ";
+
+                MySQL::NonQuery($sqlStatement,'@s',$name,$capNumber,$flavorID,$breweryID,$sidesignID,$baseColorID,$capColorID,$textColorID,$isTraded,$isUsed,$isTwistLock,$isTradeable,$isOwned,$isOwned,$locationAquired,$dateAquired,$quality,$alcohol,$stock,$_POST['editBottlecap']);
+
+                $fileUploader->SetPath("files/sets/$countryShort/$setFilepath/");
+                $fileUploader->SetSQLEntry("UPDATE bottlecaps SET capImage = '@FILENAME' WHERE id = '".$_POST['editBottlecap']."'");
+            }
+            else
+            {
+                // includes isCounted
+
+                $sqlStatement = "
+                    UPDATE bottlecaps SET
+                    name = ?,
+                    capNumber = ?,
+                    flavorID = ?,
+                    breweryID = ?,
+                    sidesignID = ?,
+                    baseColorID = ?,
+                    capColorID = ?,
+                    textColorID = ?,
+                    isTraded = ?,
+                    isUsed = ?,
+                    isTwistLock = ?,
+                    isTradeable = ?,
+                    isCounted = ?,
+                    locationAquired = ?,
+                    dateAquired = ?,
+                    quality = ?,
+                    alcohol = ?,
+                    stock = ?
+                    WHERE id = ?
+                ";
+
+                MySQL::NonQuery($sqlStatement,'@s',$name,$capNumber,$flavorID,$breweryID,$sidesignID,$baseColorID,$capColorID,$textColorID,$isTraded,$isUsed,$isTwistLock,$isTradeable,$isCounted,$locationAquired,$dateAquired,$quality,$alcohol,$stock,$_POST['editBottlecap']);
+
+                $fileUploader->SetPath("files/bottlecaps/$countryShort/$breweryFilepath/");
+                $fileUploader->SetSQLEntry("UPDATE bottlecaps SET capImage = '@FILENAME' WHERE id = '".$_POST['editBottlecap']."'");
+            }
+        }
+
         $fileUploader->SetName($capNumber);
         $fileUploader->OverrideDuplicates(false);
         $fileUploader->Upload();
 
-        Page::Redirect(Page::This());
+        if(isset($_POST['addBottlecap'])) Page::Redirect(Page::This());
+        else Page::Back(2);
         die();
     }
 
@@ -251,7 +334,12 @@
 
         if($_GET['section'] == 'kronkorken')
         {
-            echo '<h2>Kronkorken hinzuf&uuml;gen</h2>';
+            if(isset($_GET['edit'])) $edit = true;
+            else $edit = false;
+
+            if($edit) echo '<h2>Kronkorken bearbeiten</h2>';
+            else echo '<h2>Kronkorken hinzuf&uuml;gen</h2>';
+
 
             $countryList = MySQL::Cluster("SELECT * FROM countries RIGHT JOIN breweries ON countries.id = breweries.countryID GROUP BY breweries.countryID ORDER BY countries.countryDE ASC");
             $flavorList = MySQL::Cluster("SELECT * FROM flavors");
@@ -260,6 +348,24 @@
             $sidesignAllList = MySQL::Cluster("SELECT * FROM sidesigns ORDER BY sidesignName ASC");
             $qualityValueList = array("A" => "A","B" => "B","C" => "C","D" => "D","E" => "E");
             $qualityDisplayList = array("A" => "A - Neu","B" => "B - Benutzt, Sehr guter Zustand","C" => "C - Benutzt, kleine Kratzer/Knicke","D" => "D - Benutzt, gro&szlig;e Kratzer/Knicke","E" => "E - Benutzt, schlechter zust.");
+
+            if($edit)
+            {
+                echo '
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            InsertCapUpdateCapPreview();
+                        });
+                    </script>
+                ';
+                $capData = MySQL::Row("SELECT *,bottlecaps.id AS bottlecapID FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.id = ?",'s',$_GET['capID']);
+                if($capData['isSet'])
+                {
+                    $setData = MySQL::Row("SELECT * FROM sets WHERE id = ?",'s',$capData['setID']);
+                    $capDataImage = '/files/sets/'.$capData['countryShort'].'/'.$setData['setFilepath'].'/'.$capData['capImage'];
+                }
+                else $capDataImage = '/files/bottlecaps/'.$capData['countryShort'].'/'.$capData['breweryFilepath'].'/'.$capData['capImage'];
+            }
 
             echo '
                 <center>
@@ -281,7 +387,7 @@
                                     <select name="countryID" class="cel_100 cef_nomg cef_nopd" id="countryList" onchange="DynLoadList(1,this,\'--- Ausw\u00e4hlen ---\',\'breweryList\',\'SELECT breweryName AS dynLoadText, id AS dynLoadValue FROM breweries WHERE countryID = ?? ORDER BY breweryName ASC\'); DynLoadScalar(2,this,\'outCountryShort\',\'SELECT countryShort2 FROM countries WHERE id = ??\')">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($countryList AS $country) echo '<option value="'.$country['countryID'].'">'.$country['countryDE'].'</option>';
+                                        foreach($countryList AS $country) echo '<option value="'.$country['countryID'].'" '.(($edit AND $country['countryID'] == $capData['countryID']) ? 'selected' : '').'>'.$country['countryDE'].'</option>';
                                         echo '
                                     </select>
                                 </td>
@@ -299,8 +405,8 @@
                                 </td>
                                 <td rowspan=5 colspan=2>
                                     <center>
-                                        <img src="" alt="" id="capImagePreview"/><br>
-                                        '.FileButton("capImage","capImage",false,"ReadURL(this,'capImagePreview');","","width: 100px; line-height: 5px;",true).'
+                                        <img src="'.($edit ? $capDataImage : '').'" alt="" id="capImagePreview"/><br>
+                                        '.FileButton("capImage","capImage",false,"ReadURL(this,'capImagePreview');","","width: 100px; line-height: 5px;",($edit ? false : true),($edit ? $capDataImage : '')).'
                                     </center>
                                 </td>
 
@@ -313,6 +419,7 @@
                                     onchange="DynLoadScalar(3,this,\'outBreweryShort\',\'SELECT breweryShort FROM breweries WHERE id = ??\'); CopyShortsToCapNumber(false);"
                                     onclick="DynLoadScalar(3,this,\'outBreweryShort\',\'SELECT breweryShort FROM breweries WHERE id = ??\'); CopyShortsToCapNumber(false)">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                        '.($edit ? ('<option value="'.$capData['breweryID'].'" selected>'.$capData['breweryName'].'</option>') : '').'
                                     </select>
                                 </td>
                                 <td>'.Tickbox("saveBreweryID","saveBreweryID","",true).'</td>
@@ -320,7 +427,7 @@
 
                             <tr>
                                 <td>Name</td>
-                                <td><input class="cel_m" type="text" name="name" placeholder="Name..." required/></td>
+                                <td><input class="cel_m" type="text" name="name" placeholder="Name..." value="'.($edit ? $capData['name'] : '').'" required/></td>
                                 <td>'.Tickbox("saveName","saveName","",true).'</td>
                             </tr>
 
@@ -330,7 +437,7 @@
                                     <select name="flavorID" class="cel_100 cef_nomg cef_nopd" id="" required>
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($flavorList AS $flavor) echo '<option value="'.$flavor['id'].'">'.$flavor['flavorDE'].'</option>';
+                                        foreach($flavorList AS $flavor) echo '<option value="'.$flavor['id'].'" '.(($edit AND $flavor['id'] == $capData['flavorID']) ? 'selected' : '').'>'.$flavor['flavorDE'].'</option>';
                                         echo '
                                     </select>
                                 </td>
@@ -339,7 +446,7 @@
 
                             <tr>
                                 <td>Kapsel-Nr</td>
-                                <td><input class="cel_m" type="text" name="capNumber" id="capNumber" placeholder="XX_XX_XXXX" required onclick="CopyShortsToCapNumber(true)"/></td>
+                                <td><input class="cel_m" type="text" name="capNumber" id="capNumber" placeholder="XX_XX_XXXX" value="'.($edit ? $capData['capNumber'] : '').'" required onclick="CopyShortsToCapNumber(true)"/></td>
                                 <td>'.Tickbox("saveCapNumber","saveCapNumber","",true).'</td>
                             </tr>
 
@@ -350,7 +457,7 @@
 
                             <tr>
                                 <td>Erhaltsort</td>
-                                <td><input class="cel_m" type="text" name="locationAquired" placeholder="Erhaltsort..."/></td>
+                                <td><input class="cel_m" type="text" name="locationAquired" placeholder="Erhaltsort..."  value="'.($edit ? $capData['locationAquired'] : '').'"/></td>
                                 <td>'.Tickbox("saveLocationAquired","saveLocationAquired","",true).'</td>
 
                                 <td>Kapselfarbe</td>
@@ -358,7 +465,7 @@
                                     <select name="capColorID" class="cel_100 cef_nomg cef_nopd" id="capColor" onchange="InsertCapUpdateCapPreview()">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['colorShort'].'">'.$color['colorDE'].'</option>';
+                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['colorShort'].'" '.(($edit AND $color['id'] == $capData['capColorID']) ? 'selected' : '').'>'.$color['colorDE'].'</option>';
                                         echo '
                                     </select>
                                 </td>
@@ -367,7 +474,7 @@
 
                             <tr>
                                 <td>Erhaltsdatum</td>
-                                <td><input class="cel_m" type="text" name="dateAquired" placeholder="Erhaltsdatum..."/></td>
+                                <td><input class="cel_m" type="text" name="dateAquired" placeholder="Erhaltsdatum..." value="'.($edit ? $capData['dateAquired'] : '').'"/></td>
                                 <td>'.Tickbox("saveDateAquired","saveDateAquired","",true).'</td>
 
                                 <td>Grundfarbe</td>
@@ -375,7 +482,7 @@
                                     <select name="baseColorID" class="cel_100 cef_nomg cef_nopd" id="baseColor" onchange="InsertCapUpdateCapPreview()">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['hex'].'">'.$color['colorDE'].'</option>';
+                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['hex'].'" '.(($edit AND $color['id'] == $capData['baseColorID']) ? 'selected' : '').'>'.$color['colorDE'].'</option>';
                                         echo '
                                     </select>
                                 </td>
@@ -388,7 +495,7 @@
                                     <select name="quality" class="cel_m cef_nomg cef_nopd" id="">
                                         <option value="" selected>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($qualityValueList AS $quality) echo '<option value="'.$quality.'">'.$qualityDisplayList[$quality].'</option>';
+                                        foreach($qualityValueList AS $quality) echo '<option value="'.$quality.'"  '.(($edit AND $quality == $capData['quality']) ? 'selected' : '').'>'.$qualityDisplayList[$quality].'</option>';
                                         echo '
                                     </select>
                                 </td>
@@ -399,7 +506,7 @@
                                     <select name="textColorID" class="cel_100 cef_nomg cef_nopd" id="textColor" onchange="InsertCapUpdateCapPreview()">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['hex'].'">'.$color['colorDE'].'</option>';
+                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['hex'].'" '.(($edit AND $color['id'] == $capData['textColorID']) ? 'selected' : '').'>'.$color['colorDE'].'</option>';
                                         echo '
                                     </select>
                                 </td>
@@ -411,8 +518,8 @@
                                 <td>
                                     <table>
                                         <tr>
-                                            <td>'.RadioButton("Tausch","isTraded",false,"1").'</td>
-                                            <td>'.RadioButton("Kauf","isTraded",true,"0").'</td>
+                                            <td>'.RadioButton("Tausch","isTraded",($edit ? ($capData['isTraded']==1 ? true : false) : false),"1").'</td>
+                                            <td>'.RadioButton("Kauf","isTraded",($edit ? ($capData['isTraded']==1 ? false : true) : true),"0").'</td>
                                         </tr>
                                     </table>
                                 </td>
@@ -422,8 +529,8 @@
                                 <td>
                                     <table>
                                         <tr>
-                                            <td>'.RadioButton("Neu","isUsed",false,"0","InsertCapUpdateCapPreview()").'</td>
-                                            <td>'.RadioButton("Gebr.","isUsed",true,"1","InsertCapUpdateCapPreview()").'</td>
+                                            <td>'.RadioButton("Neu","isUsed",($edit ? ($capData['isUsed']==0 ? true : false) : false),"0","InsertCapUpdateCapPreview()").'</td>
+                                            <td>'.RadioButton("Gebr.","isUsed",($edit ? ($capData['isUsed']==0 ? false : true) : true),"1","InsertCapUpdateCapPreview()").'</td>
                                         </tr>
                                     </table>
                                 </td>
@@ -435,8 +542,8 @@
                                 <td>
                                     <table>
                                         <tr>
-                                            <td>'.RadioButton("Ja","isTradeable",false,"1").'</td>
-                                            <td>'.RadioButton("Nein","isTradeable",true,"0").'</td>
+                                            <td>'.RadioButton("Ja","isTradeable",($edit ? ($capData['isTradeable']==1 ? true : false) : false),"1").'</td>
+                                            <td>'.RadioButton("Nein","isTradeable",($edit ? ($capData['isTradeable']==1 ? false : true) : true),"0").'</td>
                                         </tr>
                                     </table>
                                 </td>
@@ -446,8 +553,8 @@
                                 <td>
                                     <table>
                                         <tr>
-                                            <td>'.RadioButton("Ja","isTwistLock",false,"1","InsertCapUpdateCapPreview()").'</td>
-                                            <td>'.RadioButton("Nein","isTwistLock",true,"0","InsertCapUpdateCapPreview()").'</td>
+                                            <td>'.RadioButton("Ja","isTwistLock",($edit ? ($capData['isTwistlock']==1 ? true : false) : false),"1","InsertCapUpdateCapPreview()").'</td>
+                                            <td>'.RadioButton("Nein","isTwistLock",($edit ? ($capData['isTwistlock']==1 ? false : true) : true),"0","InsertCapUpdateCapPreview()").'</td>
                                         </tr>
                                     </table>
                                 </td>
@@ -456,7 +563,7 @@
 
                             <tr>
                                 <td>Alkoholgehalt</td>
-                                <td><input class="cel_m" type="number" step="0.1" name="alcohol" placeholder="Alkoholgehalt..."/></td>
+                                <td><input class="cel_m" type="number" step="0.1" name="alcohol" placeholder="Alkoholgehalt..." '.($edit ? (($capData['alcohol']!=NULL) ? ('value="'.$capData['alcohol'].'"') : '') : '').'/></td>
                                 <td>'.Tickbox("saveAlcohol","saveAlcohol","",true).'</td>
 
 
@@ -464,21 +571,68 @@
 
                             <tr>
                                 <td>Auf Lager</td>
-                                <td><input class="cel_m" type="number" step="1" name="stock" placeholder="Auf Lager..."/></td>
+                                <td><input class="cel_m" type="number" step="1" name="stock" placeholder="Auf Lager..." value="'.($edit ? $capData['stock'] : '').'"/></td>
                                 <td>'.Tickbox("saveAlcohol","saveAlcohol","",true).'</td>
 
-                                <td>Mitz&auml;hlen</td>
-                                <td>'.Tickbox("isCounted","isCounted","",true).'</td>
-                                <td>'.Tickbox("saveIsCounted","saveIsCounted","",true).'</td>
+                                ';
+
+                                if($edit AND $capData['isSet'])
+                                {
+                                    echo '
+                                        <td>In Besitz</td>
+                                        <td>'.Tickbox("isOwned","isOwned","",($edit ? ($capData['isOwned']==1 ? true : false) : true)).'</td>
+                                        <td>'.Tickbox("saveIsCounted","saveIsCounted","",true).'</td>
+                                    ';
+                                }
+                                else
+                                {
+                                    echo '
+                                        <td>Mitz&auml;hlen</td>
+                                        <td>'.Tickbox("isCounted","isCounted","",($edit ? ($capData['isCounted']==1 ? true : false) : true)).'</td>
+                                        <td>'.Tickbox("saveIsCounted","saveIsCounted","",true).'</td>
+                                    ';
+                                }
+
+                                echo '
                             </tr>
 
                             <tr>
                                 <td colspan=7>
                                     <br>
-                                    <button type="submit" name="addBottlecap">Kronkorken hinzuf&uuml;gen</button>
+                                    ';
+
+                                    if($edit) echo '<button type="submit" name="editBottlecap" value="'.$capData['bottlecapID'].'">Kronkorken aktualisieren</button>';
+                                    else echo '<button type="submit" name="addBottlecap">Kronkorken hinzuf&uuml;gen</button>';
+
+                                    echo '
                                 </td>
                             </tr>
                         </table>
+
+
+                        <div class="modal_wrapper" id="allSidesigns">
+                            <a href="#c"><div class="modal_bg"></div></a>
+                            <div class="modal_container" style="width: 50%; height: 40%; background: #2b2b2b; border-radius: 20px;">
+                                <h3>Alle Randzeichen</h3>
+                                <div class="sideSignButtons">
+                                ';
+
+                                foreach($sidesignAllList AS $sidesign)
+                                    {
+                                        echo '
+                                            <input type="radio" id="sidesignAll'.$sidesign['id'].'" value="'.$sidesign['id'].'" name="sidesignID" hidden required '.(($edit AND $sidesign['id'] == $capData['sidesignID']) ? 'checked' : '').'/>
+                                            <label for="sidesignAll'.$sidesign['id'].'">
+                                                <div>
+                                                    <img src="/files/sidesigns/'.$sidesign['sidesignImage'].'" alt="" />
+                                                </div>
+                                            </label>
+                                        ';
+                                    }
+
+                                echo '
+                                </div>
+                            </div>
+                        </div>
 
 
                         <table class="addCapSidesignTable">
@@ -489,7 +643,7 @@
                                 foreach($sidesignFrequentList AS $sidesign)
                                 {
                                     echo '
-                                        <input type="radio" id="sidesignFrequent'.$sidesign['sidesignID'].'" value="'.$sidesign['sidesignID'].'" name="sidesignID" hidden required/>
+                                        <input type="radio" id="sidesignFrequent'.$sidesign['sidesignID'].'" value="'.$sidesign['sidesignID'].'" name="sidesignID" hidden required '.(($edit AND $sidesign['sidesignID'] == $capData['sidesignID']) ? 'checked' : '').'/>
                                         <label for="sidesignFrequent'.$sidesign['sidesignID'].'">
                                             <div>
                                                 <img src="/files/sidesigns/'.$sidesign['sidesignImage'].'" alt="" />
@@ -503,29 +657,6 @@
                             <tr><td><a href="#allSidesigns">Alle Randzeichen</a></td></tr>
                         </table>
 
-                        <div class="modal_wrapper" id="allSidesigns">
-                            <a href="#c"><div class="modal_bg"></div></a>
-                            <div class="modal_container" style="width: 50%; height: 40%; background: #2b2b2b; border-radius: 20px;">
-                                <h3>Alle Randzeichen</h3>
-                                <div class="sideSignButtons">
-                                ';
-
-                                foreach($sidesignAllList AS $sidesign)
-                                    {
-                                        echo '
-                                            <input type="radio" id="sidesignAll'.$sidesign['id'].'" value="'.$sidesign['id'].'" name="sidesignID" hidden required/>
-                                            <label for="sidesignAll'.$sidesign['id'].'">
-                                                <div>
-                                                    <img src="/files/sidesigns/'.$sidesign['sidesignImage'].'" alt="" />
-                                                </div>
-                                            </label>
-                                        ';
-                                    }
-
-                                echo '
-                                </div>
-                            </div>
-                        </div>
                     </form>
                 </center>
             ';

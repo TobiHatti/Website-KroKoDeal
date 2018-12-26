@@ -31,6 +31,9 @@ RewriteRule ^sets/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$/?$ sets.php?country=$1&set=
 
 RewriteRule ^eintragen/([a-zA-Z0-9-]+)/?$ eintragen.php?section=$1 [NC,QSA,L]
 
+RewriteRule ^bearbeiten/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$/?$ eintragen.php?section=$1&capID=$2&edit [NC,QSA,L]
+
+
 #Ignore .php-Extension
 RewriteRule ^([^\.]+)$ $1.php [NC,L]
 

@@ -351,7 +351,7 @@ function SetTile($setID)
     return $retval;
 }
 
-function BottleCapRowData($capData, $isSet, $countryHasRegions)
+function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = false)
 {
     if($isSet) $imagePath = '/files/sets/'.$capData['countryShort'].'/'.$capData['setFilepath'].'/'.$capData['capImage'];
     else $imagePath = '/files/bottlecaps/'.$capData['countryShort'].'/'.$capData['breweryFilepath'].'/'.$capData['capImage'];
@@ -390,9 +390,29 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions)
                 '.$capData['dateAquired'].'
             </td>
             <td>
-                '.(($capData['breweryLink']!='') ? '<a target="_blank" href="'.$capData['breweryLink'].'"><button type="button"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
+    ';
 
-                <a href="#zusatzinfos'.$capData['bottlecapID'].'"><button type="button" onclick="bgenScroll();"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
+    if($isEditMode)
+    {
+        $retval .= '
+            <a href="/bearbeiten/kronkorken/'.$capData['bottlecapID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32">Bearbeiten</button></a><br>
+            <a href="#"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #D60000">L&ouml;schen</button></a><br><br>
+        ';
+
+        $retval .= '
+            '.(($capData['breweryLink']!='') ? '<a target="_blank" href="'.$capData['breweryLink'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px;"><i class="fas fa-home"></i> Zur Brauerei</button></a><br>' : '').'
+            <a href="#zusatzinfos'.$capData['bottlecapID'].'"><button type="button" onclick="bgenScroll();" class="cel_100 cel_h25" style="margin-bottom: 5px;"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
+        ';
+    }
+    else
+    {
+        $retval .= '
+            '.(($capData['breweryLink']!='') ? '<a target="_blank" href="'.$capData['breweryLink'].'"><button type="button" class="cel_100"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
+            <a href="#zusatzinfos'.$capData['bottlecapID'].'"><button type="button" onclick="bgenScroll();" class="cel_100"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
+        ';
+    }
+
+    $retval .= '
             </td>
         </tr>
     ';
@@ -464,6 +484,13 @@ function BottleCapRowInfoOverlay($capData)
     ';
 
     return $retval;
+}
+
+function CheckEditPermission()
+{
+    $rank = MySQL::Scalar("SELECT rank FROM users WHERE id = ?",'s',$_SESSION['userID']);
+    if($rank>=95) return true;
+    else return false;
 }
 
 ?>

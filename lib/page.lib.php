@@ -124,6 +124,11 @@ class Page
         echo '<meta http-equiv="refresh" content="'.$delay.'; url='.$path.'" />';
     }
 
+    public static function Back($steps = 1)
+    {
+        echo '<script> window.history.back('.$steps.'); </script>';
+    }
+
 ##########################################################################################
 }
 

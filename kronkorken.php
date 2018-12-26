@@ -271,7 +271,9 @@
                         </tr>
         ';
 
-        foreach($capDataArray AS $capData) echo BottleCapRowData($capData, false, $countryHasRegions);
+        $permissionCheck = CheckEditPermission();
+
+        foreach($capDataArray AS $capData) echo BottleCapRowData($capData, false, $countryHasRegions,$permissionCheck);
 
         echo '</table><div class="infoOverlays">';
 

@@ -344,7 +344,7 @@ class FileUploader
                         {
                             $fileSQLStatement = $this->fileSQLEntry;
 
-                            $fileSQLStatement = str_replace("@FILENAME",$fileName,$fileSQLStatement);
+                            $fileSQLStatement = str_replace("@FILENAME",str_replace($this->fileUploadDirectory,'',$fileName),$fileSQLStatement);
                             $fileSQLStatement = str_replace("@FILEEXTENSION",pathinfo($this->fileUploadDirectory.$fileName, PATHINFO_EXTENSION),$fileSQLStatement);
 
                             self::MySQLNonQuery($fileSQLStatement);
