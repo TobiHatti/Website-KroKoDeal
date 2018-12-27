@@ -447,6 +447,10 @@ select {
 select:focus {
   border-bottom: 1px solid #FF892E; }
 
+select:disabled {
+  color: #696969;
+  background: #DCDCDC; }
+
 /*===================================================================================*/
 /* (Y05) FormElements > Checkbox                                                     */
 /*===================================================================================*/
@@ -2565,5 +2569,38 @@ input[type="week"]:focus {
     color: #FFFFFF; }
   .addFlavorTable tr:last-child td {
     text-align: center; }
+
+.editSetTable {
+  background: #A9A9A9;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 5px;
+  border-spacing: 5px;
+  border-collapse: separate; }
+  .editSetTable tr td:nth-child(1) {
+    background: #FFFFFF;
+    text-align: right;
+    border-radius: 5px 0 0 5px;
+    padding-right: 5px; }
+  .editSetTable tr td:nth-child(2) {
+    background: #FFFFFF;
+    text-align: center;
+    border-radius: 0 5px 5px 0;
+    padding-right: 5px; }
+    .editSetTable tr td:nth-child(2) input, .editSetTable tr td:nth-child(2) select {
+      border-radius: 0 5px 5px 0;
+      border: 1px solid; }
+    .editSetTable tr td:nth-child(2) table tr td {
+      color: #000000;
+      font-weight: normal; }
+  .editSetTable tr:first-child td {
+    background: #FF892E;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 10px;
+    color: #FFFFFF; }
+  .editSetTable tr:last-child td {
+    text-align: center;
+    background: none; }
 
 /*# sourceMappingURL=style.css.map */

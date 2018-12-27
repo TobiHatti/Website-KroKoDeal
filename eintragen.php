@@ -136,7 +136,15 @@
         $fileUploader->Upload();
 
         if(isset($_POST['addBottlecap'])) Page::Redirect(Page::This());
-        else Page::Back(2);
+        else
+        {
+            echo '
+                <script>
+                    window.history.back();
+                    window.history.back();
+                </script>
+            ';
+        }
         die();
     }
 
@@ -314,7 +322,35 @@
         MySQL::NonQuery("UPDATE sets SET thumbnailID = ? WHERE id = ?",'s',$thumbnail,$setID);
 
         Page::Redirect('/sets/'.$countryData['countryShort'].'/'.$setData['setFilepath']);
+        die();
+    }
 
+    if(isset($_POST['editSetGeneral']))
+    {
+        $setID = $_POST['editSetGeneral'];
+
+        $breweryID = $_POST['breweryID'];
+        $name = $_POST['setName'];
+        $flavorID = $_POST['flavorID'];
+        $capNumberBase = $_POST['capNumberBase'];
+        $showInCollection = isset($_POST['showInCollection']) ? 1 : 0;      
+        $alcohol = ($_POST['alcohol']=="") ? null : $_POST['alcohol'];
+
+        MySQL::NonQuery("UPDATE sets SET setName = ? WHERE id = ?",'ss',$name,$setID);
+
+        $setCaps = MySQL::Cluster("SELECT * FROM bottlecaps WHERE setID = ?",'s',$setID);
+
+        foreach($setCaps AS $setCap)
+        {
+            $oldCapNumber = $setCap['capNumber'];
+            $capExtension = substr($oldCapNumber,strrpos($oldCapNumber,'_') + 1,strlen($oldCapNumber));
+            $newCapNumber = $capNumberBase.'_'.$capExtension;
+
+            MySQL::NonQuery("UPDATE bottlecaps SET capNumber = ?, breweryID = ?, flavorID = ?, alcohol = ?, isSetsAndCollection = ?  WHERE id = ?",'@s',$newCapNumber,$breweryID,$flavorID,$alcohol,$showInCollection,$setCap['id']);
+        }
+
+        Page::Redirect(Page::This());
+        die();
     }
 
 //########################################################################################
@@ -334,7 +370,12 @@
 
         if($_GET['section'] == 'kronkorken')
         {
-            if(isset($_GET['edit'])) $edit = true;
+            $isSetPart = false;
+            if(isset($_GET['edit']))
+            {
+                $edit = true;
+                $isSetPart = MySQL::Scalar("SELECT isSet FROM bottlecaps WHERE id = ?",'s',$_GET['objID']);
+            }
             else $edit = false;
 
             if($edit) echo '<h2>Kronkorken bearbeiten</h2>';
@@ -358,7 +399,7 @@
                         });
                     </script>
                 ';
-                $capData = MySQL::Row("SELECT *,bottlecaps.id AS bottlecapID FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.id = ?",'s',$_GET['capID']);
+                $capData = MySQL::Row("SELECT *,bottlecaps.id AS bottlecapID FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.id = ?",'s',$_GET['objID']);
                 if($capData['isSet'])
                 {
                     $setData = MySQL::Row("SELECT * FROM sets WHERE id = ?",'s',$capData['setID']);
@@ -384,7 +425,7 @@
                             <tr>
                                 <td>Land</td>
                                 <td>
-                                    <select name="countryID" class="cel_100 cef_nomg cef_nopd" id="countryList" onchange="DynLoadList(1,this,\'--- Ausw\u00e4hlen ---\',\'breweryList\',\'SELECT breweryName AS dynLoadText, id AS dynLoadValue FROM breweries WHERE countryID = ?? ORDER BY breweryName ASC\'); DynLoadScalar(2,this,\'outCountryShort\',\'SELECT countryShort2 FROM countries WHERE id = ??\')">
+                                    <select '.($isSetPart ? 'disabled' : '').' name="countryID" class="cel_100 cef_nomg cef_nopd" id="countryList" onchange="DynLoadList(1,this,\'--- Ausw\u00e4hlen ---\',\'breweryList\',\'SELECT breweryName AS dynLoadText, id AS dynLoadValue FROM breweries WHERE countryID = ?? ORDER BY breweryName ASC\'); DynLoadScalar(2,this,\'outCountryShort\',\'SELECT countryShort2 FROM countries WHERE id = ??\')">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
                                         foreach($countryList AS $country) echo '<option value="'.$country['countryID'].'" '.(($edit AND $country['countryID'] == $capData['countryID']) ? 'selected' : '').'>'.$country['countryDE'].'</option>';
@@ -415,7 +456,7 @@
                             <tr>
                                 <td>Brauerei</td>
                                 <td>
-                                    <select name="breweryID" class="cel_m cef_nomg cef_nopd" id="breweryList" required
+                                    <select '.($isSetPart ? 'disabled' : '').' name="breweryID" class="cel_m cef_nomg cef_nopd" id="breweryList" required
                                     onchange="DynLoadScalar(3,this,\'outBreweryShort\',\'SELECT breweryShort FROM breweries WHERE id = ??\'); CopyShortsToCapNumber(false);"
                                     onclick="DynLoadScalar(3,this,\'outBreweryShort\',\'SELECT breweryShort FROM breweries WHERE id = ??\'); CopyShortsToCapNumber(false)">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
@@ -434,7 +475,7 @@
                             <tr>
                                 <td>Sorte</td>
                                 <td>
-                                    <select name="flavorID" class="cel_100 cef_nomg cef_nopd" id="" required>
+                                    <select '.($isSetPart ? 'disabled' : '').' name="flavorID" class="cel_100 cef_nomg cef_nopd" id="" required>
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
                                         foreach($flavorList AS $flavor) echo '<option value="'.$flavor['id'].'" '.(($edit AND $flavor['id'] == $capData['flavorID']) ? 'selected' : '').'>'.$flavor['flavorDE'].'</option>';
@@ -445,7 +486,7 @@
                             </tr>
 
                             <tr>
-                                <td>Kapsel-Nr</td>
+                                <td>Kapsel-Nr.'.($edit ? ('<br><sub><span style="color: #696969">Original: '.$capData['capNumber'].'</span></sub>') : '').'</td>
                                 <td><input class="cel_m" type="text" name="capNumber" id="capNumber" placeholder="XX_XX_XXXX" value="'.($edit ? $capData['capNumber'] : '').'" required onclick="CopyShortsToCapNumber(true)"/></td>
                                 <td>'.Tickbox("saveCapNumber","saveCapNumber","",true).'</td>
                             </tr>
@@ -563,7 +604,7 @@
 
                             <tr>
                                 <td>Alkoholgehalt</td>
-                                <td><input class="cel_m" type="number" step="0.1" name="alcohol" placeholder="Alkoholgehalt..." '.($edit ? (($capData['alcohol']!=NULL) ? ('value="'.$capData['alcohol'].'"') : '') : '').'/></td>
+                                <td><input '.($isSetPart ? 'disabled' : '').' class="cel_m" type="number" step="0.1" name="alcohol" placeholder="Alkoholgehalt..." '.($edit ? (($capData['alcohol']!=NULL) ? ('value="'.$capData['alcohol'].'"') : '') : '').'/></td>
                                 <td>'.Tickbox("saveAlcohol","saveAlcohol","",true).'</td>
 
 
@@ -670,7 +711,11 @@
 
         if($_GET['section'] == 'set')
         {
-            echo '<h2>Set hinzuf&uuml;gen</h2>';
+            if(isset($_GET['edit'])) $edit = true;
+            else $edit = false;
+
+            if($edit) echo '<h2>Set bearbeiten</h2>';
+            else echo '<h2>Setrken hinzuf&uuml;gen</h2>';
 
             $countryList = MySQL::Cluster("SELECT * FROM countries RIGHT JOIN breweries ON countries.id = breweries.countryID GROUP BY breweries.countryID ORDER BY countries.countryDE ASC");
             $flavorList = MySQL::Cluster("SELECT * FROM flavors");
@@ -680,249 +725,453 @@
             $qualityValueList = array("A" => "A","B" => "B","C" => "C","D" => "D","E" => "E");
             $qualityDisplayList = array("A" => "A - Neu","B" => "B - Benutzt, Sehr guter Zustand","C" => "C - Benutzt, kleine Kratzer/Knicke","D" => "D - Benutzt, gro&szlig;e Kratzer/Knicke","E" => "E - Benutzt, schlechter zust.");
 
-            echo '
-                <center>
-                    <form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+            if(!$edit)
+            {
+                echo '
+                    <center>
+                        <form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">
 
-                        <table class="addSet1Table">
-                            <tr>
-                                <td colspan=2>Allgemeines</td>
-                                <td rowspan=13></td>
-                                <td colspan=2>Bilder</td>
-                            </tr>
+                            <table class="addSet1Table">
+                                <tr>
+                                    <td colspan=2>Allgemeines</td>
+                                    <td rowspan=13></td>
+                                    <td colspan=2>Bilder</td>
+                                </tr>
 
-                            <tr>
-                                <td>Land</td>
-                                <td>
-                                    <select name="countryID" class="cel_100 cef_nomg cef_nopd" id="countryList" onchange="DynLoadList(1,this,\'--- Ausw\u00e4hlen ---\',\'breweryList\',\'SELECT breweryName AS dynLoadText, id AS dynLoadValue FROM breweries WHERE countryID = ?? ORDER BY breweryName ASC\'); DynLoadScalar(2,this,\'outCountryShort\',\'SELECT countryShort2 FROM countries WHERE id = ??\')">
-                                        <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
-                                        ';
-                                        foreach($countryList AS $country) echo '<option value="'.$country['countryID'].'">'.$country['countryDE'].'</option>';
-                                        echo '
-                                    </select>
-                                </td>
+                                <tr>
+                                    <td>Land</td>
+                                    <td>
+                                        <select name="countryID" class="cel_100 cef_nomg cef_nopd" id="countryList" onchange="DynLoadList(1,this,\'--- Ausw\u00e4hlen ---\',\'breweryList\',\'SELECT breweryName AS dynLoadText, id AS dynLoadValue FROM breweries WHERE countryID = ?? ORDER BY breweryName ASC\'); DynLoadScalar(2,this,\'outCountryShort\',\'SELECT countryShort2 FROM countries WHERE id = ??\')">
+                                            <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                            ';
+                                            foreach($countryList AS $country) echo '<option value="'.$country['countryID'].'">'.$country['countryDE'].'</option>';
+                                            echo '
+                                        </select>
+                                    </td>
 
-                                <td rowspan=6>
-                                    <center>
-                                        <div class="bottlecapColorSchemeContainerEntry">
-                                            <div><img name="capPreviewCapColor" id="GLD" src="/content/capUsedColored.png" alt="" /></div>
-                                            <div name="capPreviewBaseColor" style="background: #FFFFFF"></div>
-                                            <div name="capPreviewTextColor" style="color: #FF0000">K-K-D</div>
-                                            <div name="capPreviewTwistLock"></div>
-                                        </div>
-                                    </center>
-                                </td>
-                                <td rowspan=6 colspan=2>
-                                    <center>
-                                        <img src="" alt="" id="capImagePreview"/><br>
-                                        '.FileButton("capImages","capImages",true,"ReadURL(this,'capImagePreview');","","width: 100px; line-height: 5px;",true).'
-                                    </center>
-                                </td>
-
-                            </tr>
-
-                            <tr>
-                                <td>Brauerei</td>
-                                <td>
-                                    <select name="breweryID" class="cel_m cef_nomg cef_nopd" id="breweryList" required>
-                                        <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
-                                    </select>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Set-Name</td>
-                                <td><input class="cel_m" type="text" name="setName" placeholder="Set-Name..." required/></td>
-                            </tr>
-
-                            <tr>
-                                <td>Sorte</td>
-                                <td>
-                                    <select name="flavorID" class="cel_100 cef_nomg cef_nopd" id="" required>
-                                        <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
-                                        ';
-                                        foreach($flavorList AS $flavor) echo '<option value="'.$flavor['id'].'">'.$flavor['flavorDE'].'</option>';
-                                        echo '
-                                    </select>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Set-K&uuml;rzel</td>
-                                <td><input class="cel_m" type="text" name="capNumberBase" placeholder="XX_XX_XXXX" required onclick="CopyShortsToCapNumber(true)"/></td>
-                            </tr>
-                            <tr>
-                                <td>Set-Gr&ouml;&szlig;e</td>
-                                <td><input class="cel_m" type="number" name="setSize" placeholder="Anzahl..." required/></td>
-                            </tr>
-                            <tr>
-                                <td colspan=2>Zusatzinfos</td>
-                                <td colspan=2>Optische angaben</td>
-                            </tr>
-
-                            <tr>
-                                <td>Erhaltsort</td>
-                                <td><input class="cel_m" type="text" name="locationAquired" placeholder="Erhaltsort..."/></td>
-
-                                <td>Kapselfarbe</td>
-                                <td>
-                                    <select name="capColorID" class="cel_100 cef_nomg cef_nopd" id="capColor" onchange="InsertCapUpdateCapPreview()">
-                                        <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
-                                        ';
-                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['colorShort'].'">'.$color['colorDE'].'</option>';
-                                        echo '
-                                    </select>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Erhaltsdatum</td>
-                                <td><input class="cel_m" type="text" name="dateAquired" placeholder="Erhaltsdatum..."/></td>
-
-                                <td>Grundfarbe</td>
-                                <td>
-                                    <select name="baseColorID" class="cel_100 cef_nomg cef_nopd" id="baseColor" onchange="InsertCapUpdateCapPreview()">
-                                        <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
-                                        ';
-                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['hex'].'">'.$color['colorDE'].'</option>';
-                                        echo '
-                                    </select>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Qualit&auml;t</td>
-                                <td>
-                                    <select name="quality" class="cel_m cef_nomg cef_nopd" id="">
-                                        <option value="" selected>--- Ausw&auml;hlen ---</option>
-                                        ';
-                                        foreach($qualityValueList AS $quality) echo '<option value="'.$quality.'">'.$qualityDisplayList[$quality].'</option>';
-                                        echo '
-                                    </select>
-                                </td>
-
-                                <td>Textfarbe</td>
-                                <td>
-                                    <select name="textColorID" class="cel_100 cef_nomg cef_nopd" id="textColor" onchange="InsertCapUpdateCapPreview()">
-                                        <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
-                                        ';
-                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['hex'].'">'.$color['colorDE'].'</option>';
-                                        echo '
-                                    </select>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Erhalten durch</td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td>'.RadioButton("Tausch","isTraded",false,"1").'</td>
-                                            <td>'.RadioButton("Kauf","isTraded",true,"0").'</td>
-                                        </tr>
-                                    </table>
-                                </td>
-
-                                <td>Zustand</td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td>'.RadioButton("Neu","isUsed",false,"0","InsertCapUpdateCapPreview()").'</td>
-                                            <td>'.RadioButton("Gebr.","isUsed",true,"1","InsertCapUpdateCapPreview()").'</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Tauschbar</td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td>'.RadioButton("Ja","isTradeable",false,"1").'</td>
-                                            <td>'.RadioButton("Nein","isTradeable",true,"0").'</td>
-                                        </tr>
-                                    </table>
-                                </td>
-
-                                <td>Drehverschluss</td>
-                                <td>
-                                    <table>
-                                        <tr>
-                                            <td>'.RadioButton("Ja","isTwistLock",false,"1","InsertCapUpdateCapPreview()").'</td>
-                                            <td>'.RadioButton("Nein","isTwistLock",true,"0","InsertCapUpdateCapPreview()").'</td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Alkoholgehalt</td>
-                                <td><input class="cel_m" type="number" step="0.1" name="alcohol" placeholder="Alkoholgehalt..."/></td>
-                            </tr>
-                            <tr>
-                                <td>In Sets & Sammlung<br>zeigen</td>
-                                <td style="text-align:left; padding-left: 10px;" >
-                                    '.Tickbox("showInCollection","showInCollection","&nbsp;&nbsp;Ja",false).'
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan=7>
-                                    <br>
-                                    <button type="submit" name="addSetPart1">Weiter &#10148;</button>
-                                </td>
-                            </tr>
-                        </table>
-
-
-                        <table class="addCapSidesignTable">
-                            <tr><td>Randzeichen</td></tr>
-                            <tr>
-                                <td>
-                                ';
-                                foreach($sidesignFrequentList AS $sidesign)
-                                {
-                                    echo '
-                                        <input type="radio" id="sidesignFrequent'.$sidesign['sidesignID'].'" value="'.$sidesign['sidesignID'].'" name="sidesignID" hidden required/>
-                                        <label for="sidesignFrequent'.$sidesign['sidesignID'].'">
-                                            <div>
-                                                <img src="/files/sidesigns/'.$sidesign['sidesignImage'].'" alt="" />
+                                    <td rowspan=6>
+                                        <center>
+                                            <div class="bottlecapColorSchemeContainerEntry">
+                                                <div><img name="capPreviewCapColor" id="GLD" src="/content/capUsedColored.png" alt="" /></div>
+                                                <div name="capPreviewBaseColor" style="background: #FFFFFF"></div>
+                                                <div name="capPreviewTextColor" style="color: #FF0000">K-K-D</div>
+                                                <div name="capPreviewTwistLock"></div>
                                             </div>
-                                        </label>
+                                        </center>
+                                    </td>
+                                    <td rowspan=6 colspan=2>
+                                        <center>
+                                            <img src="" alt="" id="capImagePreview"/><br>
+                                            '.FileButton("capImages","capImages",true,"ReadURL(this,'capImagePreview');","","width: 100px; line-height: 5px;",true).'
+                                        </center>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td>Brauerei</td>
+                                    <td>
+                                        <select name="breweryID" class="cel_m cef_nomg cef_nopd" id="breweryList" required>
+                                            <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Set-Name</td>
+                                    <td><input class="cel_m" type="text" name="setName" placeholder="Set-Name..." required/></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Sorte</td>
+                                    <td>
+                                        <select name="flavorID" class="cel_100 cef_nomg cef_nopd" id="" required>
+                                            <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                            ';
+                                            foreach($flavorList AS $flavor) echo '<option value="'.$flavor['id'].'">'.$flavor['flavorDE'].'</option>';
+                                            echo '
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Set-K&uuml;rzel</td>
+                                    <td><input class="cel_m" type="text" name="capNumberBase" placeholder="z.B.: AT_XX_S01" required onclick="CopyShortsToCapNumber(true)"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Set-Gr&ouml;&szlig;e</td>
+                                    <td><input class="cel_m" type="number" name="setSize" placeholder="Anzahl..." required/></td>
+                                </tr>
+                                <tr>
+                                    <td colspan=2>Zusatzinfos</td>
+                                    <td colspan=2>Optische angaben</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Erhaltsort</td>
+                                    <td><input class="cel_m" type="text" name="locationAquired" placeholder="Erhaltsort..."/></td>
+
+                                    <td>Kapselfarbe</td>
+                                    <td>
+                                        <select name="capColorID" class="cel_100 cef_nomg cef_nopd" id="capColor" onchange="InsertCapUpdateCapPreview()">
+                                            <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                            ';
+                                            foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['colorShort'].'">'.$color['colorDE'].'</option>';
+                                            echo '
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Erhaltsdatum</td>
+                                    <td><input class="cel_m" type="text" name="dateAquired" placeholder="Erhaltsdatum..."/></td>
+
+                                    <td>Grundfarbe</td>
+                                    <td>
+                                        <select name="baseColorID" class="cel_100 cef_nomg cef_nopd" id="baseColor" onchange="InsertCapUpdateCapPreview()">
+                                            <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                            ';
+                                            foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['hex'].'">'.$color['colorDE'].'</option>';
+                                            echo '
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Qualit&auml;t</td>
+                                    <td>
+                                        <select name="quality" class="cel_m cef_nomg cef_nopd" id="">
+                                            <option value="" selected>--- Ausw&auml;hlen ---</option>
+                                            ';
+                                            foreach($qualityValueList AS $quality) echo '<option value="'.$quality.'">'.$qualityDisplayList[$quality].'</option>';
+                                            echo '
+                                        </select>
+                                    </td>
+
+                                    <td>Textfarbe</td>
+                                    <td>
+                                        <select name="textColorID" class="cel_100 cef_nomg cef_nopd" id="textColor" onchange="InsertCapUpdateCapPreview()">
+                                            <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                            ';
+                                            foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['hex'].'">'.$color['colorDE'].'</option>';
+                                            echo '
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Erhalten durch</td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>'.RadioButton("Tausch","isTraded",false,"1").'</td>
+                                                <td>'.RadioButton("Kauf","isTraded",true,"0").'</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                    <td>Zustand</td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>'.RadioButton("Neu","isUsed",false,"0","InsertCapUpdateCapPreview()").'</td>
+                                                <td>'.RadioButton("Gebr.","isUsed",true,"1","InsertCapUpdateCapPreview()").'</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Tauschbar</td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>'.RadioButton("Ja","isTradeable",false,"1").'</td>
+                                                <td>'.RadioButton("Nein","isTradeable",true,"0").'</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                    <td>Drehverschluss</td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>'.RadioButton("Ja","isTwistLock",false,"1","InsertCapUpdateCapPreview()").'</td>
+                                                <td>'.RadioButton("Nein","isTwistLock",true,"0","InsertCapUpdateCapPreview()").'</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Alkoholgehalt</td>
+                                    <td><input class="cel_m" type="number" step="0.1" name="alcohol" placeholder="Alkoholgehalt..."/></td>
+                                </tr>
+                                <tr>
+                                    <td>In Sets & Sammlung<br>zeigen</td>
+                                    <td style="text-align:left; padding-left: 10px;" >
+                                        '.Tickbox("showInCollection","showInCollection","&nbsp;&nbsp;Ja",false).'
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan=7>
+                                        <br>
+                                        <button type="submit" name="addSetPart1">Weiter &#10148;</button>
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                            <table class="addCapSidesignTable">
+                                <tr><td>Randzeichen</td></tr>
+                                <tr>
+                                    <td>
                                     ';
-                                }
-                                echo '
-                                </td>
-                            </tr>
-                            <tr><td><a href="#allSidesigns">Alle Randzeichen</a></td></tr>
-                        </table>
-
-                        <div class="modal_wrapper" id="allSidesigns">
-                            <a href="#c"><div class="modal_bg"></div></a>
-                            <div class="modal_container" style="width: 50%; height: 40%; background: #2b2b2b; border-radius: 20px;">
-                                <h3>Alle Randzeichen</h3>
-                                <div class="sideSignButtons">
-                                ';
-
-                                foreach($sidesignAllList AS $sidesign)
+                                    foreach($sidesignFrequentList AS $sidesign)
                                     {
                                         echo '
-                                            <input type="radio" id="sidesignAll'.$sidesign['id'].'" value="'.$sidesign['id'].'" name="sidesignID" hidden required/>
-                                            <label for="sidesignAll'.$sidesign['id'].'">
+                                            <input type="radio" id="sidesignFrequent'.$sidesign['sidesignID'].'" value="'.$sidesign['sidesignID'].'" name="sidesignID" hidden required/>
+                                            <label for="sidesignFrequent'.$sidesign['sidesignID'].'">
                                                 <div>
                                                     <img src="/files/sidesigns/'.$sidesign['sidesignImage'].'" alt="" />
                                                 </div>
                                             </label>
                                         ';
                                     }
+                                    echo '
+                                    </td>
+                                </tr>
+                                <tr><td><a href="#allSidesigns">Alle Randzeichen</a></td></tr>
+                            </table>
 
-                                echo '
+                            <div class="modal_wrapper" id="allSidesigns">
+                                <a href="#c"><div class="modal_bg"></div></a>
+                                <div class="modal_container" style="width: 50%; height: 40%; background: #2b2b2b; border-radius: 20px;">
+                                    <h3>Alle Randzeichen</h3>
+                                    <div class="sideSignButtons">
+                                    ';
+
+                                    foreach($sidesignAllList AS $sidesign)
+                                        {
+                                            echo '
+                                                <input type="radio" id="sidesignAll'.$sidesign['id'].'" value="'.$sidesign['id'].'" name="sidesignID" hidden required/>
+                                                <label for="sidesignAll'.$sidesign['id'].'">
+                                                    <div>
+                                                        <img src="/files/sidesigns/'.$sidesign['sidesignImage'].'" alt="" />
+                                                    </div>
+                                                </label>
+                                            ';
+                                        }
+
+                                    echo '
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                </center>
-            ';
+                        </form>
+                    </center>
+                ';
+            }
+            else
+            {
+                $setData = MySQL::Row("SELECT * FROM sets INNER JOIN bottlecaps ON sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id WHERE sets.id = ?",'s',$_GET['objID']);
+
+                echo '
+                    <center>
+                        <form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                            <table class="editSetTable">
+                                <tr>
+                                    <td colspan=2>Allgemeine Set-Daten</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Land</td>
+                                    <td>
+                                        <select name="countryID" class="cel_100 cef_nomg cef_nopd" id="countryList" onchange="DynLoadList(1,this,\'--- Ausw\u00e4hlen ---\',\'breweryList\',\'SELECT breweryName AS dynLoadText, id AS dynLoadValue FROM breweries WHERE countryID = ?? ORDER BY breweryName ASC\'); DynLoadScalar(2,this,\'outCountryShort\',\'SELECT countryShort2 FROM countries WHERE id = ??\')">
+                                            <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                            ';
+                                            foreach($countryList AS $country) echo '<option '.($country['countryID'] == $setData['countryID'] ? 'selected' : '').' value="'.$country['countryID'].'">'.$country['countryDE'].'</option>';
+                                            echo '
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Brauerei</td>
+                                    <td>
+                                        <select name="breweryID" class="cel_m cef_nomg cef_nopd" id="breweryList" required>
+                                            <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                            <option value="'.$setData['breweryID'].'" selected>'.$setData['breweryName'].'</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Set-Name</td>
+                                    <td><input class="cel_m" type="text" name="setName" placeholder="Set-Name..." value="'.$setData['setName'].'" required/></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Sorte</td>
+                                    <td>
+                                        <select name="flavorID" class="cel_100 cef_nomg cef_nopd" id="" required>
+                                            <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                            ';
+                                            foreach($flavorList AS $flavor) echo '<option '.($flavor['id'] == $setData['flavorID'] ? 'selected' : '').' value="'.$flavor['id'].'">'.$flavor['flavorDE'].'</option>';
+                                            echo '
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Set-K&uuml;rzel</td>
+                                    <td><input class="cel_m" type="text" name="capNumberBase" placeholder="XX_XX_XXXX" value="'.substr($setData['capNumber'],0,strrpos($setData['capNumber'],'_')).'" required onclick="CopyShortsToCapNumber(true)"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Alkoholgehalt</td>
+                                    <td><input class="cel_m" type="number" step="0.1" name="alcohol" placeholder="Alkoholgehalt..." value="'.$setData['alcohol'].'"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td>In Sets & Sammlung<br>zeigen</td>
+                                    <td style="text-align:left; padding-left: 10px;" >
+                                        '.Tickbox("showInCollection","showInCollection","&nbsp;&nbsp;Ja",$setData['isSetsAndCollection']).'
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan=2>
+                                        <br>
+                                        <button type="submit" name="editSetGeneral" value="'.$_GET['objID'].'">Set-Daten aktualisieren</button>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <br>
+
+                            <table class="editSetTable">
+                                <tr>
+                                    <td colspan=2>Erweiterte Set-Daten<br><span style="font-size: 10pt;">Achtung: &Uuml;berschreibt alle<br>individuell eingetragenen Werte</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Kapselfarbe</td>
+                                    <td>
+                                        <select name="capColorID" class="cel_100 cef_nomg cef_nopd" id="capColor" onchange="InsertCapUpdateCapPreview()">
+                                            <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                            ';
+                                            foreach($colorList AS $color) echo '<option '.($color['id'] == $setData['capColorID'] ? 'selected' : '').' style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'">'.$color['colorDE'].'</option>';
+                                            echo '
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Grundfarbe</td>
+                                    <td>
+                                        <select name="baseColorID" class="cel_100 cef_nomg cef_nopd" id="baseColor" onchange="InsertCapUpdateCapPreview()">
+                                            <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                            ';
+                                            foreach($colorList AS $color) echo '<option '.($color['id'] == $setData['baseColorID'] ? 'selected' : '').' style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'">'.$color['colorDE'].'</option>';
+                                            echo '
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Textfarbe</td>
+                                    <td>
+                                        <select name="textColorID" class="cel_100 cef_nomg cef_nopd" id="textColor" onchange="InsertCapUpdateCapPreview()">
+                                            <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                            ';
+                                            foreach($colorList AS $color) echo '<option '.($color['id'] == $setData['textColorID'] ? 'selected' : '').' style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'">'.$color['colorDE'].'</option>';
+                                            echo '
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Erhaltsort</td>
+                                    <td><input class="cel_m" type="text" name="locationAquired" placeholder="Erhaltsort..." value="'.$setData['locationAquired'].'"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Erhaltsdatum</td>
+                                    <td><input class="cel_m" type="text" name="dateAquired" placeholder="Erhaltsdatum..." value="'.$setData['dateAquired'].'"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Qualit&auml;t</td>
+                                    <td>
+                                        <select name="quality" class="cel_m cef_nomg cef_nopd" id="">
+                                            <option value="" selected>--- Ausw&auml;hlen ---</option>
+                                            ';
+                                            foreach($qualityValueList AS $quality) echo '<option '.($quality == $setData['quality'] ? 'selected' : '').' value="'.$quality.'">'.$qualityDisplayList[$quality].'</option>';
+                                            echo '
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Erhalten durch</td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>'.RadioButton("Tausch","isTraded",$setData['isTraded'],"1").'</td>
+                                                <td>'.RadioButton("Kauf","isTraded",!$setData['isTraded'],"0").'</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Zustand</td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>'.RadioButton("Neu","isUsed",!$setData['isUsed'],"0","InsertCapUpdateCapPreview()").'</td>
+                                                <td>'.RadioButton("Gebr.","isUsed",$setData['isUsed'],"1","InsertCapUpdateCapPreview()").'</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Tauschbar</td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>'.RadioButton("Ja","isTradeable",$setData['isTradeable'],"1").'</td>
+                                                <td>'.RadioButton("Nein","isTradeable",!$setData['isTradeable'],"0").'</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Drehverschluss</td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>'.RadioButton("Ja","isTwistLock",$setData['isTwistlock'],"1","InsertCapUpdateCapPreview()").'</td>
+                                                <td>'.RadioButton("Nein","isTwistLock",!$setData['isTwistlock'],"0","InsertCapUpdateCapPreview()").'</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+
+
+                                <tr>
+                                    <td colspan=2>
+                                        <br>
+                                        <button type="submit" name="editSetGeneral" value="'.$_GET['objID'].'">Set-Daten aktualisieren</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </center>
+                ';
+            }
         }
 
         if($_GET['section'] == "set-konfigurieren")

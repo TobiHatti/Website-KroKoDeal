@@ -325,7 +325,7 @@ function BreweryListTile($breweryID,$showRegional=false)
     return $retval;
 }
 
-function SetTile($setID)
+function SetTile($setID,$isEditMode = false)
 {
     $setData = MySQL::Row("SELECT * FROM sets INNER JOIN bottlecaps ON sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE sets.id = ?",'i',$setID);
 
@@ -342,7 +342,25 @@ function SetTile($setID)
                     <b>Land: </b>'.$setData['countryDE'].'
                 </td>
                 <td>
-                    <a href="/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'"><button type="button">Set betrachten</button></a>
+                ';
+
+                if($isEditMode)
+                {
+                    $retval .= '
+                        <a href="/bearbeiten/set/'.$setData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32">Bearbeiten</button></a><br>
+                        <a href="/entfernen/set/'.$setData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #D60000">L&ouml;schen</button></a><br><br>
+                    ';
+
+                    $retval .= '<a href="/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'"><button type="button" class="cel_100">Set betrachten</button></a>';
+                }
+                else
+                {
+                    $retval .= '<a href="/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'"><button type="button" class="cel_100">Set betrachten</button></a>';
+                }
+
+                echo '
+
+
                 </td>
             </tr>
         </table>
@@ -378,7 +396,7 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = fal
                 '.$capData['name'].'<br><br>
                 <b>Sorte:</b>
                 <br>'.$capData['flavorDE'].'
-                '.($isSet ? ('<br><br><b>In Sammlung: </b><br>'.($capData['isOwned'] ? 'Ja' : 'Nein' )) : '').'
+                '.($isSet ? ('<br><br><b>In Sammlung: </b> '.($capData['isOwned'] ? 'Ja' : 'Nein' )) : '').'
             </td>
             <td>
                 <b>Land:</b>
@@ -396,7 +414,7 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = fal
     {
         $retval .= '
             <a href="/bearbeiten/kronkorken/'.$capData['bottlecapID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32">Bearbeiten</button></a><br>
-            <a href="#"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #D60000">L&ouml;schen</button></a><br><br>
+            <a href="/entfernen/kronkorken/'.$capData['bottlecapID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #D60000">L&ouml;schen</button></a><br><br>
         ';
 
         $retval .= '

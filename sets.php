@@ -19,9 +19,10 @@
 
             echo '<h2>Sets aus '.$countryData['countryDE'].'</h2>';
 
+            $permissionCheck = CheckEditPermission();
             $setDataArray = MySQL::Cluster("SELECT * FROM sets INNER JOIN bottlecaps ON sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE countries.countryShort = ? GROUP BY bottlecaps.setID ORDER BY sets.setName ASC",'s',$country);
             echo '<center>';
-            foreach($setDataArray AS $setTile) echo SetTile($setTile['setID']);
+            foreach($setDataArray AS $setTile) echo SetTile($setTile['setID'],$permissionCheck);
             echo '</center>';
         }
     }
@@ -94,8 +95,9 @@
                             <td colspan=5>Set "'.$setData['setName'].'" von '.$setData['breweryName'].'</td>
                         </tr>
         ';
+        $permissionCheck = CheckEditPermission();
 
-        foreach($capDataArray AS $capData)  echo BottleCapRowData($capData, true, $countryHasRegions);
+        foreach($capDataArray AS $capData)  echo BottleCapRowData($capData, true, $countryHasRegions, $permissionCheck);
 
         echo '</table><div class="infoOverlays">';
 
