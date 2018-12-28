@@ -9,6 +9,7 @@ class Pager
 	private $pagerSize;
 	private $customURL;
 	private $offset;
+	private $pagerColorSet;
 
     /*
     ################################
@@ -50,6 +51,7 @@ class Pager
 		$this->SetPagerSize($_pagerSize);
         $this->SetCustomURL("");
         $this->offset = $this->SetOffset();
+        $this->pagerColorSet = 1;
 	}
 	
 	public static function init()
@@ -165,6 +167,12 @@ class Pager
         return ($currentPage-1) * $this->pagerSize;
     }
 
+    public function SetColorSet($colorSet)
+    {
+        $this->pagerColorSet = $colorSet;
+    }
+
+
 ##########################################################################################
 
 	public function SQLAuto($sqlStatement,$parameterTypes="", &...$sqlParameters)
@@ -198,7 +206,7 @@ class Pager
         $back = ($currentPage == 1) ? true : false;
         $next = ($currentPage >= $pages) ? true : false;
 
-        $retval .= '<div class="pager">';
+        $retval .= '<div class="pager"><div class="colorset'.$this->pagerColorSet.'">';
 
         $retval .= ($back) ? '<span title="Zur ersten Seite">&#10074;&#9664;</span>' : '<a href="'.$URLEx.'1"><span title="Zur ersten Seite">&#10074;&#9664;</span></a>' ;
         $retval .= ($back) ? '<span title="Zur vorherigen Seite">&#9664;</span>' : '<a href="'.$URLEx.($currentPage-1).'"><span title="Zur vorherigen Seite">&#9664;</span></a>' ;
@@ -295,7 +303,7 @@ class Pager
         $retval .= ($next) ? '<span title="Zur n&auml;chsten Seite">&#9654;</span>' : '<a href="'.$URLEx.($currentPage+1).'"><span title="Zur n&auml;chsten Seite">&#9654;</span></a>' ;
         $retval .= ($next) ? '<span title="Zur letzten Seite">&#9654;&#10074;</span>' : '<a href="'.$URLEx.$pages.'"><span title="Zur letzten Seite">&#9654;&#10074;</span></a>' ;
 
-        $retval .= '</div>';
+        $retval .= '</div></div>';
 
         $this->offset = $this->pagerSize * $currentPage;
 
@@ -317,7 +325,7 @@ class Pager
         $amt = func_num_args();
         $links = func_get_args();
 
-        $retval = '<div class="pager">';
+        $retval = '<div class="pager"><div class="colorset'.$this->pagerColorSet.'">';
 
         $retval .= '<a href="'.$links[0].'"><span title="Zur ersten Seite">&#9664;&#9664;</span></a>';
 
@@ -329,7 +337,7 @@ class Pager
 
         $retval .= '<a href="'.$links[$amt-1].'"><span title="Zur letzten Seite">&#9654;&#9654;</span></a>';
 
-        $retval .= '</div>';
+        $retval .= '</div></div>';
 
         return $retval;
 	}

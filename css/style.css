@@ -1219,6 +1219,9 @@ input[type="week"]:focus {
 .countryButton div {
   border-color: #DB0000; }
 
+.tradeCountryButton div {
+  border-color: #1E90FF; }
+
 .continentButton div {
   border-color: #FFA500; }
 
@@ -1269,17 +1272,34 @@ input[type="week"]:focus {
 .pager {
   font-size: 16pt;
   text-shadow: 1px 1px 2px #000000; }
-  .pager span {
+  .pager .colorset1 span {
     color: #696969;
     margin: 0 3px; }
-  .pager a span {
+  .pager .colorset1 a span {
     color: #32CD32;
     -webkit-transition: all 0.4s ease-in-out;
     -moz-transition: all 0.4s ease-in-out;
     -ms-transition: all 0.4s ease-in-out;
     -o-transition: all 0.4s ease-in-out;
     transition: all 0.4s ease-in-out; }
-  .pager a:hover span {
+  .pager .colorset1 a:hover span {
+    color: #FF4500;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out; }
+  .pager .colorset2 span {
+    color: #696969;
+    margin: 0 3px; }
+  .pager .colorset2 a span {
+    color: #42A1FF;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -ms-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out; }
+  .pager .colorset2 a:hover span {
     color: #FF4500;
     -webkit-transition: all 0.1s ease-in-out;
     -moz-transition: all 0.1s ease-in-out;

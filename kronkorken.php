@@ -1,13 +1,13 @@
 <?php
 	require("_header.php");
 
-
 //========================================================================================
 //========================================================================================
 //  START COUNTRY AND REGION SELECTION
 //========================================================================================
 //========================================================================================
-    if(!isset($_GET['collection']))
+
+if(!isset($_GET['collection']))
     {
         if(isset($_GET['region']))
         {
@@ -277,7 +277,7 @@
 
         echo '</table><div class="infoOverlays">';
 
-        foreach($capDataArray AS $capData) echo BottleCapRowInfoOverlay($capData);
+        foreach($capDataArray AS $capData) echo BottleCapRowInfoOverlay($capData,$permissionCheck);
 
         echo '</div></div><br>'.$sqlPager.'</center>';
 

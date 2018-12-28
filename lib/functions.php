@@ -1,6 +1,6 @@
 <?php
 
-function BottlecapSingleBox($bottlecapID)
+function BottlecapSingleBox($bottlecapID,$isEditMode = false)
 {
     $sqlStatement = "SELECT *,
     capColor.colorShort AS bottlecapCapColorShort,
@@ -81,9 +81,24 @@ function BottlecapSingleBox($bottlecapID)
                     <tr>
                         <td>Grundfarbe: </td>
                         <td>'.$row['bottlecapBaseColorName'].'</td>
+                        ';
 
-                        <td>Auf Lager:</td>
-                        <td>'.$row['stock'].' St&uuml;ck</td>
+                        if($isEditMode)
+                        {
+                            $retval .= '
+                                <td>Auf Lager:</td>
+                                <td>'.$row['stock'].' St&uuml;ck</td>
+                            ';
+                        }
+                        else
+                        {
+                            $retval .= '
+                                <td></td>
+                                <td></td>
+                            ';
+                        }
+
+                        $retval .= '
                     </tr>
                     <tr>
                         <td>Textfarbe: </td>
@@ -241,6 +256,68 @@ function CountryButton($ISOcode,$showBottlecapCount=false, $showSetCount=false,$
     return $retval;
 }
 
+function TradeCountryButton($ISOcode,$showBottlecapCount=false, $showSetCount=false,$linkToCollectionOrSubmenu = false)
+{
+    $link = '';
+
+    if($linkToCollectionOrSubmenu AND $showBottlecapCount)
+    {
+        $link = '/tauschen/kronkorken/'.$ISOcode;
+    }
+
+    if($linkToCollectionOrSubmenu AND $showSetCount)
+    {
+        $link = '/tauschen/sets/'.$ISOcode;
+    }
+
+    $retval = '
+        '.($linkToCollectionOrSubmenu ? ('<a href="'.$link.'">') : '').'
+            <div class="regionButtons tradeCountryButton">
+                <img src="/content/regionButtons/DE/trade/'.$ISOcode.'.png" alt="" />
+    ';
+
+    if($showBottlecapCount)
+    {
+        $retval .= '
+            <div style="width: 125px;">
+                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isCounted='1' AND countries.countryShort = ? AND isTradeable = '1'",'s',$ISOcode).' Tauschbar
+            </div>
+        ';
+    }
+
+    if($showSetCount)
+    {
+        $tradeSetCtr = 0;
+        $setCluster = MySQL::Cluster("SELECT * FROM sets INNER JOIN bottlecaps ON sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE countries.countryShort = ? GROUP BY sets.id",'s',$ISOcode);
+        foreach($setCluster AS $setData)
+        {
+            $allTradeable = true;
+
+            $capCluster = MySQL::Cluster("SELECT * FROM bottlecaps WHERE setID = ?",'s',$setData['setID']);
+            foreach($capCluster AS $capData)
+            {
+                if($capData['isTradeable'] != '1') $allTradeable = false;
+            }
+
+            if($allTradeable) $tradeSetCtr++;
+        }
+
+
+        $retval .= '
+            <div style="width: 165px;">
+                '.$tradeSetCtr.' Tauschbare(s) Set(s)
+            </div>
+        ';
+    }
+
+    $retval .= '
+            </div>
+        '.($linkToCollectionOrSubmenu ? '</a>' : '').'
+    ';
+
+    return $retval;
+}
+
 function RegionButton($ISOcode,$showBottlecapCount=false,$linkToCollection = false)
 {
     $link = '';
@@ -293,7 +370,7 @@ function BottlecapColorScheme($capColorCode,$baseColor,$textColor,$isUsed = fals
     return $retval;
 }
 
-function BreweryListTile($breweryID,$showRegional=false)
+function BreweryListTile($breweryID,$showRegional=false,$tradeableLink=false)
 {
     if($showRegional) $breweryData = MySQL::Row("SELECT *,breweries.id AS breweryID FROM breweries INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN regions ON breweries.regionID = regions.id WHERE breweries.id = ? ORDER BY breweries.breweryName ASC",'i',$breweryID);
     else $breweryData = MySQL::Row("SELECT *,breweries.id AS breweryID FROM breweries INNER JOIN countries ON breweries.countryID = countries.id  WHERE breweries.id = ? ORDER BY breweries.breweryName ASC",'i',$breweryID);
@@ -301,6 +378,8 @@ function BreweryListTile($breweryID,$showRegional=false)
     $bottleCapCount = MySQL::Count("SELECT * FROM bottlecaps WHERE isCounted = '1' AND isSet = '0' AND breweryID = ?",'i',$breweryData['breweryID']);
     $tradeableCount = MySQL::Count("SELECT * FROM bottlecaps WHERE isCounted = '1' AND isSet = '0' AND isTradeable = '1' AND breweryID = ?",'i',$breweryData['breweryID']);
 
+    if($tradeableLink) $link = '/tauschen/kronkorken/sammlung/'.$breweryData['countryShort'].'/brauerei/'.$breweryData['breweryFilepath'];
+    else $link = '/kronkorken/sammlung/'.$breweryData['countryShort'].'/brauerei/'.$breweryData['breweryFilepath'];
 
     $retval = '
         <tr>
@@ -317,7 +396,7 @@ function BreweryListTile($breweryID,$showRegional=false)
             <td>
                 '.(($breweryData['breweryLink']!='') ? '<a target="_blank" href="'.$breweryData['breweryLink'].'"><button type="button" class="cel_100"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
 
-                <a href="/kronkorken/sammlung/'.$breweryData['countryShort'].'/brauerei/'.$breweryData['breweryFilepath'].'"><button type="button" class="cel_100">Kronkorken dieser<br>Brauerei</button></a>
+                <a href="'.$link.'"><button type="button" class="cel_100">Kronkorken dieser<br>Brauerei</button></a>
             </td>
         </tr>
     ';
@@ -347,6 +426,7 @@ function SetTile($setID,$isEditMode = false)
                 if($isEditMode)
                 {
                     $retval .= '
+                        <a href="/bearbeiten/erweitern/'.$setData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32">KK hinzuf&uuml;gen</button></a><br>
                         <a href="/bearbeiten/set/'.$setData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32">Bearbeiten</button></a><br>
                         <a href="/entfernen/set/'.$setData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #D60000">L&ouml;schen</button></a><br><br>
                     ';
@@ -369,10 +449,18 @@ function SetTile($setID,$isEditMode = false)
     return $retval;
 }
 
-function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = false)
+function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = false, $isTradeDisplay = false)
 {
-    if($isSet) $imagePath = '/files/sets/'.$capData['countryShort'].'/'.$capData['setFilepath'].'/'.$capData['capImage'];
-    else $imagePath = '/files/bottlecaps/'.$capData['countryShort'].'/'.$capData['breweryFilepath'].'/'.$capData['capImage'];
+    if($isSet)
+    {
+        $imagePath = '/files/sets/'.$capData['countryShort'].'/'.$capData['setFilepath'].'/'.$capData['capImage'];
+        $capName = $capData['setName'].' - '.$capData['name'];
+    }
+    else
+    {
+        $imagePath = '/files/bottlecaps/'.$capData['countryShort'].'/'.$capData['breweryFilepath'].'/'.$capData['capImage'];
+        $capName = $capData['name'];
+    }
 
 
     $retval = '
@@ -393,10 +481,11 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = fal
                 <b>Brauerei:</b><br>
                 '.$capData['breweryName'].'<br><br>
                 <b>Name:</b><br>
-                '.$capData['name'].'<br><br>
+                '.$capName.'<br><br>
                 <b>Sorte:</b>
                 <br>'.$capData['flavorDE'].'
                 '.($isSet ? ('<br><br><b>In Sammlung: </b> '.($capData['isOwned'] ? 'Ja' : 'Nein' )) : '').'
+                '.($isTradeDisplay ? ('<br><br><b>Qualit&auml;t: </b> '.(($capData['quality'] != '') ? $capData['quality'] : '<span title="Keine Angaben">K.A.</span>')) : '').'
             </td>
             <td>
                 <b>Land:</b>
@@ -410,17 +499,26 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = fal
             <td>
     ';
 
+
+
     if($isEditMode)
     {
+        if($isSet) $retval .= '<a href="/optionen/vorschau/'.$capData['bottlecapID'].'/'.$capData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #1E90FF">F&uuml;r Vorschau verw.</button></a><br>';
+
         $retval .= '
             <a href="/bearbeiten/kronkorken/'.$capData['bottlecapID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32">Bearbeiten</button></a><br>
             <a href="/entfernen/kronkorken/'.$capData['bottlecapID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #D60000">L&ouml;schen</button></a><br><br>
         ';
 
         $retval .= '
-            '.(($capData['breweryLink']!='') ? '<a target="_blank" href="'.$capData['breweryLink'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px;"><i class="fas fa-home"></i> Zur Brauerei</button></a><br>' : '').'
-            <a href="#zusatzinfos'.$capData['bottlecapID'].'"><button type="button" onclick="bgenScroll();" class="cel_100 cel_h25" style="margin-bottom: 5px;"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
+            '.(($capData['breweryLink']!='') ? '<a target="_blank" href="'.$capData['breweryLink'].'"><button type="button" style="margin-bottom: 5px;" class="cel_100 cel_h25"><i class="fas fa-home"></i> Zur Brauerei</button></a>' : '').'
+            <a href="#zusatzinfos'.$capData['bottlecapID'].'"><button type="button" onclick="bgenScroll();" class="cel_100 cel_h25"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
         ';
+
+        if($isTradeDisplay)
+        {
+            $retval .= '<br><br><a href="#"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32"><i class="fas fa-shopping-cart"></i> Zum Warenkorb</button></a>';
+        }
     }
     else
     {
@@ -428,6 +526,11 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = fal
             '.(($capData['breweryLink']!='') ? '<a target="_blank" href="'.$capData['breweryLink'].'"><button type="button" class="cel_100"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
             <a href="#zusatzinfos'.$capData['bottlecapID'].'"><button type="button" onclick="bgenScroll();" class="cel_100"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
         ';
+
+        if($isTradeDisplay)
+        {
+            $retval .= '<br><br><a href="#"><button type="button" class="cel_100" style="margin-bottom: 5px; background: #32CD32"><i class="fas fa-shopping-cart"></i> Zum Warenkorb</button></a>';
+        }
     }
 
     $retval .= '
@@ -438,7 +541,7 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = fal
     return $retval;
 }
 
-function BottleCapRowInfoOverlay($capData)
+function BottleCapRowInfoOverlay($capData,$isEditMode = false)
 {
 
 
@@ -452,14 +555,30 @@ function BottleCapRowInfoOverlay($capData)
                         <td>'.$capData['bottlecapCapColorName'].'</td>
 
                         <td>Qualit&auml;t: </td>
-                        <td>'.$capData['quality'].'</td>
+                        <td>'.($capData['quality'] == "" ? '<span style="color: #696969">Nicht angegeben</span>' : $capData['quality']).'</td>
                     </tr>
                     <tr>
                         <td>Grundfarbe: </td>
                         <td>'.$capData['bottlecapBaseColorName'].'</td>
+                    ';
 
-                        <td>Auf Lager:</td>
-                        <td>'.$capData['stock'].' St&uuml;ck</td>
+                    if($isEditMode)
+                    {
+                        $retval .= '
+                            <td>Auf Lager:</td>
+                            <td>'.$capData['stock'].' St&uuml;ck</td>
+                        ';
+                    }
+                    else
+                    {
+                        $retval .= '
+                            <td></td>
+                            <td></td>
+                        ';
+                    }
+
+                    $retval .= '
+
                     </tr>
                     <tr>
                         <td>Textfarbe: </td>

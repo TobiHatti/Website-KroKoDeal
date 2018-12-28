@@ -31,9 +31,31 @@ RewriteRule ^sets/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$/?$ sets.php?country=$1&set=
 
 RewriteRule ^eintragen/([a-zA-Z0-9-]+)/?$ eintragen.php?section=$1 [NC,QSA,L]
 
+RewriteRule ^bearbeiten/erweitern/([a-zA-Z0-9-]+)/?$ eintragen.php?section=kronkorken&objID=$1&expand [NC,QSA,L]
 RewriteRule ^bearbeiten/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$/?$ eintragen.php?section=$1&objID=$2&edit [NC,QSA,L]
 
+RewriteRule ^optionen/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$/?$/?$ optionen.php?option=$1&objID1=$2&objID2=$3 [NC,QSA,L]
+
 RewriteRule ^entfernen/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$/?$ entfernen.php?section=$1&selectionID=$2 [NC,QSA,L]
+
+
+
+RewriteRule ^tauschen/([a-zA-Z0-9-]+)/?$ tauschen.php?section=$1 [NC,QSA,L]
+#RewriteRule ^tauschen/kronkorken/([a-zA-Z0-9-]+)/?$ tauschenKronkorken.php?country=$1 [NC,QSA,L]
+
+RewriteRule ^tauschen/kronkorken/alle/([a-zA-Z0-9-]+)/?$ tauschenKronkorken.php?all&collection&letter=$1 [NC,QSA,L]
+RewriteRule ^tauschen/kronkorken/alle kronkorken.php?all&collection [NC,QSA,L]
+
+RewriteRule ^tauschen/kronkorken/([a-zA-Z0-9-]+)/?$ tauschenKronkorken.php?country=$1 [NC,QSA,L]
+RewriteRule ^tauschen/kronkorken/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$/?$ tauschenKronkorken.php?country=$1&region=$2 [NC,QSA,L]
+
+RewriteRule ^tauschen/kronkorken/sammlung/([a-zA-Z0-9-]+)/sortiert/([a-zA-Z0-9-]+)/?$/?$ tauschenKronkorken.php?country=$1&letter=$2&sortbyletter&collection [NC,QSA,L]
+RewriteRule ^tauschen/kronkorken/sammlung/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/sortiert/([a-zA-Z0-9-]+)/?$/?$/?$ tauschenKronkorken.php?country=$1&region=$2&letter=$3&sortbyletter&collection [NC,QSA,L]
+RewriteRule ^tauschen/kronkorken/sammlung/([a-zA-Z0-9-]+)/brauerei/([a-zA-Z0-9-]+)/?$/?$ tauschenKronkorken.php?country=$1&brewery=$2&sortbybrewery&collection [NC,QSA,L]
+RewriteRule ^tauschen/kronkorken/sammlung/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/brauerei/([a-zA-Z0-9-]+)/?$/?$/?$ tauschenKronkorken.php?country=$1&region=$2&brewery=$3sortbybrewery&collection [NC,QSA,L]
+
+
+RewriteRule ^tauschen/sets/([a-zA-Z0-9-]+)/?$ tauschenSets.php?country=$1 [NC,QSA,L]
 
 #Ignore .php-Extension
 RewriteRule ^([^\.]+)$ $1.php [NC,L]

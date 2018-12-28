@@ -16,8 +16,8 @@
             </head>
             <body id="mainBody">
                 <header>
-                    <div class="signInButtonContainer">
-                        '.((isset($_SESSION['userID'])) ? ('Angemeldet als '.$_SESSION['userUsername'].' - <a href="/sign-out">Abmelden</a>') : ('<a href="/sign-in">Anmelden</a>|<a href="/sign-up">Registrieren</a>')).'
+                    <div style="text-align: right;" class="signInButtonContainer">
+                        '.((isset($_SESSION['userID'])) ? ('Angemeldet als '.$_SESSION['userUsername'].' - <a href="/sign-out">Abmelden</a><br><br><a href="/einkaufswagen"><i class="fas fa-shopping-cart"></i> Einkaufswagen</a>') : ('<a href="/sign-in">Anmelden</a>|<a href="/sign-up">Registrieren</a>')).'
                     </div>
                 </header>
                 <nav>
@@ -34,9 +34,9 @@
                             </li>
                             <li><a class="hsubs" href="#">Tauschen</a>
                                 <ul class="subs">
-                                    <li><a href="#">Wie wird getauscht</a></li>
-                                    <li><a href="#">Kronkorken Tauschen</a></li>
-                                    <li><a href="#">Sets Tauschen</a></li>
+                                    <li><a href="/tauschen/hilfe">Wie wird getauscht</a></li>
+                                    <li><a href="/tauschen/laender">Kronkorken Tauschen</a></li>
+                                    <li><a href="/tauschen/sets">Sets Tauschen</a></li>
                                 </ul>
                             </li>
                             <li><a class="hsubs" href="#">Mehr</a>

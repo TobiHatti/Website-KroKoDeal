@@ -7,26 +7,26 @@
 //########################################################################################
 //########################################################################################
 
-    if(isset($_POST['addBottlecap']) OR isset($_POST['editBottlecap']))
+    if(isset($_POST['addBottlecap']) OR isset($_POST['editBottlecap']) OR isset($_POST['expandSet']))
     {
-        $breweryID = $_POST['breweryID'];
+        $breweryID = isset($_POST['breweryID']) ? $_POST['breweryID'] : '';
         $name = $_POST['name'];
-        $flavorID = $_POST['flavorID'];
+        $flavorID = isset($_POST['flavorID']) ? $_POST['flavorID'] : '';
         $capNumber = $_POST['capNumber'];
 
         $locationAquired = $_POST['locationAquired'];
         $dateAquired = $_POST['dateAquired'];
         $quality = $_POST['quality'];
-        $isTraded = isset($_POST['isTraded']) ? 1 : 0;
-        $isTradeable = isset($_POST['isTradeable']) ? 1 : 0;
-        $alcohol = ($_POST['alcohol']=="") ? null : $_POST['alcohol'];
+        $isTraded = $_POST['isTraded'];
+        $isTradeable = $_POST['isTradeable'];
+        $alcohol = isset($_POST['alcohol']) ? (($_POST['alcohol']=="") ? null : $_POST['alcohol']) : '';
         $stock = ($_POST['stock']=="") ? 0 : $_POST['stock'];
 
         $capColorID = explode('-',$_POST['capColorID'])[0];
         $baseColorID = explode('-',$_POST['baseColorID'])[0];
         $textColorID = explode('-',$_POST['textColorID'])[0];
-        $isUsed = isset($_POST['isUsed']) ? 1 : 0;
-        $isTwistLock = isset($_POST['isTwistLock']) ? 1 : 0;
+        $isUsed = $_POST['isUsed'];
+        $isTwistLock = $_POST['isTwistLock'];
         $isCounted = isset($_POST['isCounted']) ? 1 : 0;
 
         $isOwned = isset($_POST['isOwned']) ? 1 : 0;
@@ -59,6 +59,39 @@
             $fileUploader->SetSQLEntry("UPDATE bottlecaps SET capImage = '@FILENAME' WHERE id = '$capID'");
         }
 
+        if(isset($_POST['expandSet']))
+        {
+            $setData = MySQL::Row("SELECT * FROM sets INNER JOIN bottlecaps ON sets.id = bottlecaps.setID WHERE sets.id = ?",'s',$_POST['expandSet']);
+
+            $setID = $setData['setID'];
+
+            $breweryID = $setData['breweryID'];
+            $flavorID = $setData['flavorID'];
+            $isSetsAndCollection = $setData['isSetsAndCollection'];
+
+            $countryID = MySQL::Scalar("SELECT countryID FROM breweries WHERE id = ?",'s',$breweryID);
+            $countryShort = MySQL::Scalar("SELECT countryShort FROM countries WHERE id = ?",'s',$countryID);
+
+            $setFilepath = $setData['setFilepath'];
+
+            $sqlStatement = "
+            INSERT INTO bottlecaps
+            (id, name, capNumber, flavorID, breweryID, sidesignID, baseColorID, capColorID, textColorID, isTraded, isUsed, isTwistlock, isTradeable, isCounted, isOwned, isSetsAndCollection, locationAquired, dateAquired, dateInserted, quality, stock,isSet,setID)
+            VALUES
+            (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '1',?);";
+
+            MySQL::NonQuery($sqlStatement,'@s',$name,$capNumber,$flavorID,$breweryID,$sidesignID,$baseColorID,$capColorID,$textColorID,$isTraded,$isUsed,$isTwistLock,$isTradeable,$isOwned,$isOwned,$isSetsAndCollection,$locationAquired,$dateAquired,$dateInserted,$quality,$stock,$setID);
+
+            $capID = MySQL::Scalar("SELECT id FROM bottlecaps ORDER BY id DESC");
+
+            $fileUploader->SetPath("files/sets/$countryShort/$setFilepath/");
+            $fileUploader->SetSQLEntry("UPDATE bottlecaps SET capImage = '@FILENAME' WHERE id = '$capID'");
+
+            $setSize = MySQL::Scalar("SELECT setSize FROM sets WHERE id = ?",'s',$setID);
+            $setSize += 1;
+            MySQL::NonQuery("UPDATE sets SET setSize = ? WHERE id = ?",'ss',$setSize,$setID);
+        }
+
         if(isset($_POST['editBottlecap']))
         {
             $capEditData = MySQL::Row("SELECT * FROM bottlecaps WHERE id = ?",'s',$_POST['editBottlecap']);
@@ -67,13 +100,14 @@
             {
                 // includes IsSetsAndCollection and isOwned (isOwned = isCounted)
                 $setFilepath = MySQL::Scalar("SELECT setFilepath FROM sets WHERE id = ?",'s',$capEditData['setID']);
+                $breweryID = MySQL::Scalar("SELECT breweryID FROM bottlecaps WHERE setID = ?",'s',$capEditData['setID']);
+                $countryID = MySQL::Scalar("SELECT countryID FROM breweries WHERE id = ?",'s',$breweryID);
+                $countryShort = MySQL::Scalar("SELECT countryShort FROM countries WHERE id = ?",'s',$countryID);
 
                 $sqlStatement = "
                     UPDATE bottlecaps SET
                     name = ?,
                     capNumber = ?,
-                    flavorID = ?,
-                    breweryID = ?,
                     sidesignID = ?,
                     baseColorID = ?,
                     capColorID = ?,
@@ -87,12 +121,11 @@
                     locationAquired = ?,
                     dateAquired = ?,
                     quality = ?,
-                    alcohol = ?,
                     stock = ?
                     WHERE id = ?
                 ";
 
-                MySQL::NonQuery($sqlStatement,'@s',$name,$capNumber,$flavorID,$breweryID,$sidesignID,$baseColorID,$capColorID,$textColorID,$isTraded,$isUsed,$isTwistLock,$isTradeable,$isOwned,$isOwned,$locationAquired,$dateAquired,$quality,$alcohol,$stock,$_POST['editBottlecap']);
+                MySQL::NonQuery($sqlStatement,'@s',$name,$capNumber,$sidesignID,$baseColorID,$capColorID,$textColorID,$isTraded,$isUsed,$isTwistLock,$isTradeable,$isOwned,$isOwned,$locationAquired,$dateAquired,$quality,$stock,$_POST['editBottlecap']);
 
                 $fileUploader->SetPath("files/sets/$countryShort/$setFilepath/");
                 $fileUploader->SetSQLEntry("UPDATE bottlecaps SET capImage = '@FILENAME' WHERE id = '".$_POST['editBottlecap']."'");
@@ -212,15 +245,15 @@
         $locationAquired = $_POST['locationAquired'];
         $dateAquired = $_POST['dateAquired'];
         $quality = $_POST['quality'];
-        $isTraded = isset($_POST['isTraded']) ? 1 : 0;
-        $isTradeable = isset($_POST['isTradeable']) ? 1 : 0;
+        $isTraded = $_POST['isTraded'];
+        $isTradeable = $_POST['isTradeable'];
         $alcohol = ($_POST['alcohol']=="") ? null : $_POST['alcohol'];
 
         $capColorID = explode('-',$_POST['capColorID'])[0];
         $baseColorID = explode('-',$_POST['baseColorID'])[0];
         $textColorID = explode('-',$_POST['textColorID'])[0];
-        $isUsed = isset($_POST['isUsed']) ? 1 : 0;
-        $isTwistLock = isset($_POST['isTwistLock']) ? 1 : 0;
+        $isUsed = $_POST['isUsed'];
+        $isTwistLock = $_POST['isTwistLock'];
 
         $isSetsAndCollection = isset($_POST['showInCollection']) ? 1 : 0;
 
@@ -268,22 +301,20 @@
         (id, name, capNumber, flavorID, breweryID, sidesignID, baseColorID, capColorID, textColorID, setID, isSet, isTraded, isUsed, isTwistlock, isTradeable, isCounted, isSetsAndCollection, isOwned, locationAquired, dateAquired, dateInserted, quality, alcohol, stock, capImage)
         VALUES ";
 
-
-
         $breweryID = $capData['breweryID'];
         $flavorID = $capData['flavorID'];
 
         $locationAquired = $capData['locationAquired'];
         $dateAquired = $capData['dateAquired'];
         $quality = $capData['quality'];
-        $isTraded = isset($capData['isTraded']) ? 1 : 0;
-        $isTradeable = isset($capData['isTradeable']) ? 1 : 0;
+        $isTraded = $capData['isTraded'];
+        $isTradeable = $capData['isTradeable'];
         $alcohol = ($capData['alcohol']=="") ? null : $capData['alcohol'];
 
-        $isUsed = isset($capData['isUsed']) ? 1 : 0;
-        $isTwistLock = isset($capData['isTwistLock']) ? 1 : 0;
+        $isUsed = $capData['isUsed'];
+        $isTwistLock = $capData['isTwistLock'];
 
-        $isSetsAndCollection = isset($capData['isSetsAndCollection']) ? 1 : 0;
+        $isSetsAndCollection = $capData['isSetsAndCollection'];
 
         $sidesignID = $capData['sidesignID'];
         $dateInserted = date("Y-m-d");
@@ -315,11 +346,11 @@
             else $sqlStatement .= ",(NULL,'$capName','$capNumber','$flavorID','$breweryID','$sidesignID','$baseColorID','$capColorID','$textColorID','$setID','1','$isTraded','$isUsed','$isTwistLock','$isTradeable','$isOwned','$isSetsAndCollection','$isOwned','$locationAquired','$dateAquired','$dateInserted','$quality',".($alcohol == null ? "NULL" : "'$alcohol'").",'$stock','$capImage')";
         }
 
-
+        MySQL::NonQuery($sqlStatement);
 
         // Add thumbnail to set
         $thumbnail = MySQL::Scalar("SELECT id FROM bottlecaps WHERE setID = ?",'s',$setID);
-        MySQL::NonQuery("UPDATE sets SET thumbnailID = ? WHERE id = ?",'s',$thumbnail,$setID);
+        MySQL::NonQuery("UPDATE sets SET thumbnailID = ? WHERE id = ?",'ss',$thumbnail,$setID);
 
         Page::Redirect('/sets/'.$countryData['countryShort'].'/'.$setData['setFilepath']);
         die();
@@ -333,7 +364,7 @@
         $name = $_POST['setName'];
         $flavorID = $_POST['flavorID'];
         $capNumberBase = $_POST['capNumberBase'];
-        $showInCollection = isset($_POST['showInCollection']) ? 1 : 0;      
+        $showInCollection = isset($_POST['showInCollection']) ? 1 : 0;
         $alcohol = ($_POST['alcohol']=="") ? null : $_POST['alcohol'];
 
         MySQL::NonQuery("UPDATE sets SET setName = ? WHERE id = ?",'ss',$name,$setID);
@@ -347,6 +378,32 @@
             $newCapNumber = $capNumberBase.'_'.$capExtension;
 
             MySQL::NonQuery("UPDATE bottlecaps SET capNumber = ?, breweryID = ?, flavorID = ?, alcohol = ?, isSetsAndCollection = ?  WHERE id = ?",'@s',$newCapNumber,$breweryID,$flavorID,$alcohol,$showInCollection,$setCap['id']);
+        }
+
+        Page::Redirect(Page::This());
+        die();
+    }
+
+    if(isset($_POST['editSetDetails']))
+    {
+        $setID = $_POST['editSetDetails'];
+
+        $capColorID = $_POST['capColorID'];
+        $baseColorID = $_POST['baseColorID'];
+        $textColorID = $_POST['textColorID'];
+        $locationAquired = $_POST['locationAquired'];
+        $dateAquired = $_POST['dateAquired'];
+        $quality = $_POST['quality'];
+        $isTraded = $_POST['isTraded'];
+        $isTradeable = $_POST['isTradeable'];
+        $isUsed = $_POST['isUsed'];
+        $isTwistLock = $_POST['isTwistLock'];
+
+        $setCaps = MySQL::Cluster("SELECT * FROM bottlecaps WHERE setID = ?",'s',$setID);
+
+        foreach($setCaps AS $setCap)
+        {
+            MySQL::NonQuery("UPDATE bottlecaps SET capColorID = ?, baseColorID = ?, textColorID = ?, locationAquired = ?, dateAquired = ?, quality = ?, isTraded = ?, isTradeable = ?, isUsed = ?, isTwistlock = ? WHERE id = ?",'@s',$capColorID,$baseColorID,$textColorID,$locationAquired,$dateAquired,$quality,$isTraded,$isTradeable,$isUsed,$isTwistLock,$setCap['id']);
         }
 
         Page::Redirect(Page::This());
@@ -378,7 +435,15 @@
             }
             else $edit = false;
 
+            if(isset($_GET['expand']))
+            {
+                $isSetPart = true;
+                $expand = true;
+            }
+            else $expand = false;
+
             if($edit) echo '<h2>Kronkorken bearbeiten</h2>';
+            else if($expand) echo '<h2>Set erweitern</h2>';
             else echo '<h2>Kronkorken hinzuf&uuml;gen</h2>';
 
 
@@ -408,6 +473,11 @@
                 else $capDataImage = '/files/bottlecaps/'.$capData['countryShort'].'/'.$capData['breweryFilepath'].'/'.$capData['capImage'];
             }
 
+            if($expand)
+            {
+                $setData = MySQL::Row("SELECT * FROM sets INNER JOIN bottlecaps ON sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE sets.id = ?",'s',$_GET['objID']);
+            }
+
             echo '
                 <center>
                     <form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">
@@ -428,7 +498,7 @@
                                     <select '.($isSetPart ? 'disabled' : '').' name="countryID" class="cel_100 cef_nomg cef_nopd" id="countryList" onchange="DynLoadList(1,this,\'--- Ausw\u00e4hlen ---\',\'breweryList\',\'SELECT breweryName AS dynLoadText, id AS dynLoadValue FROM breweries WHERE countryID = ?? ORDER BY breweryName ASC\'); DynLoadScalar(2,this,\'outCountryShort\',\'SELECT countryShort2 FROM countries WHERE id = ??\')">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($countryList AS $country) echo '<option value="'.$country['countryID'].'" '.(($edit AND $country['countryID'] == $capData['countryID']) ? 'selected' : '').'>'.$country['countryDE'].'</option>';
+                                        foreach($countryList AS $country) echo '<option value="'.$country['countryID'].'" '.(($expand AND $country['countryID'] == $setData['countryID']) ? 'selected' : '').'  '.(($edit AND $country['countryID'] == $capData['countryID']) ? 'selected' : '').'>'.$country['countryDE'].'</option>';
                                         echo '
                                     </select>
                                 </td>
@@ -460,6 +530,7 @@
                                     onchange="DynLoadScalar(3,this,\'outBreweryShort\',\'SELECT breweryShort FROM breweries WHERE id = ??\'); CopyShortsToCapNumber(false);"
                                     onclick="DynLoadScalar(3,this,\'outBreweryShort\',\'SELECT breweryShort FROM breweries WHERE id = ??\'); CopyShortsToCapNumber(false)">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
+                                        '.($expand ? ('<option value="'.$setData['breweryID'].'" selected>'.$setData['breweryName'].'</option>') : '').'
                                         '.($edit ? ('<option value="'.$capData['breweryID'].'" selected>'.$capData['breweryName'].'</option>') : '').'
                                     </select>
                                 </td>
@@ -487,7 +558,7 @@
 
                             <tr>
                                 <td>Kapsel-Nr.'.($edit ? ('<br><sub><span style="color: #696969">Original: '.$capData['capNumber'].'</span></sub>') : '').'</td>
-                                <td><input class="cel_m" type="text" name="capNumber" id="capNumber" placeholder="XX_XX_XXXX" value="'.($edit ? $capData['capNumber'] : '').'" required onclick="CopyShortsToCapNumber(true)"/></td>
+                                <td><input class="cel_m" type="text" name="capNumber" id="capNumber" placeholder="XX_XX_XXXX" value="'.($edit ? $capData['capNumber'] : '').($expand ? (substr($setData['capNumber'],0,strrpos($setData['capNumber'],'_')).'_') : '').'" required onclick="CopyShortsToCapNumber(true)"/></td>
                                 <td>'.Tickbox("saveCapNumber","saveCapNumber","",true).'</td>
                             </tr>
 
@@ -625,6 +696,14 @@
                                         <td>'.Tickbox("saveIsCounted","saveIsCounted","",true).'</td>
                                     ';
                                 }
+                                else if($expand)
+                                {
+                                    echo '
+                                        <td>In Besitz</td>
+                                        <td>'.Tickbox("isOwned","isOwned","",true).'</td>
+                                        <td>'.Tickbox("saveIsCounted","saveIsCounted","",true).'</td>
+                                    ';
+                                }
                                 else
                                 {
                                     echo '
@@ -643,6 +722,7 @@
                                     ';
 
                                     if($edit) echo '<button type="submit" name="editBottlecap" value="'.$capData['bottlecapID'].'">Kronkorken aktualisieren</button>';
+                                    else if($expand) echo '<button type="submit" name="expandSet" value="'.$setData['setID'].'">Kronkorken zu Set hinzuf&uuml;gen</button>';
                                     else echo '<button type="submit" name="addBottlecap">Kronkorken hinzuf&uuml;gen</button>';
 
                                     echo '
@@ -1164,7 +1244,7 @@
                                 <tr>
                                     <td colspan=2>
                                         <br>
-                                        <button type="submit" name="editSetGeneral" value="'.$_GET['objID'].'">Set-Daten aktualisieren</button>
+                                        <button type="submit" name="editSetDetails" value="'.$_GET['objID'].'">Set-Daten aktualisieren</button>
                                     </td>
                                 </tr>
                             </table>
@@ -1205,7 +1285,7 @@
             for($i = 0 ; $i < $setData['setSize'] ; $i++)
             {
                 echo '
-                    <input type="hidden" name="capImage'.$i.'" id="capImage'.$i.'"/>
+                    <input type="" name="capImage'.$i.'" id="capImage'.$i.'" hidden/>
                     <table class="addSet2Table">
                         <tr>
                             <td>
@@ -1215,7 +1295,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <input type="text" name="capNumber'.$i.'" class="cel_100" placeholder="Kapsel-Nummer..." value="'.$capData['capNumberBase'].'"/>
+                                <input type="text" name="capNumber'.$i.'" class="cel_100" placeholder="Kapsel-Nummer..." value="'.$capData['capNumberBase'].'_"/>
                             </td>
                         </tr>
                         <tr>

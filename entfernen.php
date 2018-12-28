@@ -5,20 +5,27 @@
     {
         if(isset($_POST['delete']))
         {
-            $tableCode = $_GET['section'];
-
-            if($_GET['section']=='kronkorken')
-
-            switch($_GET['section'])
-            {
-                case 'kronkorken': $table = 'bottlecaps'; break;
-
-                default: $table = 'NOTABLESELECTED'; break;
-            }
-
             $id = $_GET['selectionID'];
 
-            MySQL::NonQuery("DELETE FROM $table WHERE id = ?",'@s',$id);
+            if($_GET['section']=='kronkorken')
+            {
+                if(MySQL::Scalar("SELECT isSet FROM bottlecaps WHERE id = ?",'s',$id))
+                {
+                    $setID = MySQL::Scalar("SELECT setID FROM bottlecaps WHERE id = ?",'s',$id);
+                    $setSize = MySQL::Scalar("SELECT setSize FROM sets WHERE id = ?",'s',$setID);
+                    $setSize -= 1;
+                    MySQL::NonQuery("UPDATE sets SET setSize = ? WHERE id = ?",'ss',$setSize,$setID);
+                }
+
+                MySQL::NonQuery("DELETE FROM bottlecaps WHERE id = ?",'s',$id);
+            }
+
+            if($_GET['section']=='set')
+            {
+                MySQL::NonQuery("DELETE FROM bottlecaps WHERE setID = ?",'s',$id);
+                MySQL::NonQuery("DELETE FROM sets WHERE id = ?",'s',$id);
+            }
+
             echo '
                 <script>
                     window.history.back();
