@@ -404,11 +404,17 @@ function BreweryListTile($breweryID,$showRegional=false,$tradeableLink=false)
     return $retval;
 }
 
-function SetTile($setID,$isEditMode = false)
+function SetTile($setID,$isEditMode = false,$tradeableLink=false)
 {
     $setData = MySQL::Row("SELECT * FROM sets INNER JOIN bottlecaps ON sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE sets.id = ?",'i',$setID);
 
-    $setThumbnail = MySQL::Scalar("SELECT capImage FROM bottlecaps WHERE id = ?",'i',$setData['thumbnailID']);
+
+
+    if($tradeableLink AND $setData['thumbnailTradeID'] != 0)
+    {
+        $setThumbnail = MySQL::Scalar("SELECT capImageTrade FROM bottlecaps WHERE id = ?",'i',$setData['thumbnailTradeID']);
+    }
+    else $setThumbnail = MySQL::Scalar("SELECT capImage FROM bottlecaps WHERE id = ?",'i',$setData['thumbnailID']);
 
     $retval = '
         <table class="setTileTable">
@@ -425,17 +431,24 @@ function SetTile($setID,$isEditMode = false)
 
                 if($isEditMode)
                 {
-                    $retval .= '
-                        <a href="/bearbeiten/erweitern/'.$setData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32">KK hinzuf&uuml;gen</button></a><br>
-                        <a href="/bearbeiten/set/'.$setData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32">Bearbeiten</button></a><br>
-                        <a href="/entfernen/set/'.$setData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #D60000">L&ouml;schen</button></a><br><br>
-                    ';
+                    $retval .= '<a href="'.($tradeableLink ? '/tauschen' : '').'/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'"><button type="button" class="cel_100">Set betrachten</button></a>';
 
-                    $retval .= '<a href="/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'"><button type="button" class="cel_100">Set betrachten</button></a>';
+                    if($tradeableLink) $retval .= '<br><br><a href="/_iframe_addCapToCart?objID='.$setData['setID'].'&isSet=1" target="cartAddFrame"><button type="button" class="cel_100" style="margin-bottom: 5px; background: #32CD32"><i class="fas fa-shopping-cart"></i> Zum Tausch-Korb</button></a>';
+
+                    else
+                    {
+                        $retval .= '
+                            <a href="/bearbeiten/erweitern/'.$setData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32">KK hinzuf&uuml;gen</button></a><br>
+                            <a href="/bearbeiten/set/'.$setData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32">Bearbeiten</button></a><br>
+                            <a href="/entfernen/set/'.$setData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #D60000">L&ouml;schen</button></a><br><br>
+                        ';
+                    }
                 }
                 else
                 {
-                    $retval .= '<a href="/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'"><button type="button" class="cel_100">Set betrachten</button></a>';
+                    $retval .= '<a href="'.($tradeableLink ? '/tauschen' : '').'/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'"><button type="button" class="cel_100">Set betrachten</button></a>';
+
+                    if($tradeableLink) $retval .= '<br><br><a href="/_iframe_addCapToCart?objID='.$setData['setID'].'&isSet=1" target="cartAddFrame"><button type="button" class="cel_100" style="margin-bottom: 5px; background: #32CD32"><i class="fas fa-shopping-cart"></i> Zum Tausch-Korb</button></a>';
                 }
 
                 echo '
@@ -451,15 +464,34 @@ function SetTile($setID,$isEditMode = false)
 
 function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = false, $isTradeDisplay = false)
 {
+    $setName = '';
     if($isSet)
     {
         $imagePath = '/files/sets/'.$capData['countryShort'].'/'.$capData['setFilepath'].'/'.$capData['capImage'];
         $capName = $capData['setName'].' - '.$capData['name'];
+        $setName = $capData['setName'];
+
+        if($isTradeDisplay AND $capData['capImageTrade'] != "")  $imagePath = '/files/sets/'.$capData['countryShort'].'/'.$capData['setFilepath'].'/'.$capData['capImageTrade'];
     }
     else
     {
-        $imagePath = '/files/bottlecaps/'.$capData['countryShort'].'/'.$capData['breweryFilepath'].'/'.$capData['capImage'];
-        $capName = $capData['name'];
+        if($capData['isSet'])
+        {
+            $setData = MySQL::Row("SELECT * FROM sets WHERE id = ?",'s',$capData['setID']);
+
+            $imagePath = '/files/sets/'.$capData['countryShort'].'/'.$setData['setFilepath'].'/'.$capData['capImage'];
+            $capName = $setData['setName'].' - '.$capData['name'];
+            $setName = $setData['setName'];
+
+            if($isTradeDisplay AND $capData['capImageTrade'] != "") $imagePath = '/files/sets/'.$capData['countryShort'].'/'.$setData['setFilepath'].'/'.$capData['capImageTrade'];
+        }
+        else
+        {
+            $imagePath = '/files/bottlecaps/'.$capData['countryShort'].'/'.$capData['breweryFilepath'].'/'.$capData['capImage'];
+            $capName = $capData['name'];
+
+            if($isTradeDisplay AND $capData['capImageTrade'] != "") $imagePath = '/files/bottlecaps/'.$capData['countryShort'].'/'.$capData['breweryFilepath'].'/'.$capData['capImageTrade'];
+        }
     }
 
 
@@ -503,33 +535,86 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = fal
 
     if($isEditMode)
     {
-        if($isSet) $retval .= '<a href="/optionen/vorschau/'.$capData['bottlecapID'].'/'.$capData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #1E90FF">F&uuml;r Vorschau verw.</button></a><br>';
+        if($isSet) $retval .= '<a href="/optionen/'.($isTradeDisplay ? 'tausch' : '').'vorschau/'.$capData['bottlecapID'].'/'.$capData['setID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #1E90FF">F&uuml;r Vorschau verw.</button></a><br>';
 
-        $retval .= '
-            <a href="/bearbeiten/kronkorken/'.$capData['bottlecapID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32">Bearbeiten</button></a><br>
-            <a href="/entfernen/kronkorken/'.$capData['bottlecapID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #D60000">L&ouml;schen</button></a><br><br>
-        ';
+        $retval .= '<a href="/bearbeiten/'.($isTradeDisplay ? 'tausch' : '').'kronkorken/'.$capData['bottlecapID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32">Bearbeiten</button></a><br>';
+
+        if(!$isTradeDisplay) $retval .= '<a href="/entfernen/kronkorken/'.$capData['bottlecapID'].'"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #D60000">L&ouml;schen</button></a><br><br>';
 
         $retval .= '
             '.(($capData['breweryLink']!='') ? '<a target="_blank" href="'.$capData['breweryLink'].'"><button type="button" style="margin-bottom: 5px;" class="cel_100 cel_h25"><i class="fas fa-home"></i> Zur Brauerei</button></a>' : '').'
-            <a href="#zusatzinfos'.$capData['bottlecapID'].'"><button type="button" onclick="bgenScroll();" class="cel_100 cel_h25"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
+            <a href="#zusatzinfos'.$capData['bottlecapID'].'" class="quickInfoButton">
+                <button type="button" onclick="bgenScroll();" class="cel_100 cel_h25"><i class="fas fa-info-circle"></i> Zusatzinfos</button>
+                <div>
+                    <span>
+                        <b>Kapsel-Nummer:</b>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$capData['capNumber'].'
+                    </span>
+                    <br>
+
+                    <p>
+                        <b>Set-Teil:</b>
+                        '.($capData['isSet'] ? 'Ja <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<i>'.$setName.'</i>)' : 'Nein').'
+                    </p>
+
+                    <p>
+                        <b>Zustand: </b>
+                        '.($capData['isUsed'] ? 'Gebraucht' : 'Neu').'
+                    </p>
+                    <p>
+                        <b>Drehverschluss: </b>
+                        '.($capData['isTwistlock'] ? 'Ja' : 'Nein').'
+                        <br>
+                        <em>
+                            F&uuml;r mehr Infos klicken
+                        </em>
+                    </p>
+                </div>
+            </a>
         ';
 
         if($isTradeDisplay)
         {
-            $retval .= '<br><br><a href="#"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32"><i class="fas fa-shopping-cart"></i> Zum Warenkorb</button></a>';
+            $retval .= '<br><br><a href="/_iframe_addCapToCart?objID='.$capData['bottlecapID'].'&isSet=0" target="cartAddFrame"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32"><i class="fas fa-shopping-cart"></i> Zum Tausch-Korb</button></a>';
         }
     }
     else
     {
         $retval .= '
             '.(($capData['breweryLink']!='') ? '<a target="_blank" href="'.$capData['breweryLink'].'"><button type="button" class="cel_100"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
-            <a href="#zusatzinfos'.$capData['bottlecapID'].'"><button type="button" onclick="bgenScroll();" class="cel_100"><i class="fas fa-info-circle"></i> Zusatzinfos</button></a>
+            <a href="#zusatzinfos'.$capData['bottlecapID'].'" class="quickInfoButton">
+                <button type="button" onclick="bgenScroll();" class="cel_100"><i class="fas fa-info-circle"></i> Zusatzinfos</button>
+                <div>
+                    <span>
+                        <b>Kapsel-Nummer:</b>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$capData['capNumber'].'
+                    </span>
+                    <br>
+
+                    <p>
+                        <b>Set-Teil:</b>
+                        '.($capData['isSet'] ? 'Ja <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<i>'.$setName.'</i>)' : 'Nein').'
+                    </p>
+
+                    <p>
+                        <b>Zustand: </b>
+                        '.($capData['isUsed'] ? 'Gebraucht' : 'Neu').'
+                    </p>
+                    <p>
+                        <b>Drehverschluss: </b>
+                        '.($capData['isTwistlock'] ? 'Ja' : 'Nein').'
+                        <br>
+                        <em>
+                            F&uuml;r mehr Infos klicken
+                        </em>
+                    </p>
+                </div>
+            </a>
         ';
 
         if($isTradeDisplay)
         {
-            $retval .= '<br><br><a href="#"><button type="button" class="cel_100" style="margin-bottom: 5px; background: #32CD32"><i class="fas fa-shopping-cart"></i> Zum Warenkorb</button></a>';
+            $retval .= '<br><br><a href="/_iframe_addCapToCart?objID='.$capData['bottlecapID'].'&isSet=0" target="cartAddFrame"><button type="button" class="cel_100" style="margin-bottom: 5px; background: #32CD32"><i class="fas fa-shopping-cart"></i> Zum Tausch-Korb</button></a>';
         }
     }
 
@@ -623,11 +708,68 @@ function BottleCapRowInfoOverlay($capData,$isEditMode = false)
     return $retval;
 }
 
+
+function EditButton($link,$short = false,$targetTop = false,$customText = "")
+{
+    return '<a '.(($targetTop) ? 'target="_top"' : '').' style="margin: 0px 3px" href="'.$link.'"> &#9998; '.((!$short) ? (($customText!="") ? $customText : 'Bearbeiten') : '').'</a>';
+}
+
 function CheckEditPermission()
 {
     $rank = MySQL::Scalar("SELECT rank FROM users WHERE id = ?",'s',$_SESSION['userID']);
     if($rank>=95) return true;
     else return false;
+}
+
+function PageContent($paragraphIndex,$allowEdit=false,$reactToCustomPage="",$isIndex = false)
+{
+    // DESCRIPTION:
+    // Gets the text/description for the current page
+    // With $paragraphIndex, several entries can be saved in one page.
+
+    // !editContent for PageContent()-function
+    // !editSC for Special Containers
+    $page = Page::This("!editSC","!editContent");
+
+    if($reactToCustomPage!="") $page = $reactToCustomPage;
+
+    $content = nl2br(MySQL::Scalar("SELECT content AS x FROM pagecontents WHERE page = ? AND paragraphIndex = ?",'@s',$page,$paragraphIndex));
+
+    if(!$allowEdit)
+    {
+        $retval = FroalaContent($content);
+    }
+    else if(($allowEdit AND !isset($_GET['editContent'])) OR ($allowEdit AND isset($_GET['editContent']) AND $_GET['editContent']!=$paragraphIndex))
+    {
+        if($isIndex) $retval = FroalaContent($content).EditButton('index'.str_replace('index','',Page::This("!editSC","editContent",'+editContent='.$paragraphIndex)));
+        else $retval = FroalaContent($content).EditButton(Page::This("!editSC","editContent",'+editContent='.$paragraphIndex));
+    }
+    else if($allowEdit AND isset($_GET['editContent']) AND $_GET['editContent']==$paragraphIndex)
+    {
+        $uniqID = uniqid();
+        $retval = '
+            <form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                '.TextareaPlus("contentEdit","contentEdit",$content).'
+                <br>
+                <button type="submit" name="changeContent" value="'.$page.'||'.$paragraphIndex.'">&Auml;ndern</button>
+                <a href="'.Page::This("!editContent").'"><button type="button">Abbrechen</button></a>
+
+                <a href="#editFileUpload'.$uniqID.'"><button type="button" style="float: right;"><i class="fas fa-upload"></i> Datei hochladen</button></a>
+
+                <div class="modal_wrapper" id="editFileUpload'.$uniqID.'">
+                    <a href="#c">
+                        <div class="modal_bg"></div>
+                    </a>
+                    <div class="modal_container" style="width: 300px; height: 280px">
+                        <iframe src="/froalapl-upload-file?parent='.urlencode(Page::This()).'" frameborder="0" style="width: 100%; height: 100%;"></iframe>
+                    </div>
+                </div>
+
+            </form>';
+    }
+
+
+    return $retval;
 }
 
 ?>

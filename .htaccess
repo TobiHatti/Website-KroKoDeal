@@ -55,7 +55,10 @@ RewriteRule ^tauschen/kronkorken/sammlung/([a-zA-Z0-9-]+)/brauerei/([a-zA-Z0-9-]
 RewriteRule ^tauschen/kronkorken/sammlung/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/brauerei/([a-zA-Z0-9-]+)/?$/?$/?$ tauschenKronkorken.php?country=$1&region=$2&brewery=$3sortbybrewery&collection [NC,QSA,L]
 
 
+#RewriteRule ^tauschen/sets/([a-zA-Z0-9-]+)/?$ tauschenSets.php?country=$1 [NC,QSA,L]
+
 RewriteRule ^tauschen/sets/([a-zA-Z0-9-]+)/?$ tauschenSets.php?country=$1 [NC,QSA,L]
+RewriteRule ^tauschen/sets/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$/?$ tauschenSets.php?country=$1&set=$2 [NC,QSA,L]
 
 #Ignore .php-Extension
 RewriteRule ^([^\.]+)$ $1.php [NC,L]

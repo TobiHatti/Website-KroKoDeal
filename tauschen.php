@@ -11,7 +11,7 @@
 
             $rows = MySQL::Cluster("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE isTradeable = '1' GROUP BY countries.countryShort");
             foreach($rows AS $row) echo TradeCountryButton($row['countryShort'],true,false,true);
-            
+
             echo '</center>';
         }
 
@@ -23,6 +23,13 @@
             $buttonArray = MySQL::Cluster("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE isSet = '1' AND isTradeable = '1' GROUP BY countries.countryShort");
             foreach($buttonArray AS $button) echo TradeCountryButton($button['countryShort'],false,true,true);
             echo '</center>';
+        }
+
+        if($_GET['section']=='hilfe')
+        {
+            echo '<h2 style="color: #1E90FF">Wie wird getauscht</h2>';
+
+            echo PageContent(1,CheckEditPermission());
         }
     }
 

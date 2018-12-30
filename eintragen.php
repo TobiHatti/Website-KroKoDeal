@@ -181,6 +181,45 @@
         die();
     }
 
+    if(isset($_POST['editTradeCap']))
+    {
+        $capID = $_POST['editTradeCap'];
+
+        $capData = MySQL::Row("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.id = ?",'s',$capID);
+        $breweryFilepath = $capData['breweryFilepath'];
+        $countryShort = $capData['countryShort'];
+        $capNumber = $capData['capNumber'];
+        $stock = $_POST['stock'];
+
+        MySQL::NonQuery("UPDATE bottlecaps SET stock = ? WHERE id = ?",'ss',$stock,$capID);
+
+        $fileUploader = new FileUploader();
+        $fileUploader->SetFileElement("capImage");
+        $fileUploader->SetTargetResolution(1000,1000);
+
+        if($capData['isSet'])
+        {
+            $setData = MySQL::Row("SELECT * FROM sets WHERE id = ?",'s',$capData['setID']);
+            $setFilepath = $setData['setFilepath'];
+            $fileUploader->SetPath("files/sets/$countryShort/$setFilepath/");
+        }
+        else $fileUploader->SetPath("files/bottlecaps/$countryShort/$breweryFilepath/");
+
+        $fileUploader->SetSQLEntry("UPDATE bottlecaps SET capImageTrade = '@FILENAME' WHERE id = '$capID'");
+        $fileUploader->SetName($capNumber.'-TR');
+        $fileUploader->OverrideDuplicates(false);
+        $fileUploader->Upload();
+
+
+        echo '
+            <script>
+                window.history.back();
+                window.history.back();
+            </script>
+        ';
+        die();
+    }
+
     if(isset($_POST['addBrewery']))
     {
         $countryID = $_POST['countryID'];
@@ -783,6 +822,47 @@
             ';
         }
 
+        if($_GET['section'] == 'tauschkronkorken')
+        {
+            $capData = MySQL::Row("SELECT * FROM bottlecaps WHERE id = ?",'s',$_GET['objID']);
+
+            echo '<h2>Tausch-Kronkorken bearbeiten</h2>';
+
+            echo '
+                <br>
+                <form action="'.Page::This().'" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+                    <center>
+                        <table class="editTradeCap">
+                            <tr>
+                                <td colspan=2>Allgemeines</td>
+                                <td rowspan=2></td>
+                                <td>Bild f&uuml;r Tausch</td>
+                            </tr>
+
+                            <tr>
+                                <td>Auf Lager:</td>
+                                <td>
+                                    <input class="cel_m" type="number" step="1" name="stock" placeholder="Auf Lager..." value="'.$capData['stock'].'"/>
+                                </td>
+                                <td colspan=2>
+                                    <center>
+                                        <img src="" alt="" id="capImagePreview"/><br>
+                                        '.FileButton("capImage","capImages",true,"ReadURL(this,'capImagePreview');","","width: 100px; line-height: 5px;",false).'
+                                    </center>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=7>
+                                    <br>
+                                    <button type="submit" name="editTradeCap" value="'.$_GET['objID'].'">Kronkorken aktualisieren</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </center>
+                </form>
+            ';
+        }
+
 //========================================================================================
 //========================================================================================
 //      ADD SET
@@ -795,7 +875,7 @@
             else $edit = false;
 
             if($edit) echo '<h2>Set bearbeiten</h2>';
-            else echo '<h2>Setrken hinzuf&uuml;gen</h2>';
+            else echo '<h2>Set hinzuf&uuml;gen</h2>';
 
             $countryList = MySQL::Cluster("SELECT * FROM countries RIGHT JOIN breweries ON countries.id = breweries.countryID GROUP BY breweries.countryID ORDER BY countries.countryDE ASC");
             $flavorList = MySQL::Cluster("SELECT * FROM flavors");

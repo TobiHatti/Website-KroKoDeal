@@ -202,6 +202,8 @@
         foreach($capDataArray AS $capData) echo BottleCapRowInfoOverlay($capData,$permissionCheck);
 
         echo '</div></div><br>'.$sqlPager.'</center>';
+
+        echo '<iframe src="/_iframe_addCapToCart" name="cartAddFrame" frameborder="0" hidden></iframe>';     
     }
 
 

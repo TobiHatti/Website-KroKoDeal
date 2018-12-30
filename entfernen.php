@@ -3,6 +3,23 @@
 
     if(CheckEditPermission())
     {
+
+// REQUEST DELETE
+        if($_GET['section']=='tauschkorb')
+        {
+            $id = $_GET['selectionID'];    
+            MySQL::NonQuery("DELETE FROM cart WHERE id = ?",'s',$id);
+
+            echo '
+                <script>
+                    window.history.back();
+                </script>
+            ';
+            die();
+        }
+
+// INSTANT DELETE
+
         if(isset($_POST['delete']))
         {
             $id = $_GET['selectionID'];
@@ -25,6 +42,8 @@
                 MySQL::NonQuery("DELETE FROM bottlecaps WHERE setID = ?",'s',$id);
                 MySQL::NonQuery("DELETE FROM sets WHERE id = ?",'s',$id);
             }
+
+
 
             echo '
                 <script>
