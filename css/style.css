@@ -2900,4 +2900,279 @@ table.capCartDisplay {
     border-radius: 10px;
     width: 120px; }
 
+.tradeRequestTable {
+  background: #333333;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 900px;
+  border-spacing: 3px;
+  border-collapse: separate; }
+  .tradeRequestTable tr td {
+    text-align: left;
+    background: #FFFFFF;
+    border-radius: 10px;
+    padding: 15px; }
+    .tradeRequestTable tr td .tradeRequestCapDataTable {
+      background: transparent;
+      border-radius: 0px;
+      width: 100%;
+      border-spacing: 0px;
+      border-collapse: collapse; }
+      .tradeRequestTable tr td .tradeRequestCapDataTable tr td {
+        padding: 1px;
+        text-align: left;
+        border: 1px solid black; }
+      .tradeRequestTable tr td .tradeRequestCapDataTable tr:nth-child(1) td {
+        background: #DCDCDC;
+        border-radius: 0; }
+  .tradeRequestTable tr:first-child td {
+    text-align: center;
+    background: transparent;
+    padding: 3px; }
+    .tradeRequestTable tr:first-child td div {
+      position: relative;
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      overflow: hidden; }
+    .tradeRequestTable tr:first-child td img:nth-child(1) {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+      width: 100px;
+      height: 100px;
+      border-radius: 10px; }
+    .tradeRequestTable tr:first-child td img:nth-child(2) {
+      position: absolute;
+      left: -1px;
+      bottom: -5px;
+      border-radius: 100%; }
+    .tradeRequestTable tr:first-child td span {
+      position: absolute;
+      top: 5px;
+      left: -30px;
+      width: 100px;
+      text-align: center;
+      transform: rotate(-35deg);
+      background: orange;
+      color: #FFBF47; }
+    .tradeRequestTable tr:first-child td b {
+      color: #FFFFFF;
+      font-weight: bold; }
+    .tradeRequestTable tr:first-child td i {
+      position: absolute;
+      bottom: 0px;
+      background: orange;
+      right: 0px;
+      color: #FFFFFF;
+      width: 70px;
+      border-radius: 30% 0 0 0; }
+  .tradeRequestTable tr:last-child td {
+    text-align: center;
+    background: none;
+    padding: 5px; }
+
+.tradeStatusTable {
+  background: #333333;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 10px;
+  border-spacing: 3px;
+  border-collapse: separate; }
+  .tradeStatusTable tr td:nth-child(1) {
+    width: 100px;
+    text-align: center; }
+    .tradeStatusTable tr td:nth-child(1) div {
+      position: relative; }
+      .tradeStatusTable tr td:nth-child(1) div img {
+        max-width: 100px;
+        max-height: 100px;
+        border-radius: 10px; }
+  .tradeStatusTable tr td:nth-child(2) {
+    width: 100px;
+    text-align: center; }
+    .tradeStatusTable tr td:nth-child(2) div {
+      position: relative; }
+      .tradeStatusTable tr td:nth-child(2) div img {
+        max-width: 100px;
+        max-height: 100px;
+        border-radius: 10px; }
+  .tradeStatusTable tr td:nth-child(3) {
+    background: #FFFFFF;
+    border-radius: 10px;
+    padding: 2px; }
+    .tradeStatusTable tr td:nth-child(3) i {
+      color: #696969; }
+  .tradeStatusTable tr td:nth-child(4) {
+    background: #FFDFC7;
+    border-radius: 10px;
+    width: 150px; }
+
+.tradeInfoCapTable {
+  width: 100%;
+  border-spacing: 0px;
+  border-collapse: collapse;
+  background: #FFFFFF; }
+  .tradeInfoCapTable tr td {
+    border: 1px solid black; }
+    .tradeInfoCapTable tr td img {
+      max-width: 80px;
+      max-height: 80px; }
+    .tradeInfoCapTable tr td a {
+      color: orange;
+      -webkit-transition: all 0.5s ease-in-out;
+      -moz-transition: all 0.5s ease-in-out;
+      -ms-transition: all 0.5s ease-in-out;
+      -o-transition: all 0.5s ease-in-out;
+      transition: all 0.5s ease-in-out; }
+    .tradeInfoCapTable tr td a:hover {
+      color: #FFD700;
+      text-decoration: underline;
+      -webkit-transition: all 0.2s ease-in-out;
+      -moz-transition: all 0.2s ease-in-out;
+      -ms-transition: all 0.2s ease-in-out;
+      -o-transition: all 0.2s ease-in-out;
+      transition: all 0.2s ease-in-out; }
+  .tradeInfoCapTable tr:first-child {
+    background: orange; }
+    .tradeInfoCapTable tr:first-child td {
+      text-align: center; }
+
+.chatContainer {
+  background: #333333;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 20px;
+  padding: 15px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+  .chatContainer .chatWindow {
+    background: #5C5C5C;
+    width: 100%;
+    border-radius: 20px 10px 10px 20px;
+    height: 70%;
+    max-height: 700px;
+    min-height: 200px;
+    padding-top: 5px;
+    box-shadow: inset 0 0 30px -5px #000000;
+    overflow: hidden;
+    overflow-y: scroll;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
+    .chatContainer .chatWindow .sended {
+      position: relative;
+      background: #BDF5BD;
+      float: right;
+      min-width: 20%;
+      max-width: 80%;
+      margin-right: 15px;
+      border-radius: 10px 10px 0 10px;
+      padding: 5px;
+      padding-bottom: 14px;
+      text-align: left;
+      word-wrap: break-word;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; }
+      .chatContainer .chatWindow .sended .timeDisplay {
+        position: absolute;
+        bottom: 0px;
+        right: 10px;
+        color: #A9A9A9;
+        font-style: italic;
+        font-size: 10pt; }
+    .chatContainer .chatWindow .sended:after {
+      position: absolute;
+      right: -10px;
+      bottom: -4px;
+      content: "";
+      width: 20px;
+      height: 10px;
+      background: #BDF5BD;
+      border-radius: 0 100% 0 100%;
+      transform: rotate(180deg); }
+    .chatContainer .chatWindow .received {
+      position: relative;
+      background: #FFFFFF;
+      float: left;
+      min-width: 20%;
+      max-width: 80%;
+      margin-left: 15px;
+      border-radius: 10px 10px 10px 0;
+      padding: 5px;
+      padding-bottom: 14px;
+      text-align: left;
+      word-wrap: break-word;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; }
+      .chatContainer .chatWindow .received .timeDisplay {
+        position: absolute;
+        bottom: 0px;
+        left: 10px;
+        color: #A9A9A9;
+        font-style: italic;
+        font-size: 10pt; }
+    .chatContainer .chatWindow .received:after {
+      position: absolute;
+      left: -10px;
+      bottom: -4px;
+      content: "";
+      width: 20px;
+      height: 10px;
+      background: #FFFFFF;
+      border-radius: 0 100% 0 100%;
+      transform: rotate(-40deg); }
+    .chatContainer .chatWindow .dateDisplay {
+      background: #ADD8E6;
+      display: inline-block;
+      border-radius: 10px;
+      padding: 0 10px; }
+    .chatContainer .chatWindow .infoDisplay {
+      position: relative;
+      background: #FFA500;
+      display: inline-block;
+      border-radius: 10px;
+      padding: 0 10px; }
+    .chatContainer .chatWindow .infoDisplay:after {
+      content: "";
+      position: absolute;
+      top: 8px;
+      left: -100px;
+      width: 100px;
+      background: #FFA500;
+      height: 3px;
+      border-radius: 50% 0 0 50%; }
+    .chatContainer .chatWindow .infoDisplay:before {
+      content: "";
+      position: absolute;
+      top: 8px;
+      right: -100px;
+      width: 100px;
+      background: #FFA500;
+      height: 3px;
+      border-radius: 0 50% 50% 0; }
+    .chatContainer .chatWindow .breaker {
+      display: inline-block;
+      width: 100%; }
+    .chatContainer .chatWindow p {
+      margin-top: 0;
+      margin-bottom: 5px; }
+  .chatContainer .chatWindow::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: transparent; }
+  .chatContainer .chatWindow::-webkit-scrollbar {
+    width: 12px;
+    background-color: transparent; }
+  .chatContainer .chatWindow::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #A9A9A9; }
+
 /*# sourceMappingURL=style.css.map */

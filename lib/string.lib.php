@@ -60,6 +60,19 @@ class StringOp
 
         return $sstr;
     }
+
+    public static function GermanSpecialChars($string)
+    {
+        $sstr = str_replace('Ä','&Auml;',$string);
+        $sstr = str_replace('ä','&auml;',$sstr);
+        $sstr = str_replace('Ö','&Ouml;',$sstr);
+        $sstr = str_replace('ö','&ouml;',$sstr);
+        $sstr = str_replace('Ü','&Uuml;',$sstr);
+        $sstr = str_replace('ü','&uuml;',$sstr);
+        $sstr = str_replace('ß','&szlig;',$sstr);
+
+        return $sstr;
+    }
 }
 
 ?>

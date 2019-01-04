@@ -32,6 +32,9 @@
 
     require("_headerlinks.php");
 
+    $tradeCartCount = 0;
+    if(isset($_SESSION['userID'])) $tradeCartCount = MySQL::Count("SELECT id FROM cart WHERE userID = ? AND tradeID = ''",'s',$_SESSION['userID']);
+
     echo '
             <script>
                 window.addEventListener("scroll", function(e) {
@@ -46,11 +49,11 @@
             <body id="mainBody">
                 <header>
                     <div style="text-align: right;" class="signInButtonContainer">
-                        '.((isset($_SESSION['userID'])) ? ('Angemeldet als '.$_SESSION['userUsername'].' - <a href="/sign-out">Abmelden</a><br><br><a href="/tauschkorb"><i class="fas fa-shopping-cart"></i> Tausch-Korb</a>') : ('<a href="/sign-in">Anmelden</a>|<a href="/sign-up">Registrieren</a>')).'
+                        '.((isset($_SESSION['userID'])) ? ('Angemeldet als '.$_SESSION['userUsername'].' - <a href="/sign-out">Abmelden</a><br><br><a href="/tauschkorb"><i class="fas fa-shopping-cart"></i> Tausch-Korb <output id="outCartCount1">'.($tradeCartCount!=0 ? '(<output id="outCartCount1">'.$tradeCartCount.')' : '').'</output></a>') : ('<a href="/sign-in">Anmelden</a>|<a href="/sign-up">Registrieren</a>')).'
                     </div>
 
                     <div id="scrollNavBar" class="scrollNavBar" style="display: none">
-                        '.((isset($_SESSION['userID'])) ? ('<a href="/tauschkorb"><i class="fas fa-shopping-cart"></i> Tausch-Korb</a>') : '').'
+                        '.((isset($_SESSION['userID'])) ? ('<a href="/tauschkorb"><i class="fas fa-shopping-cart"></i> Tausch-Korb <output id="outCartCount2">'.($tradeCartCount!=0 ? '(<output id="outCartCount2">'.$tradeCartCount.')' : '').'</output></a>') : '').'
                     </div>
 
                     <div class="cartAddNotification" id="cartAddNotification" style="display:none;">
@@ -92,6 +95,7 @@
                                 echo '
                                     <li><a class="hsubs" href="#">Verwaltung</a>
                                         <ul class="subs">
+                                            <li><a href="/tauschen/uebersicht/">Tauschgesch&auml;fte</a></li>
                                             <li><a href="/eintragen/kronkorken">Kronkorken hinzuf&uuml;gen</a></li>
                                             <li><a href="/eintragen/set">Set hinzuf&uuml;gen</a></li>
                                             <li><a href="/eintragen/brauerei">Brauerei hinzuf&uuml;gen</a></li>

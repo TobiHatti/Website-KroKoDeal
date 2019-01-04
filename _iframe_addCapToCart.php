@@ -15,6 +15,11 @@
 
         echo '
             <script>
+                    var cartCount = '.MySQL::Count("SELECT id FROM cart WHERE userID = ? AND tradeID = ''",'s',$_SESSION['userID']).'
+
+                    window.parent.document.getElementById("outCartCount1").innerHTML = "(" + cartCount + ")";
+                    window.parent.document.getElementById("outCartCount2").innerHTML = "(" + cartCount + ")"; 
+
                     window.parent.document.getElementById("cartAddNotification").style.display = "block";
                     setTimeout(function() {
                         window.parent.document.getElementById("cartAddNotification").style.display = "none";

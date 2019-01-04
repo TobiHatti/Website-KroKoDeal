@@ -764,12 +764,19 @@ function PageContent($paragraphIndex,$allowEdit=false,$reactToCustomPage="",$isI
                         <iframe src="/froalapl-upload-file?parent='.urlencode(Page::This()).'" frameborder="0" style="width: 100%; height: 100%;"></iframe>
                     </div>
                 </div>
-
             </form>';
     }
 
-
     return $retval;
+}
+
+function Message($fromUserID, $toUserID, $message, $tradeID = "", $isNotification = false)
+{
+    $date = date("Y-m-d");
+    $time = date("H:i:s");
+    $type = $isNotification ? 'info' : 'chat';
+
+    MySQL::NonQuery("INSERT INTO messages (id,type,senderID,receiverID,tradeID,date,time,message) VALUES ('',?,?,?,?,?,?,?)",'sssssss',$type,$fromUserID,$toUserID,$tradeID,$date,$time,$message);
 }
 
 ?>

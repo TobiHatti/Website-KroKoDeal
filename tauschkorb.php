@@ -5,27 +5,28 @@
     {
         echo '<h2>Tausch-Korb</h2>';
 
-        $cartCount = MySQL::Count("SELECT id FROM cart WHERE userID = ? AND tradeConfirmed = 0 AND tradeCompleted = 0",'s',$_SESSION['userID']);
+        $cartCount = MySQL::Count("SELECT id FROM cart WHERE userID = ? AND tradeID = ''",'s',$_SESSION['userID']);
 
         if($cartCount == 0) echo '<br><br><h3>Ihr Tausch-Korb ist leer!</h3>';
         else
         {
             echo '<h3>'.$cartCount.' gegenst&auml;nde aktuell in Ihrem Tausch-Korb</h3>';
 
-            $cartData = MySQL::Cluster("SELECT * FROM cart WHERE userID = ? AND tradeConfirmed = 0 AND tradeCompleted = 0",'s',$_SESSION['userID']);
+            $cartData = MySQL::Cluster("SELECT * FROM cart WHERE userID = ? AND tradeID = ''",'s',$_SESSION['userID']);
 
             echo '<center>';
 
-            echo '<br><button type="button" style="background: #32CD32" class="cel_xl cel_f15">Tauschanfrage stellen</button>';
+            echo '<br><a href="/tauschanfrage"><button type="button" style="background: #32CD32" class="cel_xl cel_f15">Tauschanfrage stellen</button></a>';
 
             foreach($cartData AS $cartItem)
             {
                 if($cartItem['isSet'])
                 {
-                    $setData = MySQL::Row("SELECT * FROM sets INNER JOIN bottlecaps ON sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN flavors ON bottlecaps.flavorID = flavors.id INNER JOIN sidesigns ON bottlecaps.sidesignID = sidesigns.id WHERE sets.id = ?",'s',$cartItem['objID']);
+                    $setData = MySQL::Row("SELECT * FROM bottlecaps INNER JOIN sets ON bottlecaps.setID = sets.id INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN sidesigns ON bottlecaps.sidesignID = sidesigns.id INNER JOIN flavors ON bottlecaps.flavorID = flavors.id WHERE sets.id = ? AND bottlecaps.id = sets.thumbnailTradeID",'s',$cartItem['objID']);
+
+                    $imagePath = '/files/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'/'.($setData['capImageTrade'] == "" ? $setData['capImage'] : $setData['capImageTrade']);
 
                     $capName = $setData['setName'];
-                    $imagePath = '/files/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'/'.$setData['capImage'];
 
                     echo '
                         <table class="capCartDisplay">
@@ -69,12 +70,12 @@
                     {
                         $setData = MySQL::Row("SELECT * FROM sets WHERE id = ?",'s',$capData['setID']);
                         $capName = $setData['setName'].' - '.$capData['name'];
-                        $imagePath = '/files/sets/'.$capData['countryShort'].'/'.$setData['setFilepath'].'/'.$capData['capImage'];
+                        $imagePath = '/files/sets/'.$capData['countryShort'].'/'.$setData['setFilepath'].'/'.($capData['capImageTrade'] == "" ? $capData['capImage'] : $capData['capImageTrade']);
                     }
                     else
                     {
                         $capName = $capData['name'];
-                        $imagePath = '/files/bottlecaps/'.$capData['countryShort'].'/'.$capData['breweryFilepath'].'/'.$capData['capImage'];
+                        $imagePath = '/files/bottlecaps/'.$capData['countryShort'].'/'.$capData['breweryFilepath'].'/'.($capData['capImageTrade'] == "" ? $capData['capImage'] : $capData['capImageTrade']);
                     }
 
                     echo '
