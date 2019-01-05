@@ -11,6 +11,8 @@ if(!isset($_GET['collection']))
     {
         if(isset($_GET['region']))
         {
+            NavBar("Home","Laender","CountrySub:".$_GET['country'],"Region:".$_GET['region']);
+
             $country = $_GET['country'];
             $region = $_GET['region'];
             $countryData = MySQL::Row("SELECT * FROM countries WHERE countryShort = ?",'s',$country);
@@ -44,6 +46,8 @@ if(!isset($_GET['collection']))
         }
         else if(isset($_GET['country']))
         {
+            NavBar("Home","Laender","Country:".$_GET['country']);
+
             $country = $_GET['country'];
             $countryData = MySQL::Row("SELECT * FROM countries WHERE countryShort = ?",'s',$country);
             $pager = new Pager(20);
@@ -95,6 +99,8 @@ if(!isset($_GET['collection']))
         {
             if(isset($_GET['region']))
             {
+                NavBar("Home","Laender","CountrySub:".$_GET['country'],"Region:".$_GET['region'],"Letter:".$_GET['letter']);
+
                 $country = $_GET['country'];
                 $region = $_GET['region'];
                 $letter = $_GET['letter'].'%';
@@ -140,6 +146,8 @@ if(!isset($_GET['collection']))
             }
             else
             {
+                NavBar("Home","Laender","Country:".$_GET['country'],"Letter:".$_GET['letter']);
+
                 $country = $_GET['country'];
                 $letter = $_GET['letter'].'%';
 
@@ -181,6 +189,8 @@ if(!isset($_GET['collection']))
         }
         if(isset($_GET['sortbybrewery']))
         {
+            NavBar("Home","Laender","Country:".$_GET['country'],"Brewery:".$_GET['brewery']);
+
             $country = $_GET['country'];
             $brewery = $_GET['brewery'];
 
@@ -216,6 +226,8 @@ if(!isset($_GET['collection']))
         }
         if(isset($_GET['all']))
         {
+            NavBar("Home","Sammlung");
+
             if(isset($_GET['letter'])) $letter = $_GET['letter'].'%';
             else $letter="";
 

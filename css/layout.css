@@ -118,7 +118,8 @@
 @supports (grid-area: auto) {
   body#mainBody {
     display: grid;
-    margin: 0; }
+    margin: 0;
+    margin-bottom: 160px; }
 
   @media only screen and (max-width: 600px) {
     body#mainBody {
@@ -169,7 +170,7 @@
     background: linear-gradient(to bottom, #FF892E, #d9d9d9);
     border-radius: 5px;
     box-shadow: 0px 3px 3px 0 #000000;
-    margin-bottom: 160px;
+    margin-bottom: 0px;
     padding: 5px 10px; }
 
   @media only screen and (max-width: 600px) {

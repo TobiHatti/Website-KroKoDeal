@@ -1,6 +1,8 @@
 <?php
 	require("_header.php");
 
+    NavBar("Home","Suche");
+
     if(isset($_POST['searchValue']) AND $_POST['searchValue']!="") Page::Redirect(Page::This("+suchwert=".$_POST['searchValue']));
     else if(isset($_GET['suchwert']))
     {

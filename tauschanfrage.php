@@ -1,6 +1,8 @@
 <?php
 	require("_header.php");
 
+    NavBar("Home","Tauschen");
+
     if(isset($_POST['createTradeRequest']))
     {
         $tradeID = uniqid();
@@ -13,6 +15,10 @@
 
         MySQL::NonQuery("INSERT INTO trades (id,userID,dateTradeRequested,tradeMessage,mailNotifications) VALUES (?,?,?,?,?)",'sssss',$tradeID,$_SESSION['userID'],$requestedDate,$tradeMessage,$sendConfirmation);
 
+        $ownerID = MySQL::Scalar("SELECT id FROM users WHERE rank = 99");
+
+        Message($_SESSION['userID'],$ownerID,"Ein Tausch wurde gestartet!",$tradeID,true);
+        Message($_SESSION['userID'],$ownerID,$tradeMessage,$tradeID);
 
         $tradeMessageTable = '
             <table style="background: #FFFFFF; border: 1px solid black; width: 100%;">

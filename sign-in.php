@@ -1,6 +1,8 @@
 <?php
 	require("_header.php");
 
+    NavBar("Home","Anmelden");
+
     if(isset($_POST['signin']))
     {
         $username = strtolower($_POST['username']);

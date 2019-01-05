@@ -160,7 +160,7 @@ function SetsAndA2ZButtons($ISOcode,$showBottlecapCount=false,$linkToCountries=f
                 <img src="/content/buttons/DE/a-z.png" alt="" />
     ';
 
-    if($showBottlecapCount) $retval .= '<div>'.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isCounted='1' AND countries.countryShort = ?",'s',$ISOcode).' St&uuml;ck</div>';
+    if($showBottlecapCount) $retval .= '<div>'.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE ((bottlecaps.isSet = 0 AND bottlecaps.isCounted = 1) OR (bottlecaps.isSet = 1 AND bottlecaps.isOwned = 1)) AND countries.countryShort = ?",'s',$ISOcode).' St&uuml;ck</div>';
 
     $retval .= '</div>'.($linkToCountries ? '</a>' : '');
 
@@ -196,7 +196,7 @@ function ContinentButton($ISOcode,$showBottlecapCount=false,$linkToCountries=fal
     {
         $retval .= '
             <div>
-                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN continents ON countries.continentID = continents.id WHERE continents.continentShort = ?",'s',$ISOcode).' St&uuml;ck
+                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN continents ON countries.continentID = continents.id WHERE ((bottlecaps.isSet = 0 AND bottlecaps.isCounted = 1) OR (bottlecaps.isSet = 1 AND bottlecaps.isOwned = 1)) AND continents.continentShort = ?",'s',$ISOcode).' St&uuml;ck
             </div>
         ';
     }
@@ -209,11 +209,11 @@ function ContinentButton($ISOcode,$showBottlecapCount=false,$linkToCountries=fal
     return $retval;
 }
 
-function CountryButton($ISOcode,$showBottlecapCount=false, $showSetCount=false,$linkToCollectionOrSubmenu = false)
+function CountryButton($ISOcode,$showBottlecapCount=false, $showSetCount=false,$linkToCollectionOrSubmenu = false, $showBreweryCount = false)
 {
     $link = '';
 
-    if($linkToCollectionOrSubmenu AND $showBottlecapCount)
+    if($linkToCollectionOrSubmenu AND ($showBottlecapCount OR $showBreweryCount))
     {
         if(MySQL::Exist("SELECT regions.id FROM regions INNER JOIN countries ON regions.countryID = countries.id WHERE countries.countryShort = ?",'s',$ISOcode)) $link = '/laender/regionen/'.$ISOcode;
         else $link = '/kronkorken/'.$ISOcode;
@@ -234,7 +234,7 @@ function CountryButton($ISOcode,$showBottlecapCount=false, $showSetCount=false,$
     {
         $retval .= '
             <div>
-                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isCounted='1' AND countries.countryShort = ?",'s',$ISOcode).' St&uuml;ck
+                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE ((bottlecaps.isSet = 0 AND bottlecaps.isCounted = 1) OR (bottlecaps.isSet = 1 AND bottlecaps.isOwned = 1)) AND countries.countryShort = ?",'s',$ISOcode).' St&uuml;ck
             </div>
         ';
     }
@@ -244,6 +244,15 @@ function CountryButton($ISOcode,$showBottlecapCount=false, $showSetCount=false,$
         $retval .= '
             <div>
                 '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE isSet = '1' AND countries.countryShort = ? GROUP BY setID",'s',$ISOcode).' Sets
+            </div>
+        ';
+    }
+
+    if($showBreweryCount)
+    {
+        $retval .= '
+            <div style="width: 120px;">
+                '.MySQL::Count("SELECT * FROM breweries INNER JOIN countries ON breweries.countryID = countries.id WHERE countries.countryShort = ?",'s',$ISOcode).' Brauereien
             </div>
         ';
     }
@@ -280,7 +289,7 @@ function TradeCountryButton($ISOcode,$showBottlecapCount=false, $showSetCount=fa
     {
         $retval .= '
             <div style="width: 125px;">
-                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isCounted='1' AND countries.countryShort = ? AND isTradeable = '1'",'s',$ISOcode).' Tauschbar
+                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE ((bottlecaps.isSet = 0 AND bottlecaps.isCounted = 1) OR (bottlecaps.isSet = 1 AND bottlecaps.isOwned = 1)) AND countries.countryShort = ? AND isTradeable = '1'",'s',$ISOcode).' Tauschbar
             </div>
         ';
     }
@@ -324,7 +333,7 @@ function RegionButton($ISOcode,$showBottlecapCount=false,$linkToCollection = fal
 
     if($linkToCollection)
     {
-        $countryShort = MySQL::Scalar("SELECT countries.countryShort FROM regions INNER JOIN countries ON regions.countryID = countries.id WHERE regions.regionShort = ?",'s',$ISOcode);
+        $countryShort = MySQL::Scalar("SELECT countries.countryShort FROM regions INNER JOIN countries ON regions.countryID = countries.id WHERE  regions.regionShort = ?",'s',$ISOcode);
         $link = '/kronkorken/'.$countryShort.'/'.$ISOcode;
     }
 
@@ -338,7 +347,7 @@ function RegionButton($ISOcode,$showBottlecapCount=false,$linkToCollection = fal
     {
         $retval .= '
             <div>
-                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.ID INNER JOIN regions ON breweries.regionID = regions.id WHERE bottlecaps.isCounted = '1' AND regions.regionShort = ?",'s',$ISOcode).' St&uuml;ck
+                '.MySQL::Count("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.ID INNER JOIN regions ON breweries.regionID = regions.id WHERE ((bottlecaps.isSet = 0 AND bottlecaps.isCounted = 1) OR (bottlecaps.isSet = 1 AND bottlecaps.isOwned = 1)) AND regions.regionShort = ?",'s',$ISOcode).' St&uuml;ck
             </div>
         ';
     }
@@ -375,8 +384,8 @@ function BreweryListTile($breweryID,$showRegional=false,$tradeableLink=false)
     if($showRegional) $breweryData = MySQL::Row("SELECT *,breweries.id AS breweryID FROM breweries INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN regions ON breweries.regionID = regions.id WHERE breweries.id = ? ORDER BY breweries.breweryName ASC",'i',$breweryID);
     else $breweryData = MySQL::Row("SELECT *,breweries.id AS breweryID FROM breweries INNER JOIN countries ON breweries.countryID = countries.id  WHERE breweries.id = ? ORDER BY breweries.breweryName ASC",'i',$breweryID);
 
-    $bottleCapCount = MySQL::Count("SELECT * FROM bottlecaps WHERE isCounted = '1' AND isSet = '0' AND breweryID = ?",'i',$breweryData['breweryID']);
-    $tradeableCount = MySQL::Count("SELECT * FROM bottlecaps WHERE isCounted = '1' AND isSet = '0' AND isTradeable = '1' AND breweryID = ?",'i',$breweryData['breweryID']);
+    $bottleCapCount = MySQL::Count("SELECT * FROM bottlecaps WHERE ((bottlecaps.isSet = 0 AND bottlecaps.isCounted = 1) OR (bottlecaps.isSet = 1 AND bottlecaps.isOwned = 1)) AND breweryID = ?",'i',$breweryData['breweryID']);
+    $tradeableCount = MySQL::Count("SELECT * FROM bottlecaps WHERE ((bottlecaps.isSet = 0 AND bottlecaps.isCounted = 1) OR (bottlecaps.isSet = 1 AND bottlecaps.isOwned = 1)) AND isTradeable = '1' AND breweryID = ?",'i',$breweryData['breweryID']);
 
     if($tradeableLink) $link = '/tauschen/kronkorken/sammlung/'.$breweryData['countryShort'].'/brauerei/'.$breweryData['breweryFilepath'];
     else $link = '/kronkorken/sammlung/'.$breweryData['countryShort'].'/brauerei/'.$breweryData['breweryFilepath'];
@@ -451,7 +460,7 @@ function SetTile($setID,$isEditMode = false,$tradeableLink=false)
                     if($tradeableLink) $retval .= '<br><br><a href="/_iframe_addCapToCart?objID='.$setData['setID'].'&isSet=1" target="cartAddFrame"><button type="button" class="cel_100" style="margin-bottom: 5px; background: #32CD32"><i class="fas fa-shopping-cart"></i> Zum Tausch-Korb</button></a>';
                 }
 
-                echo '
+                $retval .= '
 
 
                 </td>
@@ -777,6 +786,91 @@ function Message($fromUserID, $toUserID, $message, $tradeID = "", $isNotificatio
     $type = $isNotification ? 'info' : 'chat';
 
     MySQL::NonQuery("INSERT INTO messages (id,type,senderID,receiverID,tradeID,date,time,message) VALUES ('',?,?,?,?,?,?,?)",'sssssss',$type,$fromUserID,$toUserID,$tradeID,$date,$time,$message);
+}
+
+function NavBar(...$linkKeywords)
+{
+    $pathStr = '';
+    $i=0;
+    $lastSection = '';
+    foreach($linkKeywords AS $link)
+    {
+        if($i > 0) $pathStr .= '<i>&gt;</i>';
+        $i++;
+
+        $fragment = explode(':',$link);
+
+        switch($fragment[0])
+        {
+            case 'Home': $pathStr .= '<a href="/"><span>Home</span></a>';$lastSection = 'Home';   break;
+            case 'Laender': $pathStr .= '<a href="/laender"><span>L&auml;nder</span></a>';$lastSection = 'L&auml;nder';   break;
+            case 'Sets': $pathStr .= '<a href="/sets"><span>Sets</span></a>'; break;$lastSection ='Sets';
+            case 'Kronkorken': $pathStr .= '<a href="/kronkorken/alle"><span>Alle</span></a>';$lastSection = 'Alle';   break;
+            case 'TradeCountries': $pathStr .= '<a href="/tauschen/laender"><span>L&auml;nder</span></a>';$lastSection = 'L&auml;nder';   break;
+            case 'TradeSets': $pathStr .= '<a href="/tauschen/sets"><span>Sets</span></a>';$lastSection = 'Sets';   break;
+            case 'CountrySub':
+                $navData = MySQL::Row("SELECT * FROM countries WHERE countryShort = ?",'s',$fragment[1]);
+                $pathStr .= '<a href="/laender/regionen/'.$navData['countryShort'].'"><span>Regionen in '.$navData['countryDE'].'</span></a>';
+                $lastSection = $navData['countryDE'];
+                break;
+            case 'Country':
+                $navData = MySQL::Row("SELECT * FROM countries WHERE countryShort = ?",'s',$fragment[1]);
+                $pathStr .= '<a href="/kronkorken/'.$navData['countryShort'].'"><span>'.$navData['countryDE'].'</span></a>';
+                $lastSection = $navData['countryDE'];
+                break;
+            case 'TradeCountry':
+                $navData = MySQL::Row("SELECT * FROM countries WHERE countryShort = ?",'s',$fragment[1]);
+                $pathStr .= '<a href="/tauschen/kronkorken/'.$navData['countryShort'].'"><span>'.$navData['countryDE'].'</span></a>';
+                $lastSection = $navData['countryDE'];
+                break;
+            case 'Continent':
+                $navData = MySQL::Row("SELECT * FROM continents WHERE continentShort = ?",'s',$fragment[1]);
+                $pathStr .= '<a href="/laender/kontinent/'.$navData['continentShort'].'"><span>'.$navData['continentDE'].'</span></a>';
+                $lastSection = $navData['continentDE'];
+                break;
+            case 'CountrySets':
+                $navData = MySQL::Row("SELECT * FROM countries WHERE countryShort = ?",'s',$fragment[1]);
+                $pathStr .= '<a href="/sets/'.$navData['countryShort'].'"><span>'.$navData['countryDE'].'</span></a>';
+                $lastSection = $navData['countryDE'];
+                break;
+            case 'TradeCountrySets':
+                $navData = MySQL::Row("SELECT * FROM countries WHERE countryShort = ?",'s',$fragment[1]);
+                $pathStr .= '<a href="/tauschen/sets/'.$navData['countryShort'].'"><span>'.$navData['countryDE'].'</span></a>';
+                $lastSection = $navData['countryDE'];
+                break;
+            case 'Region':
+                $navData = MySQL::Row("SELECT * FROM regions INNER JOIN countries ON regions.countryID = countries.id WHERE regionShort = ?",'s',$fragment[1]);
+                $pathStr .= '<a href="/kronkorken/'.$navData['countryShort'].'/'.$navData['regionShort'].'"><span>'.$navData['regionDE'].'</span></a>';
+                $lastSection = $navData['regionDE'];
+                break;
+            case 'Brewery':
+                $navData = MySQL::Row("SELECT * FROM breweries INNER JOIN countries ON breweries.countryID = countries.id WHERE breweryFilepath = ?",'s',$fragment[1]);
+                $pathStr .= '<a href="/kronkorken/sammlung/'.$navData['countryShort'].'/brauerei/'.$navData['breweryFilepath'].'"><span>'.$navData['breweryName'].'</span></a>';
+                $lastSection = $navData['breweryName'];
+                break;
+            case 'Set':
+                $navData = MySQL::Row("SELECT * FROM breweries INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN bottlecaps ON breweries.id = bottlecaps.breweryID INNER JOIN sets ON bottlecaps.setID = sets.id WHERE setFilepath = ?",'s',$fragment[1]);
+                $pathStr .= '<a href="/sets/'.$navData['countryShort'].'/'.$navData['setFilepath'].'"><span>'.$navData['setName'].'</span></a>';
+                $lastSection = $navData['setName'];
+                break;
+            case 'TradeSet':
+                $navData = MySQL::Row("SELECT * FROM breweries INNER JOIN countries ON breweries.countryID = countries.id INNER JOIN bottlecaps ON breweries.id = bottlecaps.breweryID INNER JOIN sets ON bottlecaps.setID = sets.id WHERE setFilepath = ?",'s',$fragment[1]);
+                $pathStr .= '<a href="/tauschen/sets/'.$navData['countryShort'].'/'.$navData['setFilepath'].'"><span>'.$navData['setName'].'</span></a>';
+                $lastSection = $navData['setName'];
+                break;
+            case 'Letter': $pathStr .= '<a href="#"><span>'.$fragment[1].'</span></a>'; $lastSection = 'Sortieren: '.$fragment[0]; break;
+            case 'Sammlung': $pathStr .= '<a href="#"><span>Sammlung</span></a>'; $lastSection = 'Sammlung'; break;
+            default: $pathStr .= '<a href="#"><span>'.$fragment[0].'</span></a>'; $lastSection = $fragment[0];break;
+        }
+    }
+
+
+    echo '
+        <head><title>Kro-Ko-Deal - '.$lastSection.'</title></head>
+        <script type="text/javascript">
+            document.getElementById("navigationBar").innerHTML = \''.$pathStr.'\';
+        </script>
+    ';
 }
 
 ?>

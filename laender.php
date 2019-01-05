@@ -3,6 +3,8 @@
 
     if(isset($_GET['continent']))
     {
+        NavBar("Home","Continent:".$_GET['continent']);
+
         $continent = $_GET['continent'];
 
         echo '<h2>'.MySQL::Scalar("SELECT continentDE FROM continents WHERE continentShort = ?",'s',$continent).'</h2><br>';
@@ -21,6 +23,8 @@
     }
     else if(isset($_GET['region']))
     {
+        NavBar("Home","Laender","CountrySub:".$_GET['region']);
+
         $country = $_GET['region'];
         $countryData = MySQL::Row("SELECT * FROM countries WHERE countryShort = ?",'s',$country);
 
@@ -37,6 +41,8 @@
     }
     else
     {
+        NavBar("Home","Laender");
+
         echo '<h2>L&auml;nder</h2><br>';
 
         echo '<center>';

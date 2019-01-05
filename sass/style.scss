@@ -395,7 +395,8 @@ select{
 }
 
 select:focus{
-    border-bottom: 1px solid $theme-medium;
+    border: 1px solid $theme-medium;
+    color: $theme-medium;
 }
 
 select:disabled{
@@ -3427,4 +3428,115 @@ table.capCartDisplay{
 
 }
 
+
+.guestbookEntry{
+    background: #333333;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 900px;
+    margin-bottom: 10px;
+
+    border-spacing: 5px;
+    border-collapse: seperate;
+
+    tr{
+        td{
+            position: relative;
+            border-radius: 10px;
+            padding: 5px;
+            @include box-sizing(border-box)
+        }
+
+        td:first-child{
+            background: $theme-brighter;
+            width: 150px;
+
+            i{
+                color: #696969;
+            }
+
+            b{
+                color: #32CD32;
+                font-size: 15pt;
+            }
+
+            em{
+                font-size: 10pt;
+                color: #696969;
+            }
+
+            img.userImg{
+                position: absolute;
+                top: 3px;
+                right: 3px;
+                max-width: 50px;
+                max-height: 50px;
+
+            }
+
+            .up{
+                position: absolute;
+                top: 70px;
+                left: 5px;
+                color: #32CD32;
+                background: none;
+
+                img{
+                    width: 30px;
+                    margin: 3px;
+                    @include ease(0.2s);
+                }
+
+                img:hover{
+                    width: 33px;
+                    filter: drop-shadow(2px 2px 2px black);
+                }
+
+            }
+
+            .down{
+                position: absolute;
+                top: 70px;
+                left: 60px;
+                color: red;
+                background: none;
+
+                img{
+                    width: 30px;
+                    margin: 3px;
+                    @include ease(0.2s);
+                }
+
+                img:hover{
+                    width: 33px;
+                    filter: drop-shadow(2px 2px 2px black);
+                }
+            }
+
+        }
+
+        td:last-child{
+            background: #FFFFFF;
+            position: relative;
+            vertical-align: top;
+
+            i{
+                position: absolute;
+                top: 4px;
+                left: 4px;
+                color: #696969;
+            }
+
+            u{
+                position: absolute;
+                top: 4px;
+                right: 4px;
+                color: red;
+            }
+
+        }
+
+    }
+
+}
 

@@ -1,14 +1,37 @@
 <?php
     require("_header.php");
 
+    NavBar("Home","Tauschen","Chat");   
+
     if(isset($_POST['sendMessage']))
     {
         $receiverID = $_GET['receiverID'];
         $senderID = $_SESSION['userID'];
         $message = $_POST['chatMessage'];
-        $tradeID = "";
+        $tradeID = $_GET['tradeID'];
 
         Message($senderID, $receiverID, $message, $tradeID);
+
+        $tradeData = MySQL::Row("SELECT * FROM trades WHERE id = ?",'s',$tradeID);
+        $userData = MySQL::Row("SELECT * FROM users WHERE id = ?",'s',$tradeData['userID']);
+
+        if($tradeData['userID'] != $_SESSION['userID'] AND $tradeData['mailNotifications'] == '1')
+        {
+            // ^executed by owner
+            // Message to trader
+            $traderMessage = "Sie haben eine neue Nachricht von Kro-Ko-Deal.com erhalten!<br><h3>Nachricht:</h3><br>".nl2br($message).'<br><br>';
+            $traderMessage = MailFormater(StringOp::GermanSpecialChars($traderMessage),'Neue Nachricht von Kro-Ko-Deal');
+            SendEMail($userData['email'],'Neue Nachricht von Kro-Ko-Deal',$traderMessage);
+        }
+
+        if($tradeData['userID'] == $_SESSION['userID'])
+        {
+            // ^executed by trader
+            // Message to Owner
+            $ownerMessage = "Der Nutzer ".$userData['firstName']." ".$userData['lastName']." / ".$userData['username']."  (".$userData['email'].") hat soeben eine Nachricht gesendet:<br><h3>Nachricht:</h3><br>".nl2br($message).'<br><br>';
+            $ownerMessage = MailFormater(StringOp::GermanSpecialChars($ownerMessage),'Neue Nachricht von Kro-Ko-Deal');
+            SendEMail("trade@kro-ko-deal.com",'Neue Nachricht von Kro-Ko-Deal',$ownerMessage);
+        }
 
         Page::Redirect(Page::This());
         die();
@@ -46,7 +69,7 @@
                             if($chatElement['type']=='info')
                             {
                                 echo '
-                                    <div class="infoDisplay">Ihr Tausch vom 04.02.2019 wurde best&auml;tigt</div>
+                                    <div class="infoDisplay">'.$chatElement['message'].'</div>
                                     <div class="breaker"></div>
                                 ';
                             }
@@ -77,9 +100,6 @@
                         }
 
                         echo '
-
-
-
                         </div>
                         <br>
                         <div style="text-align: left;">

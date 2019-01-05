@@ -1,6 +1,8 @@
 <?php
 	require("_header.php");
 
+    NavBar("Home","Kronkorken","Eintragen und bearbeiten");   
+
 //########################################################################################
 //########################################################################################
 //      POST PART
@@ -9,6 +11,8 @@
 
     if(isset($_POST['addBottlecap']) OR isset($_POST['editBottlecap']) OR isset($_POST['expandSet']))
     {
+        $urlKeepExtension = '';
+
         $breweryID = isset($_POST['breweryID']) ? $_POST['breweryID'] : '';
         $name = $_POST['name'];
         $flavorID = isset($_POST['flavorID']) ? $_POST['flavorID'] : '';
@@ -57,6 +61,28 @@
 
             $fileUploader->SetPath("files/bottlecaps/$countryShort/$breweryFilepath/");
             $fileUploader->SetSQLEntry("UPDATE bottlecaps SET capImage = '@FILENAME' WHERE id = '$capID'");
+
+            if(isset($_POST['saveCountryID'])) $urlKeepExtension .= '&countryID='.$_POST['countryID'];
+            if(isset($_POST['saveBreweryID'])) $urlKeepExtension .='&breweryID='.$_POST['breweryID'];
+            if(isset($_POST['saveName'])) $urlKeepExtension .= '&name='.$_POST['name'];
+            if(isset($_POST['saveFlavorID'])) $urlKeepExtension .= '&flavorID='.$_POST['flavorID'];
+            if(isset($_POST['saveCapNumber'])) $urlKeepExtension .= '&capNumber='.$_POST['capNumber'];
+            if(isset($_POST['saveLocationAquired'])) $urlKeepExtension .= '&locationAquired='.$_POST['locationAquired'];
+            if(isset($_POST['saveDateAquired'])) $urlKeepExtension .= '&dateAquired='.$_POST['dateAquired'];
+            if(isset($_POST['saveCapColorID'])) $urlKeepExtension .= '&capColorID='.$_POST['capColorID'];
+            if(isset($_POST['saveBaseColorID'])) $urlKeepExtension .= '&baseColorID='.$_POST['baseColorID'];
+            if(isset($_POST['saveTextColorID'])) $urlKeepExtension .= '&textColorID='.$_POST['textColorID'];
+            if(isset($_POST['saveQuality'])) $urlKeepExtension .= '&quality='.$_POST['quality'];
+            if(isset($_POST['saveIsTraded'])) $urlKeepExtension .= '&isTraded='.$_POST['isTraded'];
+            if(isset($_POST['saveIsUsed'])) $urlKeepExtension .= '&isUsed='.$_POST['isUsed'];
+            if(isset($_POST['saveIsTradeable'])) $urlKeepExtension .= '&isTradeable='.$_POST['isTradeable'];
+            if(isset($_POST['saveIsTwistLock'])) $urlKeepExtension .= '&isTwistLock='.$_POST['isTwistLock'];
+            if(isset($_POST['saveAlcohol'])) $urlKeepExtension .= '&alcohol='.$_POST['alcohol'];
+            if(isset($_POST['saveStock'])) $urlKeepExtension .= '&stock='.$_POST['stock'];
+            if(isset($_POST['saveIsCounted'])) $urlKeepExtension .= '&isCounted='.(isset($_POST['isCounted']) ? '1' : '0');
+            if(isset($_POST['saveSidesignID'])) $urlKeepExtension .= '&sidesignID='.$_POST['sidesignID'];
+
+            if($urlKeepExtension != "") $urlKeepExtension = '?keepEnabled'.$urlKeepExtension;
         }
 
         if(isset($_POST['expandSet']))
@@ -162,13 +188,15 @@
                 $fileUploader->SetPath("files/bottlecaps/$countryShort/$breweryFilepath/");
                 $fileUploader->SetSQLEntry("UPDATE bottlecaps SET capImage = '@FILENAME' WHERE id = '".$_POST['editBottlecap']."'");
             }
+
+
         }
 
         $fileUploader->SetName($capNumber);
         $fileUploader->OverrideDuplicates(false);
         $fileUploader->Upload();
 
-        if(isset($_POST['addBottlecap'])) Page::Redirect(Page::This());
+        if(isset($_POST['addBottlecap'])) Page::Redirect("/eintragen/kronkorken".$urlKeepExtension);
         else
         {
             echo '
@@ -512,6 +540,17 @@
                 else $capDataImage = '/files/bottlecaps/'.$capData['countryShort'].'/'.$capData['breweryFilepath'].'/'.$capData['capImage'];
             }
 
+            if(isset($_GET['keepEnabled']))
+            {
+                echo '
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            InsertCapUpdateCapPreview();
+                        });
+                    </script>
+                ';
+            }
+
             if($expand)
             {
                 $setData = MySQL::Row("SELECT * FROM sets INNER JOIN bottlecaps ON sets.id = bottlecaps.setID INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE sets.id = ?",'s',$_GET['objID']);
@@ -534,14 +573,14 @@
                             <tr>
                                 <td>Land</td>
                                 <td>
-                                    <select '.($isSetPart ? 'disabled' : '').' name="countryID" class="cel_100 cef_nomg cef_nopd" id="countryList" onchange="DynLoadList(1,this,\'--- Ausw\u00e4hlen ---\',\'breweryList\',\'SELECT breweryName AS dynLoadText, id AS dynLoadValue FROM breweries WHERE countryID = ?? ORDER BY breweryName ASC\'); DynLoadScalar(2,this,\'outCountryShort\',\'SELECT countryShort2 FROM countries WHERE id = ??\')">
+                                    <select tabindex="1" '.($isSetPart ? 'disabled' : '').' name="countryID" class="cel_100 cef_nomg cef_nopd" id="countryList" onchange="DynLoadList(1,this,\'--- Ausw\u00e4hlen ---\',\'breweryList\',\'SELECT breweryName AS dynLoadText, id AS dynLoadValue FROM breweries WHERE countryID = ?? ORDER BY breweryName ASC\'); DynLoadScalar(2,this,\'outCountryShort\',\'SELECT countryShort2 FROM countries WHERE id = ??\')">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($countryList AS $country) echo '<option value="'.$country['countryID'].'" '.(($expand AND $country['countryID'] == $setData['countryID']) ? 'selected' : '').'  '.(($edit AND $country['countryID'] == $capData['countryID']) ? 'selected' : '').'>'.$country['countryDE'].'</option>';
+                                        foreach($countryList AS $country) echo '<option value="'.$country['countryID'].'" '.((($expand AND $country['countryID'] == $setData['countryID']) OR ($edit AND $country['countryID'] == $capData['countryID']) OR (isset($_GET['countryID']) AND $country['countryID'] == $_GET['countryID'])) ? 'selected' : '').'>'.$country['countryDE'].'</option>';
                                         echo '
                                     </select>
                                 </td>
-                                <td>'.Tickbox("saveCountryID","saveCountryID","",true).'</td>
+                                <td>'.Tickbox("saveCountryID","saveCountryID","",(isset($_GET['keepEnabled']) ? (isset($_GET['countryID']) ? true : false) : true)).'</td>
 
                                 <td rowspan=5>
                                     <center>
@@ -565,40 +604,49 @@
                             <tr>
                                 <td>Brauerei</td>
                                 <td>
-                                    <select '.($isSetPart ? 'disabled' : '').' name="breweryID" class="cel_m cef_nomg cef_nopd" id="breweryList" required
+                                    <select tabindex="2" '.($isSetPart ? 'disabled' : '').' name="breweryID" class="cel_m cef_nomg cef_nopd" id="breweryList" required
                                     onchange="DynLoadScalar(3,this,\'outBreweryShort\',\'SELECT breweryShort FROM breweries WHERE id = ??\'); CopyShortsToCapNumber(false);"
                                     onclick="DynLoadScalar(3,this,\'outBreweryShort\',\'SELECT breweryShort FROM breweries WHERE id = ??\'); CopyShortsToCapNumber(false)">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         '.($expand ? ('<option value="'.$setData['breweryID'].'" selected>'.$setData['breweryName'].'</option>') : '').'
                                         '.($edit ? ('<option value="'.$capData['breweryID'].'" selected>'.$capData['breweryName'].'</option>') : '').'
+                                        '.(isset($_GET['breweryID']) ? ('<option value="'.$_GET['breweryID'].'" selected>'.MySQL::Scalar("SELECT breweryName FROM breweries WHERE id = ?",'s',$_GET['breweryID']).'</option>') : '').'
+
                                     </select>
                                 </td>
-                                <td>'.Tickbox("saveBreweryID","saveBreweryID","",true).'</td>
+                                <td>'.Tickbox("saveBreweryID","saveBreweryID","",(isset($_GET['keepEnabled']) ? (isset($_GET['breweryID']) ? true : false) : true)).'</td>
                             </tr>
 
                             <tr>
                                 <td>Name</td>
-                                <td><input class="cel_m" type="text" name="name" placeholder="Name..." value="'.($edit ? $capData['name'] : '').'" required/></td>
-                                <td>'.Tickbox("saveName","saveName","",true).'</td>
+                                <td><input tabindex="3" class="cel_m" type="text" name="name" placeholder="Name..." value="'.($edit ? $capData['name'] : (isset($_GET['name']) ? $_GET['name'] : '')).'" required/></td>
+                                <td>'.Tickbox("saveName","saveName","",(isset($_GET['keepEnabled']) ? (isset($_GET['name']) ? true : false) : true)).'</td>
                             </tr>
 
                             <tr>
                                 <td>Sorte</td>
                                 <td>
-                                    <select '.($isSetPart ? 'disabled' : '').' name="flavorID" class="cel_100 cef_nomg cef_nopd" id="" required>
+                                    <select tabindex="4" '.($isSetPart ? 'disabled' : '').' name="flavorID" class="cel_100 cef_nomg cef_nopd" id="" required>
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($flavorList AS $flavor) echo '<option value="'.$flavor['id'].'" '.(($edit AND $flavor['id'] == $capData['flavorID']) ? 'selected' : '').'>'.$flavor['flavorDE'].'</option>';
+                                        foreach($flavorList AS $flavor) echo '<option value="'.$flavor['id'].'" '.((($edit AND $flavor['id'] == $capData['flavorID']) OR (isset($_GET['flavorID']) AND $_GET['flavorID'] == $flavor['id'])) ? 'selected' : '').'>'.$flavor['flavorDE'].'</option>';
                                         echo '
                                     </select>
                                 </td>
-                                <td>'.Tickbox("saveFlavorID","saveFlavorID","",true).'</td>
+                                <td>'.Tickbox("saveFlavorID","saveFlavorID","",(isset($_GET['keepEnabled']) ? (isset($_GET['flavorID']) ? true : false) : true)).'</td>
                             </tr>
 
                             <tr>
-                                <td>Kapsel-Nr.'.($edit ? ('<br><sub><span style="color: #696969">Original: '.$capData['capNumber'].'</span></sub>') : '').'</td>
-                                <td><input class="cel_m" type="text" name="capNumber" id="capNumber" placeholder="XX_XX_XXXX" value="'.($edit ? $capData['capNumber'] : '').($expand ? (substr($setData['capNumber'],0,strrpos($setData['capNumber'],'_')).'_') : '').'" required onclick="CopyShortsToCapNumber(true)"/></td>
-                                <td>'.Tickbox("saveCapNumber","saveCapNumber","",true).'</td>
+                                ';
+
+                                if($expand) $capNumberBase = (substr($setData['capNumber'],0,strrpos($setData['capNumber'],'_')).'_');
+                                if(isset($_GET['capNumber']))  $capNumberBase = (substr($_GET['capNumber'],0,strrpos($_GET['capNumber'],'_')).'_');
+
+                                echo '
+
+                                <td>Kapsel-Nr.'.($edit ? ('<br><sub><span style="color: #696969">Original: '.$capData['capNumber'].'</span></sub>') : (isset($_GET['capNumber']) ? ('<br><sub><span style="color: #696969">Letztes: '.$_GET['capNumber'].'</span></sub>') : '')).'</td>
+                                <td><input tabindex="5" class="cel_m" type="text" name="capNumber" id="capNumber" placeholder="XX_XX_XXXX" value="'.($edit ? $capData['capNumber'] : ''.(($expand OR isset($_GET['capNumber'])) ? $capNumberBase : '')).'" required onclick="CopyShortsToCapNumber(true)"/></td>
+                                <td>'.Tickbox("saveCapNumber","saveCapNumber","",(isset($_GET['keepEnabled']) ? (isset($_GET['capNumber']) ? true : false) : true)).'</td>
                             </tr>
 
                             <tr>
@@ -608,60 +656,60 @@
 
                             <tr>
                                 <td>Erhaltsort</td>
-                                <td><input class="cel_m" type="text" name="locationAquired" placeholder="Erhaltsort..."  value="'.($edit ? $capData['locationAquired'] : '').'"/></td>
-                                <td>'.Tickbox("saveLocationAquired","saveLocationAquired","",true).'</td>
+                                <td><input tabindex="6" class="cel_m" type="text" name="locationAquired" placeholder="Erhaltsort..."  value="'.($edit ? $capData['locationAquired'] : (isset($_GET['locationAquired']) ? $_GET['locationAquired'] : '')).'"/></td>
+                                <td>'.Tickbox("saveLocationAquired","saveLocationAquired","",(isset($_GET['keepEnabled']) ? (isset($_GET['locationAquired']) ? true : false) : true)).'</td>
 
                                 <td>Kapselfarbe</td>
                                 <td>
-                                    <select name="capColorID" class="cel_100 cef_nomg cef_nopd" id="capColor" onchange="InsertCapUpdateCapPreview()">
+                                    <select tabindex="9" name="capColorID" class="cel_100 cef_nomg cef_nopd" id="capColor" onchange="InsertCapUpdateCapPreview()">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['colorShort'].'" '.(($edit AND $color['id'] == $capData['capColorID']) ? 'selected' : '').'>'.$color['colorDE'].'</option>';
+                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['colorShort'].'" '.((($edit AND $color['id'] == $capData['capColorID']) OR (isset($_GET['capColorID']) AND $_GET['capColorID'] == $color['id'])) ? 'selected' : '').'>'.$color['colorDE'].'</option>';
                                         echo '
                                     </select>
                                 </td>
-                                <td>'.Tickbox("saveCapColorID","saveCapColorID","",true).'</td>
+                                <td>'.Tickbox("saveCapColorID","saveCapColorID","",(isset($_GET['keepEnabled']) ? (isset($_GET['capColorID']) ? true : false) : true)).'</td>
                             </tr>
 
                             <tr>
                                 <td>Erhaltsdatum</td>
-                                <td><input class="cel_m" type="text" name="dateAquired" placeholder="Erhaltsdatum..." value="'.($edit ? $capData['dateAquired'] : '').'"/></td>
-                                <td>'.Tickbox("saveDateAquired","saveDateAquired","",true).'</td>
+                                <td><input tabindex="7" class="cel_m" type="text" name="dateAquired" placeholder="Erhaltsdatum..." value="'.($edit ? $capData['dateAquired'] : (isset($_GET['keepEnabled']) ? $_GET['dateAquired'] : '')).'"/></td>
+                                <td>'.Tickbox("saveDateAquired","saveDateAquired","",(isset($_GET['keepEnabled']) ? (isset($_GET['dateAquired']) ? true : false) : true)).'</td>
 
                                 <td>Grundfarbe</td>
                                 <td>
-                                    <select name="baseColorID" class="cel_100 cef_nomg cef_nopd" id="baseColor" onchange="InsertCapUpdateCapPreview()">
+                                    <select tabindex="10" name="baseColorID" class="cel_100 cef_nomg cef_nopd" id="baseColor" onchange="InsertCapUpdateCapPreview()">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['hex'].'" '.(($edit AND $color['id'] == $capData['baseColorID']) ? 'selected' : '').'>'.$color['colorDE'].'</option>';
+                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['hex'].'" '.((($edit AND $color['id'] == $capData['baseColorID']) OR (isset($_GET['baseColorID']) AND $_GET['baseColorID'] == $color['id'])) ? 'selected' : '').'>'.$color['colorDE'].'</option>';
                                         echo '
                                     </select>
                                 </td>
-                                <td>'.Tickbox("saveBaseColorID","saveBaseColorID","",true).'</td>
+                                <td>'.Tickbox("saveBaseColorID","saveBaseColorID","",(isset($_GET['keepEnabled']) ? (isset($_GET['baseColorID']) ? true : false) : true)).'</td>
                             </tr>
 
                             <tr>
                                 <td>Qualit&auml;t</td>
                                 <td>
-                                    <select name="quality" class="cel_m cef_nomg cef_nopd" id="">
+                                    <select tabindex="8" name="quality" class="cel_m cef_nomg cef_nopd" id="">
                                         <option value="" selected>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($qualityValueList AS $quality) echo '<option value="'.$quality.'"  '.(($edit AND $quality == $capData['quality']) ? 'selected' : '').'>'.$qualityDisplayList[$quality].'</option>';
+                                        foreach($qualityValueList AS $quality) echo '<option value="'.$quality.'"  '.((($edit AND $quality == $capData['quality']) OR (isset($_GET['quality']) AND $_GET['quality'] == $quality)) ? 'selected' : '').'>'.$qualityDisplayList[$quality].'</option>';
                                         echo '
                                     </select>
                                 </td>
-                                <td>'.Tickbox("saveQuality","saveQuality","",true).'</td>
+                                <td>'.Tickbox("saveQuality","saveQuality","",(isset($_GET['keepEnabled']) ? (isset($_GET['quality']) ? true : false) : true)).'</td>
 
                                 <td>Textfarbe</td>
                                 <td>
-                                    <select name="textColorID" class="cel_100 cef_nomg cef_nopd" id="textColor" onchange="InsertCapUpdateCapPreview()">
+                                    <select tabindex="11" name="textColorID" class="cel_100 cef_nomg cef_nopd" id="textColor" onchange="InsertCapUpdateCapPreview()">
                                         <option value="" selected disabled>--- Ausw&auml;hlen ---</option>
                                         ';
-                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['hex'].'" '.(($edit AND $color['id'] == $capData['textColorID']) ? 'selected' : '').'>'.$color['colorDE'].'</option>';
+                                        foreach($colorList AS $color) echo '<option style="background:#'.$color['hex'].'; color: #'.($color['hex']=="FFFFFF" ? "000000" : "FFFFFF").';" value="'.$color['id'].'-'.$color['hex'].'" '.((($edit AND $color['id'] == $capData['textColorID']) OR (isset($_GET['textColorID']) AND $_GET['textColorID'] == $color['id'])) ? 'selected' : '').'>'.$color['colorDE'].'</option>';
                                         echo '
                                     </select>
                                 </td>
-                                <td>'.Tickbox("saveTextColorID","saveTextColorID","",true).'</td>
+                                <td>'.Tickbox("saveTextColorID","saveTextColorID","",(isset($_GET['keepEnabled']) ? (isset($_GET['textColorID']) ? true : false) : true)).'</td>
                             </tr>
 
                             <tr>
@@ -669,23 +717,57 @@
                                 <td>
                                     <table>
                                         <tr>
-                                            <td>'.RadioButton("Tausch","isTraded",($edit ? ($capData['isTraded']==1 ? true : false) : false),"1").'</td>
-                                            <td>'.RadioButton("Kauf","isTraded",($edit ? ($capData['isTraded']==1 ? false : true) : true),"0").'</td>
+                                            ';
+
+                                            if($edit)
+                                            {
+                                                if($capData['isTraded'] == 1) $isTradedValue1 = true;
+                                                else $isTradedValue1 = false;
+                                            }
+                                            else if(isset($_GET['isTraded']))
+                                            {
+                                                if($_GET['isTraded'] == 1) $isTradedValue1 = true;
+                                                else $isTradedValue1 = false;
+                                            }
+                                            else $isTradedValue1 = false;
+
+                                            $isTradeValue2 = !$isTradedValue1;
+
+                                            echo '
+                                            <td>'.RadioButton("Tausch","isTraded",$isTradedValue1,"1").'</td>
+                                            <td>'.RadioButton("Kauf","isTraded",$isTradeValue2,"0").'</td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td>'.Tickbox("saveIsTraded","saveIsTraded","",true).'</td>
+                                <td>'.Tickbox("saveIsTraded","saveIsTraded","",(isset($_GET['keepEnabled']) ? (isset($_GET['isTraded']) ? true : false) : true),"").'</td>
 
                                 <td>Zustand</td>
                                 <td>
                                     <table>
                                         <tr>
-                                            <td>'.RadioButton("Neu","isUsed",($edit ? ($capData['isUsed']==0 ? true : false) : false),"0","InsertCapUpdateCapPreview()").'</td>
-                                            <td>'.RadioButton("Gebr.","isUsed",($edit ? ($capData['isUsed']==0 ? false : true) : true),"1","InsertCapUpdateCapPreview()").'</td>
+                                            ';
+
+                                            if($edit)
+                                            {
+                                                if($capData['isUsed'] == 1) $isUsedValue1 = true;
+                                                else $isUsedValue1 = false;
+                                            }
+                                            else if(isset($_GET['isUsed']))
+                                            {
+                                                if($_GET['isUsed'] == 1) $isUsedValue1 = true;
+                                                else $isUsedValue1 = false;
+                                            }
+                                            else $isUsedValue1 = true;
+
+                                            $isUsedValue2 = !$isUsedValue1;
+
+                                            echo '
+                                            <td>'.RadioButton("Neu","isUsed",$isUsedValue2,"0","InsertCapUpdateCapPreview()").'</td>
+                                            <td>'.RadioButton("Gebr.","isUsed",$isUsedValue1,"1","InsertCapUpdateCapPreview()").'</td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td>'.Tickbox("saveIsUsed","saveIsUsed","",true).'</td>
+                                <td>'.Tickbox("saveIsUsed","saveIsUsed","",(isset($_GET['keepEnabled']) ? (isset($_GET['isUsed']) ? true : false) : true),"").'</td>
                             </tr>
 
                             <tr>
@@ -693,37 +775,71 @@
                                 <td>
                                     <table>
                                         <tr>
-                                            <td>'.RadioButton("Ja","isTradeable",($edit ? ($capData['isTradeable']==1 ? true : false) : false),"1").'</td>
-                                            <td>'.RadioButton("Nein","isTradeable",($edit ? ($capData['isTradeable']==1 ? false : true) : true),"0").'</td>
+                                            ';
+
+                                            if($edit)
+                                            {
+                                                if($capData['isTradeable'] == 1) $isTradeableValue1 = true;
+                                                else $isTradeableValue1 = false;
+                                            }
+                                            else if(isset($_GET['isTradeable']))
+                                            {
+                                                if($_GET['isTradeable'] == 1) $isTradeableValue1 = true;
+                                                else $isUsedValue1 = false;
+                                            }
+                                            else $isTradeableValue1 = false;
+
+                                            $isTradeableValue2 = !$isTradeableValue1;
+
+                                            echo '
+                                            <td>'.RadioButton("Ja","isTradeable",$isTradeableValue1,"1").'</td>
+                                            <td>'.RadioButton("Nein","isTradeable",$isTradeableValue2,"0").'</td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td>'.Tickbox("saveIsTradeable","saveIsTradeable","",true).'</td>
+                                <td>'.Tickbox("saveIsTradeable","saveIsTradeable","",(isset($_GET['keepEnabled']) ? (isset($_GET['isTradeable']) ? true : false) : true)).'</td>
 
                                 <td>Drehverschluss</td>
                                 <td>
                                     <table>
                                         <tr>
-                                            <td>'.RadioButton("Ja","isTwistLock",($edit ? ($capData['isTwistlock']==1 ? true : false) : false),"1","InsertCapUpdateCapPreview()").'</td>
-                                            <td>'.RadioButton("Nein","isTwistLock",($edit ? ($capData['isTwistlock']==1 ? false : true) : true),"0","InsertCapUpdateCapPreview()").'</td>
+                                            ';
+
+                                            if($edit)
+                                            {
+                                                if($capData['isTwistlock'] == 1) $isTwistlockValue1 = true;
+                                                else $isTwistlockValue1 = false;
+                                            }
+                                            else if(isset($_GET['isTwistlock']))
+                                            {
+                                                if($_GET['isTwistlock'] == 1) $isTwistlockValue1 = true;
+                                                else $isTwistlockValue1 = false;
+                                            }
+                                            else $isTwistlockValue1 = false;
+
+                                            $isTwistlockValue2 = !$isTwistlockValue1;
+
+                                            echo '
+                                            <td>'.RadioButton("Ja","isTwistLock",$isTwistlockValue1,"1","InsertCapUpdateCapPreview()").'</td>
+                                            <td>'.RadioButton("Nein","isTwistLock",$isTwistlockValue2,"0","InsertCapUpdateCapPreview()").'</td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td>'.Tickbox("saveIsTwistLock","saveIsTwistLock","",true).'</td>
+                                <td>'.Tickbox("saveIsTwistLock","saveIsTwistLock","",(isset($_GET['keepEnabled']) ? (isset($_GET['isTwistLock']) ? true : false) : true)).'</td>
                             </tr>
 
                             <tr>
                                 <td>Alkoholgehalt</td>
-                                <td><input '.($isSetPart ? 'disabled' : '').' class="cel_m" type="number" step="0.1" name="alcohol" placeholder="Alkoholgehalt..." '.($edit ? (($capData['alcohol']!=NULL) ? ('value="'.$capData['alcohol'].'"') : '') : '').'/></td>
-                                <td>'.Tickbox("saveAlcohol","saveAlcohol","",true).'</td>
+                                <td><input tabindex="12" '.($isSetPart ? 'disabled' : '').' class="cel_m" type="number" step="0.1" name="alcohol" placeholder="Alkoholgehalt..." value="'.($edit ? (($capData['alcohol']!=NULL) ? $capData['alcohol'] : '' ) : (isset($_GET['alcohol']) ? $_GET['alcohol'] : '')).'" /></td>
+                                <td>'.Tickbox("saveAlcohol","saveAlcohol","",(isset($_GET['keepEnabled']) ? (isset($_GET['alcohol']) ? true : false) : true)).'</td>
 
 
                             </tr>
 
                             <tr>
                                 <td>Auf Lager</td>
-                                <td><input class="cel_m" type="number" step="1" name="stock" placeholder="Auf Lager..." value="'.($edit ? $capData['stock'] : '').'"/></td>
-                                <td>'.Tickbox("saveAlcohol","saveAlcohol","",true).'</td>
+                                <td><input tabindex="13" class="cel_m" type="number" step="1" name="stock" placeholder="Auf Lager..." value="'.($edit ? $capData['stock'] : (isset($_GET['stock']) ? $_GET['stock'] : '')).'"/></td>
+                                <td>'.Tickbox("saveStock","saveStock","",(isset($_GET['keepEnabled']) ? (isset($_GET['stock']) ? true : false) : true)).'</td>
 
                                 ';
 
@@ -748,7 +864,7 @@
                                     echo '
                                         <td>Mitz&auml;hlen</td>
                                         <td>'.Tickbox("isCounted","isCounted","",($edit ? ($capData['isCounted']==1 ? true : false) : true)).'</td>
-                                        <td>'.Tickbox("saveIsCounted","saveIsCounted","",true).'</td>
+                                        <td>'.Tickbox("saveIsCounted","saveIsCounted","",(isset($_GET['isCounted']) ? true : false)).'</td>
                                     ';
                                 }
 
@@ -780,7 +896,7 @@
                                 foreach($sidesignAllList AS $sidesign)
                                     {
                                         echo '
-                                            <input type="radio" id="sidesignAll'.$sidesign['id'].'" value="'.$sidesign['id'].'" name="sidesignID" hidden required '.(($edit AND $sidesign['id'] == $capData['sidesignID']) ? 'checked' : '').'/>
+                                            <input type="radio" id="sidesignAll'.$sidesign['id'].'" value="'.$sidesign['id'].'" name="sidesignID" hidden required '.((($edit AND $sidesign['id'] == $capData['sidesignID']) OR (isset($_GET['sidesignID']) AND $_GET['sidesignID'] == $sidesign['id'])) ? 'checked' : '').'/>
                                             <label for="sidesignAll'.$sidesign['id'].'">
                                                 <div>
                                                     <img src="/files/sidesigns/'.$sidesign['sidesignImage'].'" alt="" />
@@ -796,14 +912,17 @@
 
 
                         <table class="addCapSidesignTable">
-                            <tr><td>Randzeichen</td></tr>
                             <tr>
-                                <td>
+                                <td>Randzeichen</td>
+                                <td>'.Tickbox("saveSidesignID","saveSidesignID","",(isset($_GET['keepEnabled']) ? (isset($_GET['sidesignID']) ? true : false) : true)).'</td>
+                            </tr>
+                            <tr>
+                                <td colspan=2>
                                 ';
                                 foreach($sidesignFrequentList AS $sidesign)
                                 {
                                     echo '
-                                        <input type="radio" id="sidesignFrequent'.$sidesign['sidesignID'].'" value="'.$sidesign['sidesignID'].'" name="sidesignID" hidden required '.(($edit AND $sidesign['sidesignID'] == $capData['sidesignID']) ? 'checked' : '').'/>
+                                        <input type="radio" id="sidesignFrequent'.$sidesign['sidesignID'].'" value="'.$sidesign['sidesignID'].'" name="sidesignID" hidden required '.((($edit AND $sidesign['sidesignID'] == $capData['sidesignID']) OR (isset($_GET['sidesignID']) AND $_GET['sidesignID'] == $sidesign['id'])) ? 'checked' : '').'/>
                                         <label for="sidesignFrequent'.$sidesign['sidesignID'].'">
                                             <div>
                                                 <img src="/files/sidesigns/'.$sidesign['sidesignImage'].'" alt="" />
@@ -814,7 +933,7 @@
                                 echo '
                                 </td>
                             </tr>
-                            <tr><td><a href="#allSidesigns">Alle Randzeichen</a></td></tr>
+                            <tr><td colspan=2><a href="#allSidesigns">Alle Randzeichen</a></td></tr>
                         </table>
 
                     </form>

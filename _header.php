@@ -118,7 +118,7 @@
                         </ul>
                     </div>
 
-                    <div class="navigationPath">
+                    <div class="navigationPath" id="navigationBar">
                         <a href=""><span>Home</span></a> <i>&gt;</i>
                     </div>
                 </nav>

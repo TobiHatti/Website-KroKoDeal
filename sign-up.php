@@ -1,6 +1,8 @@
 <?php
 	require("_header.php");
 
+    NavBar("Home","Registrieren");
+
     if(isset($_SESSION['securePassageName']) AND isset($_POST['signin'.$_SESSION['securePassageName']]))
     {
         $gender = $_POST['gender'];

@@ -11,6 +11,8 @@
     {
         if(isset($_GET['country']))
         {
+            NavBar("Home","Tauschen","TradeCountries","TradeCountry:".$_GET['country']);
+
             $country = $_GET['country'];
             $countryData = MySQL::Row("SELECT * FROM countries WHERE countryShort = ?",'s',$country);
             $pager = new Pager(20);
@@ -62,6 +64,8 @@
 
         if(isset($_GET['sortbyletter']))
         {
+            NavBar("Home","Tauschen","TradeCountries","TradeCountry:".$_GET['country'],"Letter:".$_GET['letter']);
+
             $country = $_GET['country'];
             $letter = $_GET['letter'].'%';
 
@@ -103,6 +107,8 @@
         }
         if(isset($_GET['sortbybrewery']))
         {
+            NavBar("Home","Tauschen","TradeCountries","TradeCountry:".$_GET['country'],"Brewery:".$_GET['brewery']);
+
             $country = $_GET['country'];
             $brewery = $_GET['brewery'];
 
@@ -203,7 +209,7 @@
 
         echo '</div></div><br>'.$sqlPager.'</center>';
 
-        echo '<iframe src="/_iframe_addCapToCart" name="cartAddFrame" frameborder="0" hidden></iframe>';     
+        echo '<iframe src="/_iframe_addCapToCart" name="cartAddFrame" frameborder="0" hidden></iframe>';
     }
 
 

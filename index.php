@@ -1,7 +1,7 @@
 <?php
 	require("_header.php");
 
-
+    NavBar("Home");
 
 
     echo '
@@ -31,7 +31,7 @@
                 <table>
                     <tr>
                         <td>Aktueller Kronkorken-Stand:<br><br></td>
-                        <td>'.MySQL::Count("SELECT id FROM bottlecaps WHERE isCounted = 1").' Stück<br><br></td>
+                        <td>'.MySQL::Count("SELECT id FROM bottlecaps WHERE (isSet = 0 AND isCounted = 1) OR (isSet = 1 AND isOwned = 1)").' Stück<br><br></td>
                     </tr>
                     <tr>
                         <td>Heute hinzugefügt:</td>

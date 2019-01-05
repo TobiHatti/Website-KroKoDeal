@@ -3,11 +3,11 @@
 
     if(CheckEditPermission())
     {
+// INSTANT DELETE
 
-// REQUEST DELETE
         if($_GET['section']=='tauschkorb')
         {
-            $id = $_GET['selectionID'];    
+            $id = $_GET['selectionID'];
             MySQL::NonQuery("DELETE FROM cart WHERE id = ?",'s',$id);
 
             echo '
@@ -18,7 +18,21 @@
             die();
         }
 
-// INSTANT DELETE
+        if($_GET['section']=='gaestebuch')
+        {
+            $id = $_GET['selectionID'];
+
+            if(MySQL::Exist("SELECT * FROM guestbook WHERE id = ? AND userID = ?",'ss',$id,$_SESSION['userID']))
+            {
+                MySQL::NonQuery("DELETE FROM guestbook WHERE id = ?",'s',$id);
+            }
+
+            Page::Redirect("/gaestebuch");
+            die();
+        }
+
+// REQUEST DELETE
+
 
         if(isset($_POST['delete']))
         {

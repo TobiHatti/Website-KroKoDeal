@@ -445,7 +445,8 @@ select {
   transition: all 0.1s ease-in-out; }
 
 select:focus {
-  border-bottom: 1px solid #FF892E; }
+  border: 1px solid #FF892E;
+  color: #FF892E; }
 
 select:disabled {
   color: #696969;
@@ -3174,5 +3175,86 @@ table.capCartDisplay {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     background-color: #A9A9A9; }
+
+.guestbookEntry {
+  background: #333333;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 10px;
+  border-spacing: 5px;
+  border-collapse: seperate; }
+  .guestbookEntry tr td {
+    position: relative;
+    border-radius: 10px;
+    padding: 5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
+  .guestbookEntry tr td:first-child {
+    background: #FFDFC7;
+    width: 150px; }
+    .guestbookEntry tr td:first-child i {
+      color: #696969; }
+    .guestbookEntry tr td:first-child b {
+      color: #32CD32;
+      font-size: 15pt; }
+    .guestbookEntry tr td:first-child em {
+      font-size: 10pt;
+      color: #696969; }
+    .guestbookEntry tr td:first-child img.userImg {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      max-width: 50px;
+      max-height: 50px; }
+    .guestbookEntry tr td:first-child .up {
+      position: absolute;
+      top: 70px;
+      left: 5px;
+      color: #32CD32;
+      background: none; }
+      .guestbookEntry tr td:first-child .up img {
+        width: 30px;
+        margin: 3px;
+        -webkit-transition: all 0.2s ease-in-out;
+        -moz-transition: all 0.2s ease-in-out;
+        -ms-transition: all 0.2s ease-in-out;
+        -o-transition: all 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out; }
+      .guestbookEntry tr td:first-child .up img:hover {
+        width: 33px;
+        filter: drop-shadow(2px 2px 2px black); }
+    .guestbookEntry tr td:first-child .down {
+      position: absolute;
+      top: 70px;
+      left: 60px;
+      color: red;
+      background: none; }
+      .guestbookEntry tr td:first-child .down img {
+        width: 30px;
+        margin: 3px;
+        -webkit-transition: all 0.2s ease-in-out;
+        -moz-transition: all 0.2s ease-in-out;
+        -ms-transition: all 0.2s ease-in-out;
+        -o-transition: all 0.2s ease-in-out;
+        transition: all 0.2s ease-in-out; }
+      .guestbookEntry tr td:first-child .down img:hover {
+        width: 33px;
+        filter: drop-shadow(2px 2px 2px black); }
+  .guestbookEntry tr td:last-child {
+    background: #FFFFFF;
+    position: relative;
+    vertical-align: top; }
+    .guestbookEntry tr td:last-child i {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      color: #696969; }
+    .guestbookEntry tr td:last-child u {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      color: red; }
 
 /*# sourceMappingURL=style.css.map */

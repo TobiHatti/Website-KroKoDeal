@@ -5,6 +5,8 @@
     {
         if(!isset($_GET['country']))
         {
+            NavBar("Home","Sets");
+
             echo '<h2>Sets</h2>';
 
             echo '<center>';
@@ -14,6 +16,8 @@
         }
         else
         {
+            NavBar("Home","Sets","CountrySets:".$_GET['country']);
+
             $country = $_GET['country'];
             $countryData = MySQL::Row("SELECT * FROM countries WHERE countryShort = ?",'s',$country);
 
@@ -28,6 +32,8 @@
     }
     else
     {
+        NavBar("Home","Sets","CountrySets:".$_GET['country'],"Set:".$_GET['set']);
+
         $pager = new Pager(20);
         $pagerOffset = $pager->GetOffset();
         $pagerSize = $pager->GetPagerSize();

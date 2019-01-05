@@ -1,6 +1,8 @@
 <?php
 	require("_header.php");
 
+    NavBar("Home","Tauschen");   
+
     if(isset($_POST['confirmTrade']))
     {
         $tradeID = $_POST['confirmTrade'];
@@ -45,6 +47,16 @@
 
         Message($ownerID, $tradePartnerID, "Ihr Tausch wurde abgeschlossen!", $tradeID,true);
         Message($ownerID, $tradePartnerID, $tradeMessage, $tradeID);
+
+
+        $tradeDataArray = MySQL::Cluster("SELECT * FROM cart WHERE tradeID = ?",'s',$tradeID);
+        foreach($tradeDataArray as $tradeData)
+        {
+            if($tradeData['isSet']!='1') MySQL::NonQuery("UPDATE bottlecaps SET stock = stock - 1 WHERE id = ?",'s',$tradeData['objID']);
+            else MySQL::NonQuery("UPDATE bottlecaps SET stock = stock - 1 WHERE setID = ?",'s',$tradeData['objID']);
+        }
+
+
 
         if(MySQL::Scalar("SELECT mailNotifications FROM trades WHERE id = ?",'s',$tradeID) == '1')
         {
@@ -91,6 +103,8 @@
     {
         if($_GET['section']=='laender')
         {
+            NavBar("Home","Tauschen","TradeCountries");
+
             echo '<h2 style="color: #1E90FF">Kronkorken Tauschen</h2><br>';
 
             echo '<center>';
@@ -103,6 +117,8 @@
 
         if($_GET['section']=='sets')
         {
+            NavBar("Home","Tauschen","TradeSets");
+
             echo '<h2 style="color: #1E90FF">Sets Tauschen</h2>';
 
             echo '<center>';
@@ -113,6 +129,8 @@
 
         if($_GET['section']=='hilfe')
         {
+            NavBar("Home","Tauschen","Tauschhilfe");
+
             echo '<h2 style="color: #1E90FF">Wie wird getauscht</h2>';
 
             echo PageContent(1,CheckEditPermission());
@@ -154,7 +172,7 @@
                                     Tausch abgeschlossen: '.($tradeData['tradeCompleted'] ? str_replace('ä','&auml;',strftime("%d. %B %Y",strtotime($tradeData['dateTradeCompleted']))) : '<i>nicht abgeschlossen</i>' ).'
                                 </td>
                                 <td>
-                                    <a href="/chat/'.$tradeData['userID'].'"><button type="button" class="cel_100" style="margin-bottom: 6px;">Nachricht senden</button></a><br>
+                                    <a href="/chat/'.$tradeData['userID'].'/'.$tradeData['id'].'"><button type="button" class="cel_100" style="margin-bottom: 6px;">Nachricht senden</button></a><br>
                                     <a href="#capList'.$tradeData['id'].'"><button type="button" class="cel_100" style="margin-bottom: 6px;">KK-Liste anzeigen</button></a><br>
 
                                     ';
@@ -349,7 +367,7 @@ Gerne immer wieder!</textarea>
                                     Tausch abgeschlossen: '.($tradeData['tradeCompleted'] ? str_replace('ä','&auml;',strftime("%d. %B %Y",strtotime($tradeData['dateTradeCompleted']))) : '<i>nicht abgeschlossen</i>' ).'
                                 </td>
                                 <td>
-                                    <a href="/chat/'.$partnerData['id'].'"><button type="button" class="cel_100" style="margin-bottom: 6px;">Nachricht senden</button></a><br>
+                                    <a href="/chat/'.$partnerData['id'].'/'.$tradeData['id'].'"><button type="button" class="cel_100" style="margin-bottom: 6px;">Nachricht senden</button></a><br>
                                     <a href="#capList'.$tradeData['id'].'"><button type="button" class="cel_100" style="margin-bottom: 6px;">KK-Liste anzeigen</button></a><br>
                                 </td>
                             </tr>

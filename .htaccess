@@ -59,7 +59,7 @@ RewriteRule ^tauschen/kronkorken/sammlung/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/brauer
 RewriteRule ^tauschen/sets/([a-zA-Z0-9-]+)/?$ tauschenSets.php?country=$1 [NC,QSA,L]
 RewriteRule ^tauschen/sets/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$/?$ tauschenSets.php?country=$1&set=$2 [NC,QSA,L]
 
-RewriteRule ^chat/([a-zA-Z0-9-]+)/?$ chat.php?receiverID=$1 [NC,QSA,L]
+RewriteRule ^chat/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$/?$ chat.php?receiverID=$1&tradeID=$2 [NC,QSA,L]
 
 #Ignore .php-Extension
 RewriteRule ^([^\.]+)$ $1.php [NC,L]

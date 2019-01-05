@@ -1,6 +1,8 @@
 <?php
     require("_header.php");
 
+    NavBar("Home","Tauschen","Tauschkorb");   
+
     if(isset($_SESSION['userID']))
     {
         echo '<h2>Tausch-Korb</h2>';
