@@ -7,7 +7,7 @@
 //========================================================================================
 //========================================================================================
 
-if(!isset($_GET['collection']))
+    if(!isset($_GET['collection']))
     {
         if(isset($_GET['region']))
         {
@@ -92,8 +92,6 @@ if(!isset($_GET['collection']))
         $pager = new Pager(20);
         $pagerOffset = $pager->GetOffset();
         $pagerSize = $pager->GetPagerSize();
-
-
 
         if(isset($_GET['sortbyletter']))
         {
@@ -266,6 +264,36 @@ if(!isset($_GET['collection']))
             foreach($alphaSortData AS $letter) $alphaSort .= '<a href="/kronkorken/alle/'.$letter['letter'].'"><span '.((isset($_GET['letter']) AND $_GET['letter'] == $letter['letter']) ? 'id="selected"' : '' ).'>'.$letter['letter'].'</span></a>';
             $alphaSort .= '</div>';
         }
+        if(isset($_GET['noImage']))
+        {
+            NavBar("Home","Sammlung","Kronkorken ohne Bild");
+
+            $sqlStatement = "SELECT *,
+            bottlecaps.id AS bottlecapID,
+            capColor.colorShort AS bottlecapCapColorShort,
+            capColor.colorDE AS bottlecapCapColorName,
+            baseColor.hex AS bottlecapBaseColorValue,
+            baseColor.colorDE AS bottlecapBaseColorName,
+            textColor.hex AS bottlecapTextColorValue,
+            textColor.colorDE AS bottlecapTextColorName
+            FROM bottlecaps
+            INNER JOIN breweries ON bottlecaps.breweryID = breweries.id
+            INNER JOIN countries ON breweries.countryID = countries.id
+            INNER JOIN flavors ON bottlecaps.flavorID = flavors.id
+            INNER JOIN sidesigns ON bottlecaps.sidesignID = sidesigns.id
+            INNER JOIN colors AS capColor ON bottlecaps.capColorID = capColor.id
+            INNER JOIN colors AS baseColor ON bottlecaps.baseColorID = baseColor.id
+            INNER JOIN colors AS textColor ON bottlecaps.textColorID = textColor.id
+            ORDER BY breweries.breweryName, bottlecaps.capNumber ASC";
+
+            $countryHasRegions = false;
+
+            $capDataArray = MySQL::Cluster($sqlStatement);
+
+            $tableHeader = 'Kronkorken mit fehlendem Bild';
+            $alphaSortData = '';
+            $sqlPager = '';
+        }
 
    
 
@@ -285,11 +313,42 @@ if(!isset($_GET['collection']))
 
         $permissionCheck = CheckEditPermission();
 
-        foreach($capDataArray AS $capData) echo BottleCapRowData($capData, false, $countryHasRegions,$permissionCheck);
+        foreach($capDataArray AS $capData)
+        {
+            if(isset($_GET['noImage']))
+            {
+                if($capData['isSet'])
+                {
+                    $setFilepath = MySQL::Scalar("SELECT setFilepath FROM sets WHERE id = ?",'s',$capData['setID']);
+                    $fileExist = file_exists("files/sets/".$capData['countryShort']."/".$setFilepath."/".$capData['capImage']);
+                }
+                else $fileExist = file_exists("files/bottlecaps/".$capData['countryShort']."/".$capData['breweryFilepath']."/".$capData['capImage']);
+
+                if(!$fileExist) echo BottleCapRowData($capData, false, $countryHasRegions,$permissionCheck);
+            }
+            else echo BottleCapRowData($capData, false, $countryHasRegions,$permissionCheck);
+        }
 
         echo '</table><div class="infoOverlays">';
 
-        foreach($capDataArray AS $capData) echo BottleCapRowInfoOverlay($capData,$permissionCheck);
+        foreach($capDataArray AS $capData)
+        {
+            if(isset($_GET['noImage']))
+            {
+                if($capData['isSet'])
+                {
+                    $setFilepath = MySQL::Scalar("SELECT setFilepath FROM sets WHERE id = ?",'s',$capData['setID']);
+                    $fileExist = file_exists("files/sets/".$capData['countryShort']."/".$setFilepath."/".$capData['capImage']);
+                }
+                else $fileExist = file_exists("files/bottlecaps/".$capData['countryShort']."/".$capData['breweryFilepath']."/".$capData['capImage']);
+
+                if(!$fileExist) echo BottleCapRowInfoOverlay($capData,$permissionCheck);
+            }
+            else echo BottleCapRowInfoOverlay($capData,$permissionCheck);
+        }
+
+
+
 
         echo '</div></div><br>'.$sqlPager.'</center>';
 

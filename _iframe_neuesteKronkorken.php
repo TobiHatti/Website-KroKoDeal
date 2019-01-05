@@ -1,6 +1,6 @@
 <?php
+    setlocale (LC_ALL, 'de_DE.UTF-8', 'de_DE@euro', 'de_DE', 'de', 'ge', 'de_DE.ISO_8859-1', 'German_Germany');
     require("_headerincludes.php");
-
 
     echo '
         <html id="iframePage">

@@ -1,5 +1,6 @@
 <?php
     session_start();
+    setlocale (LC_ALL, 'de_DE.UTF-8', 'de_DE@euro', 'de_DE', 'de', 'ge', 'de_DE.ISO_8859-1', 'German_Germany');         
     require("_headerincludes.php");
     require("_headerlinks.php");
 
@@ -18,7 +19,7 @@
                     var cartCount = '.MySQL::Count("SELECT id FROM cart WHERE userID = ? AND tradeID = ''",'s',$_SESSION['userID']).'
 
                     window.parent.document.getElementById("outCartCount1").innerHTML = "(" + cartCount + ")";
-                    window.parent.document.getElementById("outCartCount2").innerHTML = "(" + cartCount + ")"; 
+                    window.parent.document.getElementById("outCartCount2").innerHTML = "(" + cartCount + ")";
 
                     window.parent.document.getElementById("cartAddNotification").style.display = "block";
                     setTimeout(function() {

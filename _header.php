@@ -1,5 +1,6 @@
 <?php
     session_start();
+    setlocale (LC_ALL, 'de_DE.UTF-8', 'de_DE@euro', 'de_DE', 'de', 'ge', 'de_DE.ISO_8859-1', 'German_Germany');         
 	require("_headerincludes.php");
 
     MySQL::PeriodicSave();
@@ -101,6 +102,17 @@
                                             <li><a href="/eintragen/brauerei">Brauerei hinzuf&uuml;gen</a></li>
                                             <li><a href="/eintragen/sorte">Sorte hinzuf&uuml;gen</a></li>
                                             <li><a href="/eintragen/randzeichen">Randzeichen hinzuf&uuml;gen</a></li>
+                                            <li><a href="/kronkorken/sammlung/kein-bild">KK ohne Bild</a></li>
+                                        </ul>
+                                    </li>
+                                ';
+                            }
+                            else if(isset($_SESSION['userID']))
+                            {
+                                echo '
+                                    <li><a class="hsubs" href="#">Ihr Account</a>
+                                        <ul class="subs">
+                                            <li><a href="/tauschen/uebersicht/">Tauschgesch&auml;fte</a></li>
                                         </ul>
                                     </li>
                                 ';

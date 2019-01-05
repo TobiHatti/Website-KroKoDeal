@@ -445,8 +445,7 @@ select {
   transition: all 0.1s ease-in-out; }
 
 select:focus {
-  border: 1px solid #FF892E;
-  color: #FF892E; }
+  border: 1px solid #FF892E; }
 
 select:disabled {
   color: #696969;

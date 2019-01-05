@@ -56,8 +56,119 @@
         return $sstr;
     }
 
-
+    $linkOld = mysqli_connect("localhost","root","","krokodeal_old");
     cryptoload();
+
+    //Brewery Transfer
+    /*
+    $strSQL = "SELECT *,breweries.name AS brewName FROM caps INNER JOIN breweries ON caps.brewery_id = breweries.id GROUP BY breweries.id";
+    $rs=mysqli_query($linkOld,$strSQL);
+    while($row=mysqli_fetch_assoc($rs))
+    {
+        $id = $row['id'];
+        $countryID = $row['country_id'];
+        $regionID = $row['federal_id'];
+        $breweryName = $row['brewName'];
+        $breweryShort = explode('_',$row['cap_nr'])[1];
+        $breweryLink = $row['link'];
+        $breweryImage = SReplace($row['file']);
+        $breweryFilepath = SReplace($row['brewName']);
+
+        $sqlStatement ="INSERT INTO breweries (id,countryID,regionID,breweryName,breweryShort,breweryLink,breweryImage,breweryFilepath) VALUES ('$id','$countryID','$regionID','$breweryName','$breweryShort','$breweryLink','$breweryImage','$breweryFilepath')";
+
+        //echo $sqlStatement.'<br>';
+
+        MySQL::NonQuery($sqlStatement);
+    }
+    */
+
+    /*
+    // Set Transfer
+    $strSQL = "SELECT * FROM sets";
+    $rs=mysqli_query($linkOld,$strSQL);
+    while($row=mysqli_fetch_assoc($rs))
+    {
+        $id = $row['id'];
+        $thumbnailID = $row['thumbnail_id'];
+        $setSize = $row['set_size'];
+        $setName = $row['set_name'];
+        $setFilepath = SReplace($row['set_name']);
+
+        $sqlStatement ="INSERT INTO sets (id,thumbnailID,setSize,setName,setFilepath) VALUES ('$id','$thumbnailID','$setSize','$setName','$setFilepath')";
+
+        //echo $sqlStatement.'<br>';
+
+        MySQL::NonQuery($sqlStatement);
+    }
+    */
+
+    /*
+    // Erzeugen Länder-Verzeichnisse
+    $strSQL = "SELECT * FROM countries";
+    $rs=mysqli_query($linkOld,$strSQL);
+    while($row=mysqli_fetch_assoc($rs))
+    {
+        mkdir("files/bottlecaps/".$row['short'],0750);
+        mkdir("files/breweries/".$row['short'],0750);
+        mkdir("files/sets/".$row['short'],0750);
+    }
+    */
+
+    /*
+    // Umsiedlung Brauerei-Bilder
+    $strSQL = "SELECT * FROM breweries INNER JOIN countries ON breweries.country_id = countries.id";
+    $rs=mysqli_query($linkOld,$strSQL);
+    while($row=mysqli_fetch_assoc($rs))
+    {
+        $oldFilepath = 'files/old/breweries/'.$row['short'].'/'.$row['file'];
+        $newFilepath = 'files/breweries/'.$row['short'].'/'.SReplace($row['file']);
+        $newDir = 'files/breweries/'.$row['short'].'/';
+
+        //echo 'OLD: '.$oldFilepath.'<br>';
+        //echo 'NEW: '.$newFilepath.'<br><br>';
+
+        mkdir($newDir,0750);
+        rename($oldFilepath,$newFilepath);
+    }
+    */
+
+    /*
+    // Umsiedlung KK-Bilder (!= SET)
+    $strSQL = "SELECT *,breweries.name AS brewName, breweries.id AS brewID FROM caps INNER JOIN countries ON countries.id = caps.country_id INNER JOIN breweries ON caps.brewery_id = breweries.id WHERE set_id = 0";
+    $rs=mysqli_query($linkOld,$strSQL);
+    while($row=mysqli_fetch_assoc($rs))
+    {
+        $oldFilepath = 'files/old/bottlecaps/'.$row['short'].'/'.id_encrypt($row['brewID'])  .'/'.$row['cap_nr'].'.JPG';
+        $newFilepath = 'files/bottlecaps/'.$row['short'].'/'.SReplace($row['brewName']).'/'.$row['cap_nr'].'.JPG';
+        $newDir = 'files/bottlecaps/'.$row['short'].'/'.SReplace($row['brewName']).'/';
+
+        //echo 'OLD: '.$oldFilepath.'<br>';
+        //echo 'NEW: '.$newFilepath.'<br><br>';
+
+        mkdir($newDir,0750);
+        rename($oldFilepath,$newFilepath);
+    }
+    */
+
+
+    // Umsiedlung KK-Bilder (== SET)
+    $strSQL = "SELECT *,breweries.name AS brewName, breweries.id AS brewID FROM caps INNER JOIN countries ON countries.id = caps.country_id INNER JOIN breweries ON caps.brewery_id = breweries.id INNER JOIN sets ON caps.set_id = sets.id WHERE caps.set_id != '0'";
+    $rs=mysqli_query($linkOld,$strSQL);
+    while($row=mysqli_fetch_assoc($rs))
+    {
+        $oldFilepath = 'files/old/bottlecaps/_sets/'.$row['short'].'/'.$row['set_id'].'/'.$row['cap_nr'].'.JPG';
+        $newFilepath = 'files/sets/'.$row['short'].'/'.SReplace($row['set_name']).'/'.$row['cap_nr'].'.JPG';
+        $newDir = 'files/sets/'.$row['short'].'/'.SReplace($row['set_name']).'/';
+
+        //echo 'OLD: '.$oldFilepath.'<br>';
+        //echo 'NEW: '.$newFilepath.'<br><br>';
+
+        mkdir($newDir,0750);
+        rename($oldFilepath,$newFilepath);
+    }
+
+
+
     /*
     $strSQL = "SELECT *, breweries.name AS bname FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id";
     $rs=mysqli_query($link,$strSQL);
@@ -81,9 +192,30 @@
         //echo $oldPath.'<br>';
         //echo $newPath.'<br>';
 
-    }
 
+        /*
+        if($row['isSet'])
+        {
+
+        }
+        else
+        {
+            echo $oldPath = 'files/old_bottlecaps/'.$row['short'].'/'.id_encrypt($row['breweryID']).'/'.$row['capNumber'].'.JPG';
+
+            $newPath = 'files/bottlecaps/'.$row['short'].'/'.SReplace($row['bname']).'/'.$row['capNumber'].'.JPG';
+            $newDir = 'files/bottlecaps/'.$row['short'].'/'.SReplace($row['bname']).'/';
+        }
+
+
+        //mkdir($newDir,0750);
+        //rename($oldPath,$newPath);
+
+        //echo $oldPath.'<br>';
+        //echo $newPath.'<br>';
+
+    }
     */
+
 
     /*
 

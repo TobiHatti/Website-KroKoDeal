@@ -57,7 +57,18 @@
                 $sliderRows = MySQL::Cluster("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE bottlecaps.isSet = '0' ORDER BY bottlecaps.id DESC LIMIT 0,6");
                 $sliderMessages = array("KRO-KO-DEAL","EST. 2016","Dein Kronkorken Dealer","KRO-KO-DEAL","EST. 2016","Dein Kronkorken Dealer");
                 $i=1;
-                foreach($sliderRows AS $slide) echo '<li><img src="/files/bottlecaps/'.$slide['countryShort'].'/'.$slide['breweryFilepath'].'/'.$slide['capImage'].'" alt="Kro-Ko-Deal" title="'.$sliderMessages[$i-1].'" id="wows1_'.$i++.'" width="350px" height="350px" style="border-radius:25px; "/></li>';
+                foreach($sliderRows AS $slide)
+                {
+                    $altMessage = '';
+                    $imagePath = '/files/bottlecaps/'.$slide['countryShort'].'/'.$slide['breweryFilepath'].'/'.$slide['capImage'].'" alt="Kro-Ko-Deal" title="'.$sliderMessages[$i-1];
+                    if(!file_exists(ltrim($imagePath,'/')))
+                    {
+                        $altMessage = $imagePath;
+                        $imagePath = '/content/not_found.png';
+                    }
+
+                    echo '<li><img src="'.$imagePath.'" id="wows1_'.$i++.'" width="350px" height="350px" style="border-radius:25px; alt="'.$altMessage.'"/></li>';
+                }
 
                 echo '
             	</ul>
@@ -67,7 +78,18 @@
                 ';
 
                 $i=1;
-                foreach($sliderRows AS $slide) echo '<a href="#" title=""><span><img src="/files/bottlecaps/'.$slide['countryShort'].'/'.$slide['breweryFilepath'].'/'.$slide['capImage'].'" alt="Kro-Ko-Deal" class="thumbnail"/>'.$i++.'</span></a>';
+                foreach($sliderRows AS $slide)
+                {
+                    $altMessage = '';
+                    $imagePath = '/files/bottlecaps/'.$slide['countryShort'].'/'.$slide['breweryFilepath'].'/'.$slide['capImage'].'" alt="Kro-Ko-Deal" title="'.$sliderMessages[$i-1];
+                    if(!file_exists(ltrim($imagePath,'/')))
+                    {
+                        $altMessage = $imagePath;
+                        $imagePath = '/content/not_found.png';
+                    }
+
+                    echo '<a href="#" title=""><span><img src="'.$imagePath.'" alt="Kro-Ko-Deal" class="thumbnail"/>'.$i++.'</span></a>';
+                }
 
                 echo '
         	    </div>

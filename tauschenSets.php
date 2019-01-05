@@ -109,7 +109,15 @@
             if($i < $pager->GetPagerSize() * 2) $page = 2;
             if($i < $pager->GetPagerSize() * 1) $page = 1;
 
-            echo '<a href="?page='.$page.'#cap'.$capThumbnailArray[$i]['id'].'"><img src="/files/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'/'.$capThumbnailArray[$i]['capImage'].'"/></a>';
+            $imagePath = '/files/sets/'.$setData['countryShort'].'/'.$setData['setFilepath'].'/'.$capThumbnailArray[$i]['capImage'];
+            $altMessage = '';
+            if(!file_exists(ltrim($imagePath,'/')))
+            {
+                $altMessage = $imagePath;
+                $imagePath = '/content/not_found.png';
+            }
+
+            echo '<a href="?page='.$page.'#cap'.$capThumbnailArray[$i]['id'].'"><img src="'.$imagePath.'" alt="'.$altMessage.'"/></a>';
         }
         echo '</div>';
 

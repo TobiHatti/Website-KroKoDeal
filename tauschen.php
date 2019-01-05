@@ -1,7 +1,7 @@
 <?php
 	require("_header.php");
 
-    NavBar("Home","Tauschen");   
+    NavBar("Home","Tauschen");
 
     if(isset($_POST['confirmTrade']))
     {
@@ -204,7 +204,7 @@
                         ';
 
                         $i=1;
-                        $tradeTableData = MySQL::Cluster("SELECT * FROM cart WHERE userID = ? AND tradeID = ?",'ss',$_SESSION['userID'],$tradeData['id']);
+                        $tradeTableData = MySQL::Cluster("SELECT * FROM cart WHERE userID = ? AND tradeID = ?",'ss',$tradeData['userID'],$tradeData['id']);
                         foreach($tradeTableData AS $tradeElement)
                         {
                             if($tradeElement['isSet'])
@@ -458,8 +458,9 @@ Gerne immer wieder!</textarea>
                         </div>
                     ';
 
-                    echo '</center>';
+
                 }
+                echo '</center>';
             }
         }
     }

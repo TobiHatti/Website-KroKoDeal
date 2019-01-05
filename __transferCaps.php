@@ -1,10 +1,13 @@
 <?php
     require("_header.php");
 
+    $linkOld = mysqli_connect("localhost","root","","krokodeal_old");
+
     $strSQL = "SELECT * FROM caps";
-    $rs=mysqli_query($link,$strSQL);
+    $rs=mysqli_query($linkOld,$strSQL);
     while($row=mysqli_fetch_assoc($rs))
     {
+        $id = $row['id'];
         $country_id = $row['country_id'];
         $federal_id = $row['federal_id'];
         $kind_id = $row['kind_id'];
@@ -30,7 +33,7 @@
         $quality = $row['quality'];
         $image = $cap_nr.'.JPG';
 
-        $quality = ($quality==0) ? '' : $quality;
+        $quality = ($quality!='0') ? $quality : '';
 
         $isSet = ($set_id==0) ? 0 : 1;
         $isUsed = ($cap_cond==0) ? 1 : 0;
@@ -39,15 +42,19 @@
 
         $addedDate = $addedDateParts[2].'-'.$addedDateParts[1].'-'.$addedDateParts[0];
 
+        $isSetsAndCollection =
+
+        $name = ($info != "") ? $info : $name;
+
         $sqlInsert = "
         INSERT INTO
         `bottlecaps`
-        (`id`, `name`, `info`, `capNumber`, `countryID`, `federalID`, `flavorID`, `breweryID`, `sidesignID`, `baseColorID`, `capColorID`, `textColorID`, `setID`, `isSet`, `isTraded`, `isUsed`, `isTwitslock`, `isTradeable`, `isOwned`, `isDisplayed`, `locationAquired`, `dateAquired`, `dateInserted`, `quality`, `stock`, `image`, `showSideImage`, `sideImage`)
+        (`id`, `name`,`capNumber`, `flavorID`, `breweryID`, `sidesignID`, `baseColorID`, `capColorID`, `textColorID`, `setID`, `isSet`, `isTraded`, `isUsed`, `isTwistlock`, `isTradeable`, `isCounted`,`isSetsAndCollection`,`isOwned`, `locationAquired`, `dateAquired`, `dateInserted`, `quality`, `stock`, `capImage`, `showSideImage`, `sideImage`)
         VALUES
-        ('', '$name', '$info', '$cap_nr', '$country_id', '$federal_id', '$kind_id', '$brewery_id', '$sidesign_id', '$base_color_id', '$cap_color_id', '$text_color_id', '$set_id', '$isSet', '$traded', '$isUsed', '$twist', '$tradeable', '$in_collection', '$display_in_collection', '$get_location', '$get_year', '$addedDate', '$quality', '$stock', '$image', '0', '');";
+        ('$id', '$name', '$cap_nr','$kind_id', '$brewery_id', '$sidesign_id', '$base_color_id', '$cap_color_id', '$text_color_id', '$set_id', '$isSet', '$traded', '$isUsed', '$twist', '$tradeable', '$in_collection','$display_in_collection', '$in_collection', '$get_location', '$get_year', '$addedDate', '$quality', '$stock', '$image', '0', '');";
 
 
-        MySQL::NonQuery($sqlInsert);
+        //MySQL::NonQuery($sqlInsert);
     }
 
 ?>

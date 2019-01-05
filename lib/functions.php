@@ -22,6 +22,14 @@ function BottlecapSingleBox($bottlecapID,$isEditMode = false)
 
     $row = MySQL::Row($sqlStatement,'s',$bottlecapID);
 
+    $altMessage = '';
+    $imagePath = '/files/bottlecaps/'.$row['countryShort'].'/'.$row['breweryFilepath'].'/'.$row['capImage'];
+    if(!file_exists(ltrim($imagePath,'/')))
+    {
+        $altMessage = $imagePath;
+        $imagePath = '/content/not_found.png';
+    }
+
     $retval = '
     <div class="bottlecapSingleContainer">
         <table class="capDisplay">
@@ -30,7 +38,7 @@ function BottlecapSingleBox($bottlecapID,$isEditMode = false)
             </tr>
             <tr>
                 <td>
-                    <img src="/files/bottlecaps/'.$row['countryShort'].'/'.$row['breweryFilepath'].'/'.$row['capImage'].'" alt="" />
+                    <img src="'.$imagePath.'" alt="'.$altMessage.'" />
 
                 </td>
                 <td>
@@ -503,12 +511,18 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = fal
         }
     }
 
+    $altMessage = '';
+    if(!file_exists(ltrim($imagePath,'/')))
+    {
+        $altMessage = $imagePath;
+        $imagePath = '/content/not_found.png';
+    }
 
     $retval = '
         <tr>
             <td>
                 '.($isSet ? '<a name="cap'.$capData['bottlecapID'].'">' : '').'
-                <img src="'.$imagePath.'" alt="" />
+                <img src="'.$imagePath.'" alt="'.$altMessage.'" />
             </td>
             <td>
                 <center>

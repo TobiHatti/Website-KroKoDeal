@@ -18,6 +18,7 @@ RewriteRule ^laender/regionen/([a-zA-Z0-9-]+)/?$ laender.php?region=$1 [NC,QSA,L
 RewriteRule ^kronkorken/alle/([a-zA-Z0-9-]+)/?$ kronkorken.php?all&collection&letter=$1 [NC,QSA,L]
 RewriteRule ^kronkorken/alle kronkorken.php?all&collection [NC,QSA,L]
 
+RewriteRule ^kronkorken/sammlung/kein-bild kronkorken.php?noImage&collection [NC,QSA,L]
 RewriteRule ^kronkorken/([a-zA-Z0-9-]+)/?$ kronkorken.php?country=$1 [NC,QSA,L]
 RewriteRule ^kronkorken/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$/?$ kronkorken.php?country=$1&region=$2 [NC,QSA,L]
 

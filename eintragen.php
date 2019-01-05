@@ -1,7 +1,7 @@
 <?php
 	require("_header.php");
 
-    NavBar("Home","Kronkorken","Eintragen und bearbeiten");   
+    NavBar("Home","Kronkorken","Eintragen und bearbeiten");
 
 //########################################################################################
 //########################################################################################
@@ -417,7 +417,7 @@
 
         // Add thumbnail to set
         $thumbnail = MySQL::Scalar("SELECT id FROM bottlecaps WHERE setID = ?",'s',$setID);
-        MySQL::NonQuery("UPDATE sets SET thumbnailID = ? WHERE id = ?",'ss',$thumbnail,$setID);
+        MySQL::NonQuery("UPDATE sets SET thumbnailID = ?, thumbnailTradeID = ?,  WHERE id = ?",'ss',$thumbnail,$thumbnail,$setID);
 
         Page::Redirect('/sets/'.$countryData['countryShort'].'/'.$setData['setFilepath']);
         die();
@@ -595,7 +595,7 @@
                                 <td rowspan=5 colspan=2>
                                     <center>
                                         <img src="'.($edit ? $capDataImage : '').'" alt="" id="capImagePreview"/><br>
-                                        '.FileButton("capImage","capImage",false,"ReadURL(this,'capImagePreview');","","width: 100px; line-height: 5px;",($edit ? false : true),($edit ? $capDataImage : '')).'
+                                        '.FileButton("capImage","capImage",false,"ReadURL(this,'capImagePreview');","","width: 100px; line-height: 5px;",false,($edit ? $capDataImage : '')).'
                                     </center>
                                 </td>
 
