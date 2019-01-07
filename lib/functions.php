@@ -24,7 +24,7 @@ function BottlecapSingleBox($bottlecapID,$isEditMode = false)
 
     $altMessage = '';
     $imagePath = '/files/bottlecaps/'.$row['countryShort'].'/'.$row['breweryFilepath'].'/'.$row['capImage'];
-    if(!file_exists(ltrim($imagePath,'/')))
+    if(!file_exists(ltrim($imagePath,'/')) OR $row['capImage']=="")
     {
         $altMessage = $imagePath;
         $imagePath = '/content/not_found.png';
@@ -512,7 +512,7 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = fal
     }
 
     $altMessage = '';
-    if(!file_exists(ltrim($imagePath,'/')))
+    if(!file_exists(ltrim($imagePath,'/')) OR $capData['capImage']=="")
     {
         $altMessage = $imagePath;
         $imagePath = '/content/not_found.png';

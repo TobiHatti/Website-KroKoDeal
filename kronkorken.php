@@ -126,7 +126,6 @@
                 WHERE countries.countryShort = ?
                 AND regions.regionShort = ?
                 AND breweries.breweryName LIKE ?
-                AND isOwned = '1'
                 ORDER BY breweries.breweryName, bottlecaps.capNumber ASC
                 LIMIT $pagerOffset,$pagerSize";
 
@@ -171,7 +170,6 @@
                 INNER JOIN colors AS textColor ON bottlecaps.textColorID = textColor.id
                 WHERE countries.countryShort = ?
                 AND breweries.breweryName LIKE ?
-                AND isOwned = '1'
                 ORDER BY breweries.breweryName, bottlecaps.capNumber ASC
                 LIMIT $pagerOffset,$pagerSize";
 
@@ -214,7 +212,6 @@
             INNER JOIN colors AS textColor ON bottlecaps.textColorID = textColor.id
             WHERE countries.countryShort = ?
             AND breweries.breweryFilepath = ?
-            AND isOwned = '1'
             ORDER BY breweries.breweryName, bottlecaps.capNumber ASC
             LIMIT $pagerOffset,$pagerSize";
 
