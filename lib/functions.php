@@ -511,6 +511,15 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = fal
         }
     }
 
+    if($isTradeDisplay)
+    {
+        if($capData['quality'] == '' AND $capData['qualityTrade'] == '') $capQuality = '<span title="Keine Angaben">K.A.</span>';
+        if($capData['quality'] != '' AND $capData['qualityTrade'] == '') $capQuality = $capData['quality'];
+        if($capData['quality'] != '' AND $capData['qualityTrade'] != '') $capQuality = $capData['qualityTrade'];
+        if($capData['quality'] == '' AND $capData['qualityTrade'] != '') $capQuality = $capData['qualityTrade'];
+    }
+    else $capQuality = $capData['quality'];
+
     $altMessage = '';
     if(!file_exists(ltrim($imagePath,'/')) OR $capData['capImage']=="")
     {
@@ -521,8 +530,11 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = fal
     $retval = '
         <tr>
             <td>
-                '.($isSet ? '<a name="cap'.$capData['bottlecapID'].'">' : '').'
-                <img src="'.$imagePath.'" alt="'.$altMessage.'" />
+                <div>
+                    '.($isSet ? '<a name="cap'.$capData['bottlecapID'].'">' : '').'
+                    <img src="'.$imagePath.'" alt="'.$altMessage.'" />
+                    <img src="'.$imagePath.'" alt="'.$altMessage.'" class="capImageEnlarged"/>
+                </div>
             </td>
             <td>
                 <center>
@@ -540,7 +552,7 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = fal
                 <b>Sorte:</b>
                 <br>'.$capData['flavorDE'].'
                 '.($isSet ? ('<br><br><b>In Sammlung: </b> '.($capData['isOwned'] ? 'Ja' : 'Nein' )) : '').'
-                '.($isTradeDisplay ? ('<br><br><b>Qualit&auml;t: </b> '.(($capData['quality'] != '') ? $capData['quality'] : '<span title="Keine Angaben">K.A.</span>')) : '').'
+                '.($isTradeDisplay ? ('<br><br><b>Qualit&auml;t: </b> '.$capQuality) : '').'
             </td>
             <td>
                 <b>Land:</b>

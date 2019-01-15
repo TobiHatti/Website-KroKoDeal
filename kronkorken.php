@@ -126,6 +126,7 @@
                 WHERE countries.countryShort = ?
                 AND regions.regionShort = ?
                 AND breweries.breweryName LIKE ?
+                AND (bottlecaps.isSet = '0' OR (bottlecaps.isSet = '1' AND bottlecaps.isSetsAndCollection = '1'))
                 ORDER BY breweries.breweryName, bottlecaps.capNumber ASC
                 LIMIT $pagerOffset,$pagerSize";
 
@@ -170,6 +171,7 @@
                 INNER JOIN colors AS textColor ON bottlecaps.textColorID = textColor.id
                 WHERE countries.countryShort = ?
                 AND breweries.breweryName LIKE ?
+                AND (bottlecaps.isSet = '0' OR (bottlecaps.isSet = '1' AND bottlecaps.isSetsAndCollection = '1'))
                 ORDER BY breweries.breweryName, bottlecaps.capNumber ASC
                 LIMIT $pagerOffset,$pagerSize";
 
@@ -212,6 +214,7 @@
             INNER JOIN colors AS textColor ON bottlecaps.textColorID = textColor.id
             WHERE countries.countryShort = ?
             AND breweries.breweryFilepath = ?
+            AND (bottlecaps.isSet = '0' OR (bottlecaps.isSet = '1' AND bottlecaps.isSetsAndCollection = '1'))
             ORDER BY breweries.breweryName, bottlecaps.capNumber ASC
             LIMIT $pagerOffset,$pagerSize";
 
@@ -243,6 +246,7 @@
             INNER JOIN colors AS baseColor ON bottlecaps.baseColorID = baseColor.id
             INNER JOIN colors AS textColor ON bottlecaps.textColorID = textColor.id
             ".(isset($_GET['letter']) ? "WHERE breweries.breweryName LIKE ? AND isOwned = '1'" : "WHERE isOwned = '1'")."
+            AND (bottlecaps.isSet = '0' OR (bottlecaps.isSet = '1' AND bottlecaps.isSetsAndCollection = '1'))     
             ORDER BY breweries.breweryName, bottlecaps.capNumber ASC
             LIMIT $pagerOffset,$pagerSize";
 

@@ -1324,13 +1324,52 @@ input[type="week"]:focus {
       .bottlecapRowContainer table.capDisplay tr td:nth-child(1) {
         width: 140px;
         position: relative; }
-        .bottlecapRowContainer table.capDisplay tr td:nth-child(1) img:nth-child(1) {
+        .bottlecapRowContainer table.capDisplay tr td:nth-child(1) div img:nth-child(1) {
           width: 140px;
-          border-radius: 10px; }
-        .bottlecapRowContainer table.capDisplay tr td:nth-child(1) img:nth-child(2) {
+          border-radius: 10px;
+          -webkit-transition: all 0.4s ease-in-out;
+          -moz-transition: all 0.4s ease-in-out;
+          -ms-transition: all 0.4s ease-in-out;
+          -o-transition: all 0.4s ease-in-out;
+          transition: all 0.4s ease-in-out; }
+        .bottlecapRowContainer table.capDisplay tr td:nth-child(1) div .capImageEnlarged {
           position: absolute;
-          bottom: 0;
-          left: 0; }
+          top: 50%;
+          transform: translateY(-50%);
+          left: 50%;
+          transform: translateX(-50%);
+          width: 140px;
+          height: 140px;
+          margin-top: -72.5px;
+          border-radius: 10px;
+          z-index: 20000000;
+          -webkit-transition: all 0.3s ease-in-out;
+          -moz-transition: all 0.3s ease-in-out;
+          -ms-transition: all 0.3s ease-in-out;
+          -o-transition: all 0.3s ease-in-out;
+          transition: all 0.3s ease-in-out; }
+        .bottlecapRowContainer table.capDisplay tr td:nth-child(1) div:hover img:nth-child(1) {
+          width: 140px;
+          border-radius: 10px;
+          opacity: 0.3;
+          background: #FFFFFF;
+          -webkit-transition: all 0.3s ease-in-out;
+          -moz-transition: all 0.3s ease-in-out;
+          -ms-transition: all 0.3s ease-in-out;
+          -o-transition: all 0.3s ease-in-out;
+          transition: all 0.3s ease-in-out; }
+        .bottlecapRowContainer table.capDisplay tr td:nth-child(1) div:hover .capImageEnlarged {
+          width: 350px;
+          height: 350px;
+          left: 400px;
+          margin-top: -175px;
+          border-radius: 25px;
+          filter: drop-shadow(3px 3px 20px black);
+          -webkit-transition: all 0.2s ease-in-out;
+          -moz-transition: all 0.2s ease-in-out;
+          -ms-transition: all 0.2s ease-in-out;
+          -o-transition: all 0.2s ease-in-out;
+          transition: all 0.2s ease-in-out; }
       .bottlecapRowContainer table.capDisplay tr td:nth-child(2) {
         background: #FFFFFF;
         border-radius: 10px 0 0 10px;

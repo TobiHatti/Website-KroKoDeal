@@ -218,8 +218,9 @@
         $countryShort = $capData['countryShort'];
         $capNumber = $capData['capNumber'];
         $stock = $_POST['stock'];
+        $quality = $_POST['quality'];
 
-        MySQL::NonQuery("UPDATE bottlecaps SET stock = ? WHERE id = ?",'ss',$stock,$capID);
+        MySQL::NonQuery("UPDATE bottlecaps SET stock = ?, qualityTrade = ? WHERE id = ?",'sss',$stock,$quality,$capID);
 
         $fileUploader = new FileUploader();
         $fileUploader->SetFileElement("capImage");
@@ -944,6 +945,8 @@
         if($_GET['section'] == 'tauschkronkorken')
         {
             $capData = MySQL::Row("SELECT * FROM bottlecaps WHERE id = ?",'s',$_GET['objID']);
+            $qualityValueList = array("A" => "A","B" => "B","C" => "C","D" => "D","E" => "E");
+            $qualityDisplayList = array("A" => "A - Neu","B" => "B - Benutzt, Sehr guter Zustand","C" => "C - Benutzt, kleine Kratzer/Knicke","D" => "D - Benutzt, gro&szlig;e Kratzer/Knicke","E" => "E - Benutzt, schlechter zust.");
 
             echo '<h2>Tausch-Kronkorken bearbeiten</h2>';
 
@@ -954,7 +957,7 @@
                         <table class="editTradeCap">
                             <tr>
                                 <td colspan=2>Allgemeines</td>
-                                <td rowspan=2></td>
+                                <td rowspan=3></td>
                                 <td>Bild f&uuml;r Tausch</td>
                             </tr>
 
@@ -963,11 +966,22 @@
                                 <td>
                                     <input class="cel_m" type="number" step="1" name="stock" placeholder="Auf Lager..." value="'.$capData['stock'].'"/>
                                 </td>
-                                <td colspan=2>
+                                <td colspan=2 rowspan=2>
                                     <center>
                                         <img src="" alt="" id="capImagePreview"/><br>
                                         '.FileButton("capImage","capImages",true,"ReadURL(this,'capImagePreview');","","width: 100px; line-height: 5px;",false).'
                                     </center>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Qualit&auml;t</td>
+                                <td>
+                                    <select tabindex="8" name="quality" class="cel_m cef_nomg cef_nopd" id="">
+                                        <option value="" selected>--- Ausw&auml;hlen ---</option>
+                                        ';
+                                        foreach($qualityValueList AS $quality) echo '<option value="'.$quality.'"  '.((($edit AND $quality == $capData['quality']) OR (isset($_GET['quality']) AND $_GET['quality'] == $quality)) ? 'selected' : '').'>'.$qualityDisplayList[$quality].'</option>';
+                                        echo '
+                                    </select>
                                 </td>
                             </tr>
                             <tr>
@@ -1598,7 +1612,7 @@
                             <tr>
                                 <td>Land: </td>
                                 <td>
-                                    <select name="countryID" id="" class="cel_m cef_nomg" onchange="DynLoadExist(this,\'outCountryHasRegions\',\'SELECT * FROM regions WHERE countryID = ??\');">
+                                    <select name="countryID" id="countryID" class="cel_m cef_nomg" onchange="DynLoadExist(1,this,\'outCountryHasRegions\',\'SELECT * FROM regions WHERE countryID = ??\');">
                                         <option value="" disabled selected>--- Ausw&auml;hlen ---</option>
                                         ';
                                         $countryList = MySQL::Cluster("SELECT * FROM countries ORDER BY countryDE ASC");

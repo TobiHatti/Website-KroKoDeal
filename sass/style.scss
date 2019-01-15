@@ -1337,15 +1337,49 @@ input[type="week"]:focus{
                 width: 140px;
                 position: relative;
 
-                img:nth-child(1){
-                    width: 140px;
-                    border-radius: 10px;
+                div{
+                    img:nth-child(1){
+                        width: 140px;
+                        border-radius: 10px;
+                        @include ease(0.4s);
+                    }
+
+                    .capImageEnlarged{
+                        position: absolute;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        left: 50%;
+                        transform: translateX(-50%);
+                        width: 140px;
+                        height: 140px;
+                        margin-top: -72.5px;
+                        border-radius: 10px;
+                        z-index: 20000000;
+                        @include ease(0.3s);
+
+                    }
                 }
 
-                img:nth-child(2){
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
+                div:hover{
+                    img:nth-child(1){
+                        width: 140px;
+                        border-radius: 10px;
+                        opacity: 0.3;
+                        background: #FFFFFF;
+                        @include ease(0.3s);
+                    }
+
+                    .capImageEnlarged{
+                        width: 350px;
+                        height: 350px;
+                        left: 400px;
+                        margin-top: -175px;
+                        border-radius: 25px;
+                        filter: drop-shadow(3px 3px 20px black);
+                        //box-shadow: 0 0 20px 0 #000000;
+                        @include ease(0.2s);
+
+                    }
                 }
             }
 
