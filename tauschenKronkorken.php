@@ -91,6 +91,7 @@
             INNER JOIN colors AS textColor ON bottlecaps.textColorID = textColor.id
             WHERE countries.countryShort = ?
             AND bottlecaps.isTradeable = '1'
+            AND bottlecaps.stock > 0
             AND breweries.breweryName LIKE ?
             AND isOwned = '1'
             ORDER BY breweries.breweryName, bottlecaps.capNumber ASC
@@ -134,6 +135,7 @@
             INNER JOIN colors AS textColor ON bottlecaps.textColorID = textColor.id
             WHERE countries.countryShort = ?
             AND bottlecaps.isTradeable = '1'
+            AND bottlecaps.stock > 0
             AND breweries.breweryFilepath = ?
             AND isOwned = '1'
             ORDER BY breweries.breweryName, bottlecaps.capNumber ASC
@@ -166,6 +168,7 @@
             INNER JOIN colors AS textColor ON bottlecaps.textColorID = textColor.id
             ".(isset($_GET['letter']) ? "WHERE breweries.breweryName LIKE ? AND isOwned = '1'" : "WHERE isOwned = '1'")."
             AND bottlecaps.isTradeable = '1'
+            AND bottlecaps.stock > 0 
             ORDER BY breweries.breweryName, bottlecaps.capNumber ASC
             LIMIT $pagerOffset,$pagerSize";
 

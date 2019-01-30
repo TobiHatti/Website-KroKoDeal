@@ -313,7 +313,7 @@ function TradeCountryButton($ISOcode,$showBottlecapCount=false, $showSetCount=fa
             $capCluster = MySQL::Cluster("SELECT * FROM bottlecaps WHERE setID = ?",'s',$setData['setID']);
             foreach($capCluster AS $capData)
             {
-                if($capData['isTradeable'] != '1') $allTradeable = false;
+                if($capData['isTradeable'] != '1' OR $capData['stock'] <= '0') $allTradeable = false;
             }
 
             if($allTradeable) $tradeSetCtr++;
@@ -393,7 +393,7 @@ function BreweryListTile($breweryID,$showRegional=false,$tradeableLink=false)
     else $breweryData = MySQL::Row("SELECT *,breweries.id AS breweryID FROM breweries INNER JOIN countries ON breweries.countryID = countries.id  WHERE breweries.id = ? ORDER BY breweries.breweryName ASC",'i',$breweryID);
 
     $bottleCapCount = MySQL::Count("SELECT * FROM bottlecaps WHERE ((bottlecaps.isSet = 0 AND bottlecaps.isCounted = 1) OR (bottlecaps.isSet = 1 AND bottlecaps.isOwned = 1)) AND breweryID = ?",'i',$breweryData['breweryID']);
-    $tradeableCount = MySQL::Count("SELECT * FROM bottlecaps WHERE ((bottlecaps.isSet = 0 AND bottlecaps.isCounted = 1) OR (bottlecaps.isSet = 1 AND bottlecaps.isOwned = 1)) AND isTradeable = '1' AND breweryID = ?",'i',$breweryData['breweryID']);
+    $tradeableCount = MySQL::Count("SELECT * FROM bottlecaps WHERE ((bottlecaps.isSet = 0 AND bottlecaps.isCounted = 1) OR (bottlecaps.isSet = 1 AND bottlecaps.isOwned = 1)) AND isTradeable = '1' AND bottlecaps.stock > 0  AND breweryID = ?",'i',$breweryData['breweryID']);
 
     if($tradeableLink) $link = '/tauschen/kronkorken/sammlung/'.$breweryData['countryShort'].'/brauerei/'.$breweryData['breweryFilepath'];
     else $link = '/kronkorken/sammlung/'.$breweryData['countryShort'].'/brauerei/'.$breweryData['breweryFilepath'];
@@ -610,7 +610,7 @@ function BottleCapRowData($capData, $isSet, $countryHasRegions,$isEditMode = fal
 
         if($isTradeDisplay)
         {
-            $retval .= '<br><br><a href="/_iframe_addCapToCart?objID='.$capData['bottlecapID'].'&isSet=0" target="cartAddFrame"><button type="button" class="cel_100 cel_h25" style="margin-bottom: 5px; background: #32CD32"><i class="fas fa-shopping-cart"></i> Zum Tausch-Korb</button></a>';
+            $retval .= '<br><br><a href="/_iframe_addCapToCart?objID='.$capData['bottlecapID'].'&isSet=0" target="cartAddFrame"><button type="button" class="cel_100" style="margin-bottom: 5px; background: #32CD32"><i class="fas fa-shopping-cart"></i> Zum Tausch-Korb</button></a>';
         }
     }
     else

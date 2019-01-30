@@ -24,7 +24,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan=2 style="text-align: right"><a href="/impressum" style="color: white;"><u>Imrepssum</u></a></td>
+                            <td colspan=2 style="text-align: right"><a href="/impressum" style="color: white;"><u>Impressum</u></a></td>
                         </tr>
                     </table>
                 </center>

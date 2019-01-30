@@ -6,6 +6,7 @@
     {
         if(!isset($_GET['country']))
         {
+            // EDIT 2019.01.30 - Is this section obsolete?
             NavBar("Home","Tauschen","Sets");
 
             echo '<h2 style="color: #1E90FF">Sets</h2>';
@@ -84,6 +85,8 @@
         INNER JOIN colors AS baseColor ON bottlecaps.baseColorID = baseColor.id
         INNER JOIN colors AS textColor ON bottlecaps.textColorID = textColor.id
         WHERE countries.countryShort = ?
+        AND bottlecaps.isTradeable = '1'
+        AND bottlecaps.stock > 0
         AND sets.setFilepath = ?
         ORDER BY breweries.breweryName, bottlecaps.capNumber ASC
         LIMIT $pagerOffset,$pagerSize";

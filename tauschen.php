@@ -122,9 +122,12 @@
             echo '<h2 style="color: #1E90FF">Sets Tauschen</h2>';
 
             echo '<center>';
-            $buttonArray = MySQL::Cluster("SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE isSet = '1' AND isTradeable = '1' GROUP BY countries.countryShort");
+            $sqlStatement = "SELECT * FROM bottlecaps INNER JOIN breweries ON bottlecaps.breweryID = breweries.id INNER JOIN countries ON breweries.countryID = countries.id WHERE isSet = '1' AND isTradeable = '1' AND stock > '0' GROUP BY countries.countryShort";
+            $buttonArray = MySQL::Cluster($sqlStatement);
             foreach($buttonArray AS $button) echo TradeCountryButton($button['countryShort'],false,true,true);
             echo '</center>';
+
+            if(!MySQL::Exist($sqlStatement)) echo '<br><br><h3 style="color: #1E90FF">Aktuell stehen keine Sets zum Tauschen zur verf&uuml;gung</h3>';
         }
 
         if($_GET['section']=='hilfe')

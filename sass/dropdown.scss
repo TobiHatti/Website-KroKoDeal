@@ -28,7 +28,8 @@
     overflow: hidden;
     position: absolute;
     top: -9999px;
-    z-index: 2;
+
+    z-index: 40000000;
 
     -moz-transform: scaleY(0);
     -ms-transform: scaleY(0);
@@ -74,14 +75,17 @@
 }
 #nav ul li {
     background: none;
+    z-index: 40000000;
     width: 100%;
 }
 #nav ul li a {
     float: none;
+    z-index: 40000000;
 
     @include ease(0.3s);
 }
 #nav ul li:hover > a {
+    z-index: 40000000;  
     background-color: #121212;
     color: $theme-medium;
 }
