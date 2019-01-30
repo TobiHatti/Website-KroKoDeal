@@ -313,7 +313,7 @@ function TradeCountryButton($ISOcode,$showBottlecapCount=false, $showSetCount=fa
             $capCluster = MySQL::Cluster("SELECT * FROM bottlecaps WHERE setID = ?",'s',$setData['setID']);
             foreach($capCluster AS $capData)
             {
-                if($capData['isTradeable'] != '1' OR $capData['stock'] <= '0') $allTradeable = false;
+                if($capData['isTradeable'] != '1' OR ($capData['isTradeable'] != '1' AND $capData['stock'] < 0)) $allTradeable = false;
             }
 
             if($allTradeable) $tradeSetCtr++;
