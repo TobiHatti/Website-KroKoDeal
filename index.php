@@ -60,14 +60,14 @@
                 foreach($sliderRows AS $slide)
                 {
                     $altMessage = '';
-                    $imagePath = '/files/bottlecaps/'.$slide['countryShort'].'/'.$slide['breweryFilepath'].'/'.$slide['capImage'].'" alt="Kro-Ko-Deal" title="'.$sliderMessages[$i-1];
+                    $imagePath = '/files/bottlecaps/'.$slide['countryShort'].'/'.$slide['breweryFilepath'].'/'.$slide['capImage'];
                     if(!file_exists(ltrim($imagePath,'/')))
                     {
                         $altMessage = $imagePath;
                         $imagePath = '/content/not_found.png';
                     }
 
-                    echo '<li><img src="'.$imagePath.'" id="wows1_'.$i++.'" width="350px" height="350px" style="border-radius:25px; alt="'.$altMessage.'"/></li>';
+                    echo '<li><img src="'.$imagePath.'" id="wows1_'.$i++.'" width="350px" height="350px" style="border-radius:25px;" title="'.$sliderMessages[$i-1].'" alt="'.$altMessage.'"/></li>';
                 }
 
                 echo '
@@ -81,14 +81,14 @@
                 foreach($sliderRows AS $slide)
                 {
                     $altMessage = '';
-                    $imagePath = '/files/bottlecaps/'.$slide['countryShort'].'/'.$slide['breweryFilepath'].'/'.$slide['capImage'].'" alt="Kro-Ko-Deal" title="'.$sliderMessages[$i-1];
+                    $imagePath = '/files/bottlecaps/'.$slide['countryShort'].'/'.$slide['breweryFilepath'].'/'.$slide['capImage'];
                     if(!file_exists(ltrim($imagePath,'/')))
                     {
                         $altMessage = $imagePath;
                         $imagePath = '/content/not_found.png';
                     }
 
-                    echo '<a href="#" title=""><span><img src="'.$imagePath.'" alt="Kro-Ko-Deal" class="thumbnail"/>'.$i++.'</span></a>';
+                    echo '<a href="#" title=""><span><img src="'.$imagePath.'" alt="Kro-Ko-Deal" class="thumbnail" title="'.$sliderMessages[$i-1].'" alt="Kro-Ko-Deal" />'.$i++.'</span></a>';
                 }
 
                 echo '
