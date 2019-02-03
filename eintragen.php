@@ -786,7 +786,7 @@
                                             else if(isset($_GET['isTradeable']))
                                             {
                                                 if($_GET['isTradeable'] == 1) $isTradeableValue1 = true;
-                                                else $isUsedValue1 = false;
+                                                else $isTradeableValue1 = false;
                                             }
                                             else $isTradeableValue1 = false;
 
