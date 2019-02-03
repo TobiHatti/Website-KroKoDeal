@@ -284,7 +284,7 @@
     {
         $flavorDE = $_POST['flavorDE'];
         $flavorEN = $_POST['flavorEN'];
-        MySQL::NonQuery("INSERT INTO flavors (id,flavorDE,flavorEN) VALUES (NULL,?)",'s',$flavorDE,$flavorEN);
+        MySQL::NonQuery("INSERT INTO flavors (id,flavorDE,flavorEN) VALUES (NULL,?,?)",'ss',$flavorDE,$flavorEN);
         Page::Redirect(Page::This());
         die();
     }
