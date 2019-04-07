@@ -323,6 +323,12 @@
         $isUsed = $_POST['isUsed'];
         $isTwistLock = $_POST['isTwistLock'];
 
+        $breweryData = MySQL::Row("SELECT * FROM breweries WHERE id = ?",'i',$breweryID);
+        $countryData = MySQL::Row("SELECT * FROM countries WHERE id = ?",'i',$breweryData['countryID']);
+
+
+        $countryShort = $countryData["countryShort"];
+
         $isSetsAndCollection = isset($_POST['showInCollection']) ? 1 : 0;
 
         $sidesignID = $_POST['sidesignID'];
@@ -340,7 +346,7 @@
         $fileUploader = new FileUploader();
         $fileUploader->SetFileElement("capImages");
         $fileUploader->SetName("tmpSetUpload{#u}");
-        $fileUploader->SetPath("files/sets/AUT/$namePath");
+        $fileUploader->SetPath("files/sets/$countryShort/$namePath");
         $fileUploader->OverrideDuplicates(false);
         $fileUploader->Upload();
 
@@ -361,7 +367,7 @@
             $capData[str_replace(' ','',$cd[0])] = $cd[1];
         }
 
-        $breweryData = MySQL::Row("SELECT * FROM breweries WHERE id = ?",'i',$capData['flavorID']);
+        $breweryData = MySQL::Row("SELECT * FROM breweries WHERE id = ?",'i',$capData['breweryID']);
         $countryData = MySQL::Row("SELECT * FROM countries WHERE id = ?",'i',$breweryData['countryID']);
 
         $sqlStatement = "
@@ -418,7 +424,9 @@
 
         // Add thumbnail to set
         $thumbnail = MySQL::Scalar("SELECT id FROM bottlecaps WHERE setID = ?",'s',$setID);
-        MySQL::NonQuery("UPDATE sets SET thumbnailID = ?, thumbnailTradeID = ?,  WHERE id = ?",'ss',$thumbnail,$thumbnail,$setID);
+        MySQL::NonQuery("UPDATE sets SET thumbnailID = ?, thumbnailTradeID = ? WHERE id = ?",'sss',$thumbnail,$thumbnail,$setID);
+
+
 
         Page::Redirect('/sets/'.$countryData['countryShort'].'/'.$setData['setFilepath']);
         die();
@@ -1480,7 +1488,7 @@
                 $capData[str_replace(' ','',$cd[0])] = $cd[1];
             }
 
-            $breweryData = MySQL::Row("SELECT * FROM breweries WHERE id = ?",'i',$capData['flavorID']);
+            $breweryData = MySQL::Row("SELECT * FROM breweries WHERE id = ?",'i',$capData['breweryID']);
             $countryData = MySQL::Row("SELECT * FROM countries WHERE id = ?",'i',$breweryData['countryID']);
             $colorList = MySQL::Cluster("SELECT * FROM colors");
 
