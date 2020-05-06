@@ -435,6 +435,22 @@
         die();
     }
 
+    if(isset($_POST['editSetStock']))
+    {
+       $setID = $_POST['editSetStock'];
+       $countIncrement = $_POST['stock'];
+
+        $setCaps = MySQL::Cluster("SELECT * FROM bottlecaps WHERE setID = ?",'s',$setID);
+
+        foreach($setCaps AS $setCap)
+        {
+            MySQL::NonQuery("UPDATE bottlecaps SET stock = stock + ? WHERE id = ?",'@s',$countIncrement,$setCap['id']);
+        }
+
+        Page::Redirect(Page::This());
+        die();
+    }
+
     if(isset($_POST['editSetGeneral']))
     {
         $setID = $_POST['editSetGeneral'];
@@ -1364,6 +1380,26 @@
                                     <td colspan=2>
                                         <br>
                                         <button type="submit" name="editSetGeneral" value="'.$_GET['objID'].'">Set-Daten aktualisieren</button>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <br>
+
+                            <table class ="editSetTable">
+                                <tr>
+                                    <td colspan=2>Bestand ver&auml;ndern</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Bestand erh&ouml;hen<br>oder vermindern (+/-)</td>
+                                    <td><input class="cel_m" type="number" step="1" name="stock" placeholder="Bestand erh&ouml;hen/vermindern um X" value="0"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan=2>
+                                        <br>
+                                        <button type="submit" name="editSetStock" value="'.$_GET['objID'].'">Bestand aktualisieren</button>
                                     </td>
                                 </tr>
                             </table>
