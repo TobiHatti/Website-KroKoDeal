@@ -446,6 +446,8 @@
         $showInCollection = isset($_POST['showInCollection']) ? 1 : 0;
         $alcohol = ($_POST['alcohol']=="") ? null : $_POST['alcohol'];
 
+        $isTradeable = $_POST['isTradeable'];
+
         MySQL::NonQuery("UPDATE sets SET setName = ? WHERE id = ?",'ss',$name,$setID);
 
         $setCaps = MySQL::Cluster("SELECT * FROM bottlecaps WHERE setID = ?",'s',$setID);
@@ -456,7 +458,7 @@
             $capExtension = substr($oldCapNumber,strrpos($oldCapNumber,'_') + 1,strlen($oldCapNumber));
             $newCapNumber = $capNumberBase.'_'.$capExtension;
 
-            MySQL::NonQuery("UPDATE bottlecaps SET capNumber = ?, breweryID = ?, flavorID = ?, alcohol = ?, isSetsAndCollection = ?  WHERE id = ?",'@s',$newCapNumber,$breweryID,$flavorID,$alcohol,$showInCollection,$setCap['id']);
+            MySQL::NonQuery("UPDATE bottlecaps SET capNumber = ?, breweryID = ?, flavorID = ?, alcohol = ?, isSetsAndCollection = ?, isTradeable = ? WHERE id = ?",'@s',$newCapNumber,$breweryID,$flavorID,$alcohol,$showInCollection, $isTradeable,$setCap['id']);
         }
 
         Page::Redirect(Page::This());
@@ -474,7 +476,7 @@
         $dateAquired = $_POST['dateAquired'];
         $quality = $_POST['quality'];
         $isTraded = $_POST['isTraded'];
-        $isTradeable = $_POST['isTradeable'];
+
         $isUsed = $_POST['isUsed'];
         $isTwistLock = $_POST['isTwistLock'];
 
@@ -482,7 +484,7 @@
 
         foreach($setCaps AS $setCap)
         {
-            MySQL::NonQuery("UPDATE bottlecaps SET capColorID = ?, baseColorID = ?, textColorID = ?, locationAquired = ?, dateAquired = ?, quality = ?, isTraded = ?, isTradeable = ?, isUsed = ?, isTwistlock = ? WHERE id = ?",'@s',$capColorID,$baseColorID,$textColorID,$locationAquired,$dateAquired,$quality,$isTraded,$isTradeable,$isUsed,$isTwistLock,$setCap['id']);
+            MySQL::NonQuery("UPDATE bottlecaps SET capColorID = ?, baseColorID = ?, textColorID = ?, locationAquired = ?, dateAquired = ?, quality = ?, isTraded = ?, isUsed = ?, isTwistlock = ? WHERE id = ?",'@s',$capColorID,$baseColorID,$textColorID,$locationAquired,$dateAquired,$quality,$isTraded,$isUsed,$isTwistLock,$setCap['id']);
         }
 
         Page::Redirect(Page::This());
@@ -1347,6 +1349,18 @@
                                 </tr>
 
                                 <tr>
+                                    <td>Tauschbar</td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>'.RadioButton("Ja","isTradeable",$setData['isTradeable'],"1").'</td>
+                                                <td>'.RadioButton("Nein","isTradeable",!$setData['isTradeable'],"0").'</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <tr>
                                     <td colspan=2>
                                         <br>
                                         <button type="submit" name="editSetGeneral" value="'.$_GET['objID'].'">Set-Daten aktualisieren</button>
@@ -1443,17 +1457,7 @@
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td>Tauschbar</td>
-                                    <td>
-                                        <table>
-                                            <tr>
-                                                <td>'.RadioButton("Ja","isTradeable",$setData['isTradeable'],"1").'</td>
-                                                <td>'.RadioButton("Nein","isTradeable",!$setData['isTradeable'],"0").'</td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
+
 
                                 <tr>
                                     <td>Drehverschluss</td>
