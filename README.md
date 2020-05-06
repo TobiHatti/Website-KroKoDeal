@@ -12,7 +12,7 @@
 ![image](https://github.com/TobiHatti/Website-KroKoDeal/blob/master/krokodeal_sample01.png)
 ![image](https://github.com/TobiHatti/Website-KroKoDeal/blob/master/krokodeal_sample02.png)
 
-New Website of Kro-Ko-Deal (ver. 3.5)
+New Website of Kro-Ko-Deal (ver. 4.1.X)
 
 ### Features:
 - Collection Manager
