@@ -323,6 +323,8 @@
         $isUsed = $_POST['isUsed'];
         $isTwistLock = $_POST['isTwistLock'];
 
+
+
         $breweryData = MySQL::Row("SELECT * FROM breweries WHERE id = ?",'i',$breweryID);
         $countryData = MySQL::Row("SELECT * FROM countries WHERE id = ?",'i',$breweryData['countryID']);
 
@@ -330,10 +332,11 @@
         $countryShort = $countryData["countryShort"];
 
         $isSetsAndCollection = isset($_POST['showInCollection']) ? 1 : 0;
+        $counted = isset($_POST['counted']) ? 1 : 0;
 
         $sidesignID = $_POST['sidesignID'];
 
-        $setTmpData = "breweryID=$breweryID;;flavorID=$flavorID;;capNumberBase=$capNumberBase;;locationAquired=$locationAquired;;dateAquired=$dateAquired;;quality=$quality;;isTraded=$isTraded;;isTradeable=$isTradeable;;alcohol=$alcohol;;capColorID=$capColorID;;baseColorID=$baseColorID;;textColorID=$textColorID;;isUsed=$isUsed;;isTwistLock=$isTwistLock;;isSetsAndCollection=$isSetsAndCollection;;sidesignID=$sidesignID";
+        $setTmpData = "breweryID=$breweryID;;flavorID=$flavorID;;capNumberBase=$capNumberBase;;locationAquired=$locationAquired;;dateAquired=$dateAquired;;quality=$quality;;isTraded=$isTraded;;isTradeable=$isTradeable;;alcohol=$alcohol;;capColorID=$capColorID;;baseColorID=$baseColorID;;textColorID=$textColorID;;isUsed=$isUsed;;isTwistLock=$isTwistLock;;isSetsAndCollection=$isSetsAndCollection;;sidesignID=$sidesignID;;counted=$counted";
 
         $sqlStatement  = "
         INSERT INTO sets
@@ -855,7 +858,7 @@
                                 if($edit AND $capData['isSet'])
                                 {
                                     echo '
-                                        <td>In Besitz</td>
+                                        <td>In Besitz / Mitz&auml;hlen</td>
                                         <td>'.Tickbox("isOwned","isOwned","",($edit ? ($capData['isOwned']==1 ? true : false) : true)).'</td>
                                         <td>'.Tickbox("saveIsCounted","saveIsCounted","",true).'</td>
                                     ';
@@ -863,7 +866,7 @@
                                 else if($expand)
                                 {
                                     echo '
-                                        <td>In Besitz</td>
+                                        <td>In Besitz / Mitz&auml;hlen</td>
                                         <td>'.Tickbox("isOwned","isOwned","",true).'</td>
                                         <td>'.Tickbox("saveIsCounted","saveIsCounted","",true).'</td>
                                     ';
@@ -1035,7 +1038,7 @@
                             <table class="addSet1Table">
                                 <tr>
                                     <td colspan=2>Allgemeines</td>
-                                    <td rowspan=13></td>
+                                    <td rowspan=15></td>
                                     <td colspan=2>Bilder</td>
                                 </tr>
 
@@ -1212,6 +1215,10 @@
                                     <td>In Sets & Sammlung<br>zeigen</td>
                                     <td style="text-align:left; padding-left: 10px;" >
                                         '.Tickbox("showInCollection","showInCollection","&nbsp;&nbsp;Ja",false).'
+                                    </td>
+                                    <td>Alle Kronkorken dieses<br>Sets z&auml;hlen</td>
+                                    <td style="text-align:left; padding-left: 10px;" >
+                                        '.Tickbox("counted","counted","&nbsp;&nbsp;Ja",true).'
                                     </td>
                                 </tr>
                                 <tr>
@@ -1555,7 +1562,7 @@
                         </tr>
                         <tr>
                             <td>
-                                '.Tickbox("isOwned$i","isOwned$i","&nbsp;In Besitz",true).'
+                                '.Tickbox("isOwned$i","isOwned$i","&nbsp;In Besitz / Mitz&auml;hlen",$capData['counted']).'
                             </td>
                         </tr>
                     </table>

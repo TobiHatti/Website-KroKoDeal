@@ -33,7 +33,7 @@
                         Weitere Fotos hinzuf&uuml;gen (max. 20)
                         <br>
                         '.FileButton("uploadSetImages","uploadSetImages",true).'
-                        <br>
+                        <br><br>
                         <button type="submit" name="uploadSetImg">Hochladen</button>
                     </center>
                 </form>
