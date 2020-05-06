@@ -431,7 +431,11 @@ function SetTile($setID,$isEditMode = false,$tradeableLink=false)
     {
         $setThumbnail = MySQL::Scalar("SELECT capImageTrade FROM bottlecaps WHERE id = ?",'i',$setData['thumbnailTradeID']);
     }
-    else $setThumbnail = MySQL::Scalar("SELECT capImage FROM bottlecaps WHERE id = ?",'i',$setData['thumbnailID']);
+    else
+    {
+        $setThumbnail = MySQL::Scalar("SELECT capImage FROM bottlecaps WHERE id = ?",'i',$setData['thumbnailID']);
+    }
+
 
     $retval = '
         <table class="setTileTable">
