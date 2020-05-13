@@ -1,7 +1,7 @@
 <?php
     setlocale (LC_ALL, 'de_DE.UTF-8', 'de_DE@euro', 'de_DE', 'de', 'ge', 'de_DE.ISO_8859-1', 'German_Germany'); 
 
-    $__pageRevision = "4.1.9";
+    $__pageRevision = "4.1.8";
 
 
 
