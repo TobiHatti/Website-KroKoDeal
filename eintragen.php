@@ -463,6 +463,7 @@
         $alcohol = ($_POST['alcohol']=="") ? null : $_POST['alcohol'];
 
         $isTradeable = $_POST['isTradeable'];
+        $isCounted = $_POST['isCounted'];
 
         MySQL::NonQuery("UPDATE sets SET setName = ? WHERE id = ?",'ss',$name,$setID);
 
@@ -474,7 +475,7 @@
             $capExtension = substr($oldCapNumber,strrpos($oldCapNumber,'_') + 1,strlen($oldCapNumber));
             $newCapNumber = $capNumberBase.'_'.$capExtension;
 
-            MySQL::NonQuery("UPDATE bottlecaps SET capNumber = ?, breweryID = ?, flavorID = ?, alcohol = ?, isSetsAndCollection = ?, isTradeable = ? WHERE id = ?",'@s',$newCapNumber,$breweryID,$flavorID,$alcohol,$showInCollection, $isTradeable,$setCap['id']);
+            MySQL::NonQuery("UPDATE bottlecaps SET capNumber = ?, breweryID = ?, flavorID = ?, alcohol = ?, isSetsAndCollection = ?, isTradeable = ?, isCounted = ? WHERE id = ?",'@s',$newCapNumber,$breweryID,$flavorID,$alcohol,$showInCollection, $isTradeable,$isCounted,$setCap['id']);
         }
 
         Page::Redirect(Page::This());
@@ -876,7 +877,7 @@
                                 if($edit AND $capData['isSet'])
                                 {
                                     echo '
-                                        <td>In Besitz / Mitz&auml;hlen</td>
+                                        <td>In Besitz</td>
                                         <td>'.Tickbox("isOwned","isOwned","",($edit ? ($capData['isOwned']==1 ? true : false) : true)).'</td>
                                         <td>'.Tickbox("saveIsCounted","saveIsCounted","",true).'</td>
                                     ';
@@ -884,7 +885,7 @@
                                 else if($expand)
                                 {
                                     echo '
-                                        <td>In Besitz / Mitz&auml;hlen</td>
+                                        <td>In Besitz</td>
                                         <td>'.Tickbox("isOwned","isOwned","",true).'</td>
                                         <td>'.Tickbox("saveIsCounted","saveIsCounted","",true).'</td>
                                     ';
@@ -1371,6 +1372,18 @@
                                             <tr>
                                                 <td>'.RadioButton("Ja","isTradeable",$setData['isTradeable'],"1").'</td>
                                                 <td>'.RadioButton("Nein","isTradeable",!$setData['isTradeable'],"0").'</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                               <tr>
+                                    <td>Alle Kronkorken dieses<br>Sets z&auml;hlen</td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>'.RadioButton("Ja","isCounted",$setData['isCounted'],"1").'</td>
+                                                <td>'.RadioButton("Nein","isCounted",!$setData['isCounted'],"0").'</td>
                                             </tr>
                                         </table>
                                     </td>
