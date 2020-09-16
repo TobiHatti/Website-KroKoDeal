@@ -1,4 +1,4 @@
-<img align="right" width="80" height="80" src="https://github.com/TobiHatti/Website-KroKoDeal/blob/master/content/logo.png">
+<img align="right" width="80" height="80" data-rmimg src="https://github.com/TobiHatti/Website-KroKoDeal/blob/master/content/logo.png">
 
 # Website-KroKoDeal
 
