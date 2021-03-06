@@ -279,6 +279,36 @@
         Page::Redirect(Page::This());
         die();
     }
+	
+	if(isset($_POST['editBrewery']))
+    {
+        $countryID = $_POST['countryID'];
+        $regionID = isset($_POST['regionID']) ? $_POST['regionID'] : 0;
+        $link = $_POST['link'];
+        $name = $_POST['name'];
+        $short = $_POST['breweryShort'];
+        $saveName = StringOp::SReplace($name);
+		
+		$breweryID = $_POST['breweryID'];
+
+		$oldShort = MySQL::Scalar("SELECT breweryShort FROM breweries WHERE id = ?", 'i', $breweryID);
+		$oldRegion = MySQL::Scalar("SELECT regionID FROM breweries WHERE id = ?", 'i', $breweryID);
+		
+		if($regionID == 0) $regionID = $oldRegion;
+		
+		$sqlStatement = "UPDATE breweries SET countryID = ?, regionID = ?, breweryName = ?, breweryShort = ?, breweryLink = ? WHERE id = ?";
+		MySQL::NonQuery($sqlStatement,'@s',$countryID,$regionID,$name,$short,$link,$breweryID);
+		
+		// IMAGES WILL NOT BE UPDATED
+		// (TOO MUCH WORK AND I AM LAZY)
+		
+		// Update existing Names
+		// Only update names, not filenames
+		MySQL::NonQuery("UPDATE bottlecaps SET capNumber = REPLACE(capNumber, '$oldShort', '$short') WHERE breweryID = ?", 'i', $breweryID);
+
+        Page::Redirect(Page::This());
+        //die();
+    }
 
     if(isset($_POST['addFlavor']))
     {
@@ -1649,7 +1679,17 @@
 
         if($_GET['section'] == 'brauerei')
         {
-            echo '<h2>Brauerei hinzuf&uuml;gen</h2>';
+			if(isset($_GET['breweryID']))
+			{
+				// Yes, this is an after-thought.
+				// Yes, this edit section will be messy
+				// No, i don't care because this page is messy AF as it is
+				echo '<h2>Brauerei bearbeiten (Experimentell)</h2>';
+			
+				$breweryData = MySQL::Row("SELECT * FROM breweries WHERE id = ?", 'i', $_GET['breweryID']);
+			
+			}
+			else echo '<h2>Brauerei hinzuf&uuml;gen</h2>';
 
             echo '
                 <input type="hidden" value="0" id="outCountryHasRegions"/>
@@ -1663,19 +1703,19 @@
                     <center>
                         <table class="addBreweryTable">
                             <tr>
-                                <td colspan=3>Brauerei eintragen</td>
+                                <td colspan=3>Brauerei '.(isset($_GET['breweryID']) ? 'bearbeiten' : 'eintragen').'</td>
                             </tr>
                             <tr>
                                 <td>Brauerei-Name: </td>
-                                <td><input type="text" name="name" placeholder="Brauerei..." class="cel_m cef_nomg"/></td>
+                                <td><input type="text" name="name" placeholder="Brauerei..." value="'.(isset($_GET['breweryID']) ? $breweryData['breweryName'] : '').'" class="cel_m cef_nomg"/></td>
                                 <td rowspan=5>
                                     <img src="#" alt="" id="breweryImagePreview"/><br><br>
-                                    '.FileButton("breweryImage","breweryImage",false,"ReadURL(this,'breweryImagePreview');","","width: 100px; line-height: 5px;",true).'
+                                    '.(isset($_GET['breweryID']) ? '' : FileButton("breweryImage","breweryImage",false,"ReadURL(this,'breweryImagePreview');","","width: 100px; line-height: 5px;",true)).'
                                 </td>
                             </tr>
                             <tr>
                                 <td>Brauerei-K&uuml;rzel: </td>
-                                <td><input type="text" name="breweryShort" placeholder="K&uuml;rzel..." class="cel_m cef_nomg"/></td>
+                                <td><input type="text" name="breweryShort" placeholder="K&uuml;rzel..." value="'.(isset($_GET['breweryID']) ? $breweryData['breweryShort'] : '').'" class="cel_m cef_nomg"/></td>
                             </tr>
                             <tr>
                                 <td>Land: </td>
@@ -1684,7 +1724,7 @@
                                         <option value="" disabled selected>--- Ausw&auml;hlen ---</option>
                                         ';
                                         $countryList = MySQL::Cluster("SELECT * FROM countries ORDER BY countryDE ASC");
-                                        foreach($countryList AS $country) echo '<option value="'.$country['id'].'">'.$country['countryDE'].'</option>';
+                                        foreach($countryList AS $country) echo '<option value="'.$country['id'].'" '.((isset($_GET['breweryID']) AND $country['id'] == $breweryData['countryID']) ? 'selected' : '').'>'.$country['countryDE'].'</option>';
                                         echo '
                                     </select>
                                 </td>
@@ -1706,12 +1746,14 @@
                             </tr>
                             <tr>
                                 <td>Homepage-Link: </td>
-                                <td><input type="url" name="link" placeholder="http://..." class="cel_m cef_nomg"/></td>
+                                <td><input type="url" name="link" placeholder="http://..." value="'.(isset($_GET['breweryID']) ? $breweryData['breweryLink'] : '').'" class="cel_m cef_nomg"/></td>
                             </tr>
                             <tr>
                                 <td colspan=3>
                                     <br>
-                                    <button type="submit" name="addBrewery">Brauerei hinzuf&uuml;gen</button>
+									'.( isset($_GET['breweryID']) ? '<input type="hidden" name="breweryID" value="'.$_GET['breweryID'].'">' : '').'
+									
+                                    <button type="submit" name="'.(isset($_GET['breweryID']) ? 'editBrewery' : 'addBrewery').'">Brauerei '.(isset($_GET['breweryID']) ? 'aktualisieren' : 'hinzuf&uuml;gen').'</button>
                                 </td>
                             </tr>
                         </table>

@@ -414,6 +414,15 @@ function BreweryListTile($breweryID,$showRegional=false,$tradeableLink=false)
                 '.(($breweryData['breweryLink']!='') ? '<a target="_blank" href="'.$breweryData['breweryLink'].'"><button type="button" class="cel_100"><i class="fas fa-home"></i> Zur Brauerei</button></a><br><br>' : '').'
 
                 <a href="'.$link.'"><button type="button" class="cel_100">Kronkorken dieser<br>Brauerei</button></a>
+				
+				'; 
+				
+				if(isset($_SESSION['userID']) AND $_SESSION['userRank'] > 90)
+				{
+					$retval .= '<br><a href="/eintragen?section=brauerei&breweryID='.$breweryID.'"><button type="button" class="cel_100" style="background: #32CD32; margin-top: 5px;">Brauerei<br>Bearbeiten</button></a>';
+				}
+				
+				$retval .= '
             </td>
         </tr>
     ';
