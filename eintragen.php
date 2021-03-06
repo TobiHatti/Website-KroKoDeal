@@ -546,7 +546,7 @@
 
 
             $countryList = MySQL::Cluster("SELECT * FROM countries RIGHT JOIN breweries ON countries.id = breweries.countryID GROUP BY breweries.countryID ORDER BY countries.countryDE ASC");
-            $flavorList = MySQL::Cluster("SELECT * FROM flavors");
+            $flavorList = MySQL::Cluster("SELECT * FROM flavors ORDER BY flavorDE ASC");
             $colorList = MySQL::Cluster("SELECT * FROM colors");
             $sidesignFrequentList = MySQL::Cluster("SELECT *,COUNT(sidesignID) AS sidesignCount FROM bottlecaps INNER JOIN sidesigns ON bottlecaps.sidesignID = sidesigns.id GROUP BY sidesignID HAVING sidesignCount >= 3");
             $sidesignAllList = MySQL::Cluster("SELECT * FROM sidesigns ORDER BY sidesignName ASC");
@@ -1041,7 +1041,7 @@
             else echo '<h2>Set hinzuf&uuml;gen</h2>';
 
             $countryList = MySQL::Cluster("SELECT * FROM countries RIGHT JOIN breweries ON countries.id = breweries.countryID GROUP BY breweries.countryID ORDER BY countries.countryDE ASC");
-            $flavorList = MySQL::Cluster("SELECT * FROM flavors");
+            $flavorList = MySQL::Cluster("SELECT * FROM flavors ORDER BY flavorDE ASC");
             $colorList = MySQL::Cluster("SELECT * FROM colors");
             $sidesignFrequentList = MySQL::Cluster("SELECT *,COUNT(sidesignID) AS sidesignCount FROM bottlecaps INNER JOIN sidesigns ON bottlecaps.sidesignID = sidesigns.id GROUP BY sidesignID HAVING sidesignCount >= 3");
             $sidesignAllList = MySQL::Cluster("SELECT * FROM sidesigns ORDER BY sidesignName ASC");
