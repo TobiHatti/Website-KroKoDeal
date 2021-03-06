@@ -23,7 +23,7 @@
         $quality = $_POST['quality'];
         $isTraded = $_POST['isTraded'];
         $isTradeable = $_POST['isTradeable'];
-        $alcohol = isset($_POST['alcohol']) ? (($_POST['alcohol']=="") ? null : $_POST['alcohol']) : '';
+		$alcohol = ($_POST['alcohol']=="") ? null : $_POST['alcohol'];
         $stock = ($_POST['stock']=="") ? 0 : $_POST['stock'];
 
         $capColorID = explode('-',$_POST['capColorID'])[0];

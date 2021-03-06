@@ -431,11 +431,7 @@ function SetTile($setID,$isEditMode = false,$tradeableLink=false)
     {
         $setThumbnail = MySQL::Scalar("SELECT capImageTrade FROM bottlecaps WHERE id = ?",'i',$setData['thumbnailTradeID']);
     }
-    else
-    {
-        $setThumbnail = MySQL::Scalar("SELECT capImage FROM bottlecaps WHERE id = ?",'i',$setData['thumbnailID']);
-    }
-
+    else $setThumbnail = MySQL::Scalar("SELECT capImage FROM bottlecaps WHERE id = ?",'i',$setData['thumbnailID']);
 
     $retval = '
         <table class="setTileTable">
@@ -735,8 +731,8 @@ function BottleCapRowInfoOverlay($capData,$isEditMode = false)
                         <td>Drehverschluss: </td>
                         <td>'.($capData['isTwistlock'] ? 'Ja' : 'Nein').'</td>
 
-                        <td></td>
-                        <td></td>
+                        <td>Alkoholgehalt: </td>
+                        <td>'.(($capData['alcohol'] != null) ? $capData['alcohol'].'%' : 'n/a').'</td>
                     </tr>
                 </table>
                 <a href="#"><div class="close" onclick="bgenScroll();">Schlie&szlig;en</div></a>
